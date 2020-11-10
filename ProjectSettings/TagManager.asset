@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Wall
+  - Breakable
+  - Unbreakable
+  - Paddle
+  - Ball
+  - PowerUp
+  - Ball_Echo
+  - Paddle_Echo
+  - Line_Between_Ball_Pointer
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Paddle
+  - Ball
+  - Wall
+  - Death_Zone
+  - PowerUp
+  - Projectile
+  - Controllers
+  - Block
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 154393619
+    locked: 0
+  - name: Wall
+    uniqueID: 1882871025
+    locked: 0
+  - name: Paddle
+    uniqueID: 4268489051
+    locked: 0
+  - name: Block
+    uniqueID: 1060988235
+    locked: 0
+  - name: Ball
+    uniqueID: 1601163665
+    locked: 0
+  - name: PowerUp
+    uniqueID: 230632173
+    locked: 0
+  - name: Cursor
+    uniqueID: 418104979
+    locked: 0
+  - name: Blackout
+    uniqueID: 3330426595
+    locked: 0

@@ -1,0 +1,10 @@
+Choose An Level|Saving...
+Configurations|Background Music|Music Effects|Sound Effects|About|Reset Progress|Back
+About|1994-2019, All Rights Reserved.
+Are you sure?|All your progress will be reseted, such as scores, time scores, and levels unlocked!|No|Yes
+Level|Best Score:|Time Score:|Play!
+Instructions 1|Move Paddle|Release Ball / Shoot|Drag to Aim|Pause|Continue
+Instructions 2|Light Block: 1 Hit|Normal Block: 2 Hits|Dark Block: 3 Hits|Silver Blocks: 4 Hits|Gold Blocks: 5 Hits|Unbreakable Block
+Instructions 3|1 Hit Blocks|Ball Bigger|Ball Faster|Reset Balls|Ball Slower|Ball Smaller|Duplicate Ball|Fire Ball|Pull Blocks Down|Pull Blocks Left|Pull Blocks Right|Pull Blocks Up|Expand Paddle|Reset Paddle|Shrink Paddle|Shooter|All Breakable Blocks
+Paused|Resume|Restart|Levels
+Level Completed!|Score:|Time Score:|Best Combo:|Current Balls:|Total:|New Score!|Continue

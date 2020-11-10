@@ -1,0 +1,14 @@
+1 Hit Blocks
+Bigger Balls
+Smaller Balls
+Faster Balls
+Slower Balls
+Duplicate Balls
+Expand Paddle
+Shrink Paddle
+Level Completed
+Reset Balls
+Reset Paddle
+Shooter
+All Breakables Blocks
+Reset Deaths

@@ -1,0 +1,71 @@
+﻿using UnityEngine;
+
+public class EchoEffect : MonoBehaviour
+{
+    // Params Config
+    [SerializeField] private GameObject echoPrefab;
+    private float startTimeBetweenSpanws = 0.05f;
+    private float timeBetweenSpawns = 0;
+    private float timeToSelfDestruct = 1f;
+
+    // Cached
+    private Ball ball;
+    private Paddle paddle;
+
+    //--------------------------------------------------------------------------------//
+    // GETTERS / SETTERS
+
+    public void SetTimeToSelfDestruct (float time) { this.timeToSelfDestruct = time; }
+
+    //--------------------------------------------------------------------------------//
+    // MONOBEHAVIOUR
+
+    private void Start () 
+    {
+        DefineReferences ();
+    }
+
+    private void Update ()
+    {
+        SpawnEchoEffect ();
+    }
+
+    //--------------------------------------------------------------------------------//
+    // HELPER FUNCTIONS
+
+    private void DefineReferences ()
+    {
+        if (tag == NamesTags.GetBallEchoTag ())
+        {
+            ball = this.transform.parent.GetComponent<Ball>();
+        }
+    }
+
+    // Verify times and instantiate the prefab of echo
+    private void SpawnEchoEffect ()
+    {
+        if (!GameSession.Instance) { return; }
+        if (GameSession.Instance.GetActualGameState () != Enumerators.GameStates.GAMEPLAY) { return; }
+
+        if (timeBetweenSpawns <= 0)
+        {
+            GameObject echo = Instantiate (echoPrefab, transform.position, Quaternion.identity) as GameObject;
+            echo.transform.parent = GameSession.Instance.FindOrCreateObjectParent (NamesTags.GetEchosParentName ()).transform;
+            if (tag == NamesTags.GetBallEchoTag () && ball) 
+            { 
+                echo.transform.localScale = ball.transform.localScale;
+                echo.transform.rotation = ball.transform.rotation;
+                SpriteRenderer spriteRenderer = echo.GetComponent<SpriteRenderer>();
+                spriteRenderer.color = ball.GetBallColor ();
+                spriteRenderer.sprite = ball.GetSprite ();
+            }
+
+            Destroy (echo, timeToSelfDestruct);
+            timeBetweenSpawns = startTimeBetweenSpanws;
+        }
+        else
+        {
+            timeBetweenSpawns -= Time.deltaTime;
+        }
+    }
+}
