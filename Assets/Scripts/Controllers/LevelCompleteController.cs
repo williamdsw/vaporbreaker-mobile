@@ -124,11 +124,12 @@ public class LevelCompleteController : MonoBehaviour
         if (labelsText.Count == 0 || uiLabels.Count == 0 || cachedTexts.Count == 0) { return; }
 
         // Update UI
-        labelsText[0].SetText (string.Concat (cachedTexts[1], currentScore));
-        labelsText[1].SetText (string.Concat (cachedTexts[2], totalTimeScore));
-        labelsText[2].SetText (string.Concat (cachedTexts[3], bestCombo));
-        labelsText[3].SetText (string.Concat (cachedTexts[4], numberOfBalls));
-        labelsText[4].SetText (string.Concat (cachedTexts[5], totalScore));
+        int[] values = { currentScore, totalTimeScore, bestCombo, numberOfBalls, totalScore };
+        for (int index = 0; index < values.Length; index++)
+        {
+            TextMeshProUGUI label = labelsText[index];
+            label.SetText(string.Concat(cachedTexts[index], values[index]));
+        }
     }
 
     //--------------------------------------------------------------------------------//

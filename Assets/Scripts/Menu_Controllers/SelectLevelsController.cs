@@ -156,6 +156,7 @@ public class SelectLevelsController : MonoBehaviour
 
     private void LoadLevelButtons ()
     {
+        Debug.Log("progress.GetTotalNumberOfLevels (): " + progress.GetTotalNumberOfLevels ());
         for (int index = 0; index < progress.GetTotalNumberOfLevels (); index++)
         {
             // GameObject
