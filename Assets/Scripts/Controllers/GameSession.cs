@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GameSession : MonoBehaviour
 {
-    [Header ("UI Texts")]
+    [Header("UI Texts")]
     [SerializeField] private Canvas gameCanvas;
     [SerializeField] private TextMeshProUGUI ellapsedTimeText;
     [SerializeField] private TextMeshProUGUI currentScoreText;
@@ -49,7 +49,7 @@ public class GameSession : MonoBehaviour
 
     // Change music in game
     private int songIndex = 0;
-    
+
     // Cached 
     private Ball[] balls;
     private CanvasGroup canvasGroup;
@@ -58,81 +58,138 @@ public class GameSession : MonoBehaviour
     private Paddle paddle;
     private PauseController pauseController;
 
-    //--------------------------------------------------------------------------------//
-    // GETTERS / SETTERS
+    public Enumerators.GameStates GetActualGameState()
+    {
+        return actualGameState;
+    }
 
-    public Enumerators.GameStates GetActualGameState () { return actualGameState; }
-    public bool GetAreBallOnFire () { return this.areBallOnFire; }
-    public string GetBlockDirection () { return this.blockDirection; }
-    public bool GetCanMoveBlocks () { return this.canMoveBlocks; }
-    public int GetComboMultiplier () { return comboMultiplier; }
-    public bool GetHasStarted () { return hasStarted; }
-    public int GetMaxNumberOfBalls () { return MAX_NUMBER_OF_BALLS; }
-    public float GetTimeToWaitToSpawnAnotherBall () { return this.timeToWaitToSpawnAnotherBall; }
+    public bool GetAreBallOnFire()
+    {
+        return this.areBallOnFire;
+    }
 
-    public void SetAreBallOnFire (bool areBallOnFire) { this.areBallOnFire = areBallOnFire; }
-    public void SetBlockDirection (string blocksDirection) { this.blockDirection = blocksDirection; }
-    public void SetCanMoveBlocks (bool canMoveBlocks) { this.canMoveBlocks = canMoveBlocks; }
-    public void SetCanSpawnAnotherBall (bool canSpawnAnotherBall) { this.canSpawnAnotherBall = canSpawnAnotherBall; }
-    public void SetHasStarted (bool hasStarted) { this.hasStarted = hasStarted; }
-    public void SetStartTimeToSpawnAnotherBall (float startTimeToSpawnAnotherBall) { this.startTimeToSpawnAnotherBall = startTimeToSpawnAnotherBall; }
-    public void SetTimeToSpawnAnotherBall (float timeToSpawnAnotherBall) { this.timeToSpawnAnotherBall = timeToSpawnAnotherBall; }
+    public string GetBlockDirection()
+    {
+        return this.blockDirection;
+    }
 
-    public void SetActualGameState (Enumerators.GameStates gameState)
+    public bool GetCanMoveBlocks()
+    {
+        return this.canMoveBlocks;
+    }
+
+    public int GetComboMultiplier()
+    {
+        return comboMultiplier;
+    }
+
+    public bool GetHasStarted()
+    {
+        return hasStarted;
+    }
+
+    public int GetMaxNumberOfBalls()
+    {
+        return MAX_NUMBER_OF_BALLS;
+    }
+
+    public float GetTimeToWaitToSpawnAnotherBall()
+    {
+        return this.timeToWaitToSpawnAnotherBall;
+    }
+
+
+    public void SetAreBallOnFire(bool areBallOnFire)
+    {
+        this.areBallOnFire = areBallOnFire;
+    }
+
+    public void SetBlockDirection(string blocksDirection)
+    {
+        this.blockDirection = blocksDirection;
+    }
+
+    public void SetCanMoveBlocks(bool canMoveBlocks)
+    {
+        this.canMoveBlocks = canMoveBlocks;
+    }
+
+    public void SetCanSpawnAnotherBall(bool canSpawnAnotherBall)
+    {
+        this.canSpawnAnotherBall = canSpawnAnotherBall;
+    }
+
+    public void SetHasStarted(bool hasStarted)
+    {
+        this.hasStarted = hasStarted;
+    }
+
+    public void SetStartTimeToSpawnAnotherBall(float startTimeToSpawnAnotherBall)
+    {
+        this.startTimeToSpawnAnotherBall = startTimeToSpawnAnotherBall;
+    }
+
+    public void SetTimeToSpawnAnotherBall(float timeToSpawnAnotherBall)
+    {
+        this.timeToSpawnAnotherBall = timeToSpawnAnotherBall;
+    }
+
+
+    public void SetActualGameState(Enumerators.GameStates gameState)
     {
         this.actualGameState = gameState;
 
         switch (actualGameState)
         {
             case Enumerators.GameStates.LEVEL_COMPLETE:
-            {
-                pauseController.SetCanPause (false);
-                canvasGroup.interactable = true;
-                break;
-            }
+                {
+                    pauseController.SetCanPause(false);
+                    canvasGroup.interactable = true;
+                    break;
+                }
 
             case Enumerators.GameStates.GAMEPLAY:
-            {
-                Time.timeScale = 1f;
-                pauseController.SetCanPause (true);
-                canvasGroup.interactable = true;
-                break;
-            }
+                {
+                    Time.timeScale = 1f;
+                    pauseController.SetCanPause(true);
+                    canvasGroup.interactable = true;
+                    break;
+                }
 
             case Enumerators.GameStates.PAUSE:
-            {
-                Time.timeScale = 0f;
-                pauseController.SetCanPause (true);
-                canvasGroup.interactable = true;
-                break;
-            }
+                {
+                    Time.timeScale = 0f;
+                    pauseController.SetCanPause(true);
+                    canvasGroup.interactable = true;
+                    break;
+                }
 
             case Enumerators.GameStates.TRANSITION:
-            {
-                pauseController.SetCanPause (false);
-                canvasGroup.interactable = false;
-                break;
-            }
+                {
+                    pauseController.SetCanPause(false);
+                    canvasGroup.interactable = false;
+                    break;
+                }
         }
     }
-    
-    //--------------------------------------------------------------------------------//
-    // PROPERTIES
 
-    public int CurrentNumberOfBalls { get { return this.currentNumberOfBalls; } set {currentNumberOfBalls = value; }}
-    public static GameSession Instance { get { return instance; }}
-
-    //--------------------------------------------------------------------------------//
-
-    private void Awake () 
+    public int CurrentNumberOfBalls
     {
-        SetupSingleton ();
+        get => this.currentNumberOfBalls;
+        set { currentNumberOfBalls = value; }
     }
 
-    private void Start () 
+    public static GameSession Instance { get => instance; }
+
+    private void Awake()
     {
-        UnityUtilities.DisableAnalytics ();
-        
+        SetupSingleton();
+    }
+
+    private void Start()
+    {
+        UnityUtilities.DisableAnalytics();
+
         // Find other objects
         balls = FindObjectsOfType<Ball>();
         canvasGroup = FindObjectOfType<CanvasGroup>();
@@ -141,151 +198,140 @@ public class GameSession : MonoBehaviour
         pauseController = FindObjectOfType<PauseController>();
 
         // Audio Controller
-        songIndex = Random.Range (0, AudioController.Instance.AllNotLoopedSongs.Length);
-        AudioController.Instance.ChangeMusic (AudioController.Instance.AllNotLoopedSongs[songIndex], false, "", false, true);
+        songIndex = Random.Range(0, AudioController.Instance.AllNotLoopedSongs.Length);
+        AudioController.Instance.ChangeMusic(AudioController.Instance.AllNotLoopedSongs[songIndex], false, "", false, true);
 
-        ResetCombo ();
-        UpdateUI ();
+        ResetCombo();
+        UpdateUI();
 
-        if (chooseRandomBlocks) { ChooseBlocks (); }
-        FillBlockGrid ();
+        if (chooseRandomBlocks)
+        {
+            ChooseBlocks();
+        }
+
+        FillBlockGrid();
     }
 
-    private void Update ()
+    private void Update()
     {
-        FindCamera ();
+        FindCamera();
 
         if (actualGameState == Enumerators.GameStates.GAMEPLAY)
         {
             if (hasStarted)
             {
-                ShowEllapsedTime ();
-                CheckSpawnAnotherBall ();
+                ShowEllapsedTime();
+                CheckSpawnAnotherBall();
             }
         }
     }
 
-    //--------------------------------------------------------------------------------//
-
-    // Setups a singleton
-    private void SetupSingleton ()
+    private void SetupSingleton()
     {
-        int numberOfInstances = FindObjectsOfType (GetType ()).Length;
+        int numberOfInstances = FindObjectsOfType(GetType()).Length;
         if (numberOfInstances > 1)
         {
-            gameObject.SetActive (false);
-            DestroyImmediate (this.gameObject);
+            gameObject.SetActive(false);
+            DestroyImmediate(this.gameObject);
         }
-        else 
+        else
         {
             instance = this;
-            DontDestroyOnLoad (this.gameObject);
+            DontDestroyOnLoad(this.gameObject);
         }
     }
 
-    //--------------------------------------------------------------------------------//
-
-    // Updates Texts in UI
-    public void UpdateUI ()
+    public void UpdateUI()
     {
-        currentScoreText.SetText (currentScore.ToString ());
-        ellapsedTimeText.SetText (Formatter.FormatEllapsedTime ((int) ellapsedTime));
-        
+        currentScoreText.SetText(currentScore.ToString());
+        ellapsedTimeText.SetText(Formatter.FormatEllapsedTime((int) ellapsedTime));
+
         // Combo text
         if (comboMultiplier > 1)
         {
             bestCombo = (comboMultiplier >= bestCombo ? comboMultiplier : bestCombo);
-            comboMultiplierText.SetText (string.Concat ("x", comboMultiplier));
+            comboMultiplierText.SetText(string.Concat("x", comboMultiplier));
         }
-        else 
+        else
         {
-            comboMultiplierText.SetText (string.Empty);
+            comboMultiplierText.SetText(string.Empty);
         }
 
         // Ball Countdown
         if (canSpawnAnotherBall && timeToSpawnAnotherBall >= 0)
         {
-            int ballCountdown = (int) (startTimeToSpawnAnotherBall - timeToSpawnAnotherBall);
-            ballCountdownText.SetText ((ballCountdown > 0 ? ballCountdown.ToString ("00") : string.Empty));
+            int ballCountdown = (int)( startTimeToSpawnAnotherBall - timeToSpawnAnotherBall);
+            ballCountdownText.SetText((ballCountdown > 0 ? ballCountdown.ToString("00") : string.Empty));
         }
-        else 
+        else
         {
-            ballCountdownText.SetText (string.Empty);
+            ballCountdownText.SetText(string.Empty);
         }
     }
 
-    // Add points to score
-    public void AddToStore (int value)
+    public void AddToStore(int value)
     {
         currentScore += value;
-        UpdateUI ();
+        UpdateUI();
     }
 
-    // Count blocks
-    public void CountBlocks ()
+    public void CountBlocks()
     {
         totalNumberOfBlocks++;
         currentNumberOfBlocks = (totalNumberOfBlocks - numberOfBlocksDestroyed);
-        UpdateUI ();
+        UpdateUI();
     }
 
-    // Updates number of blocks
-    public void BlockDestroyed ()
+    public void BlockDestroyed()
     {
         numberOfBlocksDestroyed++;
         currentNumberOfBlocks = (totalNumberOfBlocks - numberOfBlocksDestroyed);
-        UpdateUI ();
+        UpdateUI();
 
         if (currentNumberOfBlocks <= 0 && numberOfBlocksDestroyed == totalNumberOfBlocks)
         {
-            CallLevelComplete ();
+            CallLevelComplete();
         }
     }
 
-    public void CallLevelComplete ()
+    public void CallLevelComplete()
     {
-        SetActualGameState (Enumerators.GameStates.LEVEL_COMPLETE);
-        levelCompleteController.CallLevelComplete (ellapsedTime, bestCombo, currentScore);
+        SetActualGameState(Enumerators.GameStates.LEVEL_COMPLETE);
+        levelCompleteController.CallLevelComplete(ellapsedTime, bestCombo, currentScore);
     }
 
-    // Increment combo
-    public void AddToComboMultiplier ()
+    public void AddToComboMultiplier()
     {
         comboMultiplier++;
-        UpdateUI ();
+        UpdateUI();
     }
-    
-    // Resets combo
-    public void ResetCombo ()
+
+    public void ResetCombo()
     {
         comboMultiplier = 0;
-        UpdateUI ();
+        UpdateUI();
     }
 
-    //--------------------------------------------------------------------------------//
-    // BLOCKS FUNCTIONS
-
-    // Choose random blocks to instantiate Power Up Blocks
-    private void ChooseBlocks ()
+    private void ChooseBlocks()
     {
         // Finds
-        GameObject[] blocks = GameObject.FindGameObjectsWithTag (NamesTags.BreakableBlockTag);
-        if (blocks.Length == 0 ) { return; }
+        GameObject[] blocks = GameObject.FindGameObjectsWithTag(NamesTags.BreakableBlockTag);
+        if (blocks.Length == 0) return;
 
         // Calculates
-        minNumberOfRandomBlocks = Mathf.FloorToInt ((blocks.Length * (10f / 100f)));
-        maxNumberOfRandomBlocks = Mathf.FloorToInt ((blocks.Length * (20f / 100f)));
-        numberOfRandomBlocks = Random.Range (minNumberOfRandomBlocks, maxNumberOfRandomBlocks + 1);
+        minNumberOfRandomBlocks = Mathf.FloorToInt((blocks.Length * (10f / 100f)));
+        maxNumberOfRandomBlocks = Mathf.FloorToInt((blocks.Length * (20f / 100f)));
+        numberOfRandomBlocks = Random.Range(minNumberOfRandomBlocks, maxNumberOfRandomBlocks + 1);
 
         for (int i = 1; i <= numberOfRandomBlocks; i++)
         {
-            int index = Random.Range (0, blocks.Length);
-            blocks[index].GetComponent<Block>().SetCanSpawnPowerUp (true);
+            int index = Random.Range(0, blocks.Length);
+            blocks[index].GetComponent<Block>().SetCanSpawnPowerUp(true);
         }
     }
 
     // Moves all blocks in some sirection
-    public void MoveBlocks (string direction)
+    public void MoveBlocks(string direction)
     {
         if (actualGameState == Enumerators.GameStates.GAMEPLAY)
         {
@@ -296,38 +342,38 @@ public class GameSession : MonoBehaviour
                 foreach (Block block in blocks)
                 {
                     // Cancels
-                    if (block.CompareTag (NamesTags.UnbreakableBlockTag)) { return; }
+                    if (block.CompareTag(NamesTags.UnbreakableBlockTag)) return;
 
                     switch (direction)
                     {
                         case "Right":
                         {
-                            Vector3 rightPosition = new Vector3 (block.transform.position.x + 1f, block.transform.position.y, 0f);
+                            Vector3 rightPosition = new Vector3(block.transform.position.x + 1f, block.transform.position.y, 0f);
                             if (rightPosition.x <= BlockGrid.MaxXCoordinate)
                             {
-                                if (!BlockGrid.CheckPosition (rightPosition)) { return; }
-                                if (!BlockGrid.GetBlock (rightPosition))
+                                if (!BlockGrid.CheckPosition(rightPosition)) return;
+                                if (!BlockGrid.GetBlock(rightPosition))
                                 {
-                                    BlockGrid.RedefineBlock (block.transform.position, null);
-                                    BlockGrid.RedefineBlock (rightPosition, block);
+                                    BlockGrid.RedefineBlock(block.transform.position, null);
+                                    BlockGrid.RedefineBlock(rightPosition, block);
                                     block.transform.position = rightPosition;
                                     numberOfOcorrences++;
                                 }
                             }
-                            
+
                             break;
                         }
 
                         case "Left":
                         {
-                            Vector3 leftPosition = new Vector3 (block.transform.position.x - 1f, block.transform.position.y, 0f);
+                            Vector3 leftPosition = new Vector3(block.transform.position.x - 1f, block.transform.position.y, 0f);
                             if (leftPosition.x >= BlockGrid.MinXCoordinate)
                             {
-                                if (!BlockGrid.CheckPosition (leftPosition)) { return; }
-                                if (!BlockGrid.GetBlock (leftPosition))
+                                if (!BlockGrid.CheckPosition(leftPosition)) return;
+                                if (!BlockGrid.GetBlock(leftPosition))
                                 {
-                                    BlockGrid.RedefineBlock (block.transform.position, null);
-                                    BlockGrid.RedefineBlock (leftPosition, block);
+                                    BlockGrid.RedefineBlock(block.transform.position, null);
+                                    BlockGrid.RedefineBlock(leftPosition, block);
                                     block.transform.position = leftPosition;
                                     numberOfOcorrences++;
                                 }
@@ -338,14 +384,14 @@ public class GameSession : MonoBehaviour
 
                         case "Down":
                         {
-                            Vector3 downPosition = new Vector3 (block.transform.position.x, block.transform.position.y - 0.5f, 0f);
+                            Vector3 downPosition = new Vector3(block.transform.position.x, block.transform.position.y - 0.5f, 0f);
                             if (downPosition.y >= BlockGrid.MinYCoordinate)
                             {
-                                if (!BlockGrid.CheckPosition (downPosition)) { return; }
-                                if (!BlockGrid.GetBlock (downPosition))
+                                if (!BlockGrid.CheckPosition(downPosition)) return;
+                                if (!BlockGrid.GetBlock(downPosition))
                                 {
-                                    BlockGrid.RedefineBlock (block.transform.position, null);
-                                    BlockGrid.RedefineBlock (downPosition, block);
+                                    BlockGrid.RedefineBlock(block.transform.position, null);
+                                    BlockGrid.RedefineBlock(downPosition, block);
                                     block.transform.position = downPosition;
                                     numberOfOcorrences++;
                                 }
@@ -356,14 +402,14 @@ public class GameSession : MonoBehaviour
 
                         case "Up":
                         {
-                            Vector3 upPosition = new Vector3 (block.transform.position.x, block.transform.position.y + 0.5f, 0f);
+                            Vector3 upPosition = new Vector3(block.transform.position.x, block.transform.position.y + 0.5f, 0f);
                             if (upPosition.y <= BlockGrid.MaxYCoordinate)
                             {
-                                if (!BlockGrid.CheckPosition (upPosition)) { return; }
-                                if (!BlockGrid.GetBlock (upPosition))
+                                if (!BlockGrid.CheckPosition(upPosition)) return;
+                                if (!BlockGrid.GetBlock(upPosition))
                                 {
-                                    BlockGrid.RedefineBlock (block.transform.position, null);
-                                    BlockGrid.RedefineBlock (upPosition, block);
+                                    BlockGrid.RedefineBlock(block.transform.position, null);
+                                    BlockGrid.RedefineBlock(upPosition, block);
                                     block.transform.position = upPosition;
                                     numberOfOcorrences++;
                                 }
@@ -372,7 +418,7 @@ public class GameSession : MonoBehaviour
                             break;
                         }
 
-                        default: { break; }
+                        default: break;
                     }
                 }
 
@@ -380,148 +426,143 @@ public class GameSession : MonoBehaviour
                 canMoveBlocks = (numberOfOcorrences >= 1);
                 if (canMoveBlocks)
                 {
-                    AudioController.Instance.PlaySFX (AudioController.Instance.HittingWall, AudioController.Instance.GetMaxSFXVolume ());
+                    AudioController.Instance.PlaySFX(AudioController.Instance.HittingWall, AudioController.Instance.GetMaxSFXVolume());
                 }
             }
         }
     }
 
     // Fills the grid with block or null
-    private void FillBlockGrid ()
+    private void FillBlockGrid()
     {
         // Clears the grid
-        BlockGrid.Grid.Clear ();
-        
+        BlockGrid.Grid.Clear();
+
         // Finds and populate the grid
         Block[] blocks = FindObjectsOfType<Block>();
         for (float y = BlockGrid.MinYCoordinate; y <= BlockGrid.MaxYCoordinate; y += 0.5f)
         {
             for (float x = BlockGrid.MinXCoordinate; x <= BlockGrid.MaxXCoordinate; x++)
             {
-                Vector3 position = new Vector3 (x, y, 0f);
+                Vector3 position = new Vector3(x, y, 0f);
 
                 // Iterates and check positions
                 foreach (Block block in blocks)
                 {
                     if (block.transform.position == position)
                     {
-                        BlockGrid.PutBlock (position, block);
+                        BlockGrid.PutBlock(position, block);
                         break;
                     }
                 }
 
                 // Otherwise put null at position
-                if (!BlockGrid.CheckPosition (position))
+                if (!BlockGrid.CheckPosition(position))
                 {
-                    BlockGrid.PutBlock (position, null);
+                    BlockGrid.PutBlock(position, null);
                 }
             }
         }
     }
 
-    //--------------------------------------------------------------------------------//
-    // BALLS FUNCTIONS
-
-    public void MakeFireBalls ()
+    public void MakeFireBalls()
     {
         if (actualGameState == Enumerators.GameStates.GAMEPLAY)
         {
             // Cancels
-            if (!AudioController.Instance) { return; }
+            if (!AudioController.Instance) return;
 
             // Checks
             if (areBallOnFire)
             {
-                CancelInvoke ("UndoFireBalls");
-                Invoke ("UndoFireBalls", timeToPutOutBallFire);
+                CancelInvoke("UndoFireBalls");
+                Invoke("UndoFireBalls", timeToPutOutBallFire);
             }
-            else 
+            else
             {
                 areBallOnFire = true;
 
                 // Check Blocks
-                GameObject[] blocks = GameObject.FindGameObjectsWithTag (NamesTags.BreakableBlockTag);
+                GameObject[] blocks = GameObject.FindGameObjectsWithTag(NamesTags.BreakableBlockTag);
                 foreach (GameObject blockObject in blocks)
                 {
                     BoxCollider2D blockCollider = blockObject.GetComponent<BoxCollider2D>();
                     blockCollider.isTrigger = true;
                     Block block = blockObject.GetComponent<Block>();
-                    block.SetMaxHits (1);
+                    block.SetMaxHits(1);
                 }
 
                 // Check Balls
                 Ball[] balls = FindObjectsOfType<Ball>();
-                foreach (Ball ball in balls) 
-                { 
-                    ball.SetIsBallOnFire (true);
-                    ball.ChangeBallSprite (true); 
+                foreach (Ball ball in balls)
+                {
+                    ball.SetIsBallOnFire(true);
+                    ball.ChangeBallSprite(true);
                 }
 
-                AudioController.Instance.PlayME (AudioController.Instance.FireEffect, AudioController.Instance.GetMaxMEVolume () / 2f, true);
+                AudioController.Instance.PlayME(AudioController.Instance.FireEffect, AudioController.Instance.GetMaxMEVolume() / 2f, true);
 
                 // Calls cancel after 'n' seconds
-                Invoke ("UndoFireBalls", timeToPutOutBallFire);
+                Invoke("UndoFireBalls", timeToPutOutBallFire);
             }
         }
     }
 
-    private void UndoFireBalls ()
+    private void UndoFireBalls()
     {
         // Cancels
-        if (!AudioController.Instance) { return; }
+        if (!AudioController.Instance) return;
 
         areBallOnFire = false;
 
         // Check Blocks
-        GameObject[] blocks = GameObject.FindGameObjectsWithTag (NamesTags.BreakableBlockTag);
+        GameObject[] blocks = GameObject.FindGameObjectsWithTag(NamesTags.BreakableBlockTag);
         foreach (GameObject blockObject in blocks)
         {
             BoxCollider2D blockCollider = blockObject.GetComponent<BoxCollider2D>();
             blockCollider.isTrigger = false;
             Block block = blockObject.GetComponent<Block>();
-            block.SetMaxHits (block.GetStartMaxHits ());
+            block.SetMaxHits(block.GetStartMaxHits());
         }
 
         // Check Balls
         Ball[] balls = FindObjectsOfType<Ball>();
-        foreach (Ball ball in balls) 
-        { 
-            ball.SetIsBallOnFire (false);
-            ball.ChangeBallSprite (false); 
+        foreach (Ball ball in balls)
+        {
+            ball.SetIsBallOnFire(false);
+            ball.ChangeBallSprite(false);
         }
 
-        AudioController.Instance.StopME ();
+        AudioController.Instance.StopME();
     }
 
-    //--------------------------------------------------------------------------------//
-    // FINDER / CREATER
-
     // Finds a GameObject by name or create one
-    public GameObject FindOrCreateObjectParent (string parentName)
+    public GameObject FindOrCreateObjectParent(string parentName)
     {
-        GameObject parent = GameObject.Find (parentName);
-        if (!parent) { parent = new GameObject (parentName); }
+        GameObject parent = GameObject.Find(parentName);
+        if (!parent) 
+        { 
+            parent = new GameObject(parentName); 
+        }
+
         return parent;
     }
 
-    private void FindCamera ()
+    private void FindCamera()
     {
-        if (gameCanvas.worldCamera) { return; }
+        if (gameCanvas.worldCamera) return;
         gameCanvas.worldCamera = Camera.main;
     }
 
-    //--------------------------------------------------------------------------------//
-    // TIME RELATED
-
     // Increments ellapsed time
-    private void ShowEllapsedTime ()
+    private void ShowEllapsedTime()
     {
         ellapsedTime += Time.deltaTime;
-        UpdateUI ();
+        UpdateUI();
     }
 
     // Checks if can spawn another ball 
-    private void CheckSpawnAnotherBall ()
+    private void CheckSpawnAnotherBall()
     {
         if (currentNumberOfBalls < MAX_NUMBER_OF_BALLS)
         {
@@ -538,12 +579,12 @@ public class GameSession : MonoBehaviour
                         if (firstBall)
                         {
                             Rigidbody2D ballRB = firstBall.GetComponent<Rigidbody2D>();
-                            Ball newBall = Instantiate (firstBall, firstBall.transform.position, Quaternion.identity) as Ball;
+                            Ball newBall = Instantiate(firstBall, firstBall.transform.position, Quaternion.identity) as Ball;
                             Rigidbody2D newBallRB = newBall.GetComponent<Rigidbody2D>();
                             newBallRB.velocity = (ballRB.velocity.normalized * -1 * Time.deltaTime * firstBall.GetMoveSpeed());
-                            newBall.SetMoveSpeed (firstBall.GetDefaultSpeed ());
-                            newBall.SetIsBallOnFire (firstBall.GetIsBallOnFire ());
-                            newBall.ChangeBallSprite (newBall.GetIsBallOnFire ());
+                            newBall.SetMoveSpeed(firstBall.GetDefaultSpeed());
+                            newBall.SetIsBallOnFire(firstBall.GetIsBallOnFire());
+                            newBall.ChangeBallSprite(newBall.GetIsBallOnFire());
                             currentNumberOfBalls++;
                         }
                     }
@@ -555,41 +596,43 @@ public class GameSession : MonoBehaviour
         }
     }
 
-    //--------------------------------------------------------------------------------//
-    // RESET RELATED
-
-    private void ResetObjects ()
+    private void ResetObjects()
     {
-        // Balls
-        Ball[] balls = FindObjectsOfType<Ball> ();
+        Ball[] balls = FindObjectsOfType<Ball>();
         foreach (Ball ball in balls)
         {
             ball.transform.localScale = Vector2.one;
-            float defaultSpeed = ball.GetDefaultSpeed ();
-            ball.SetMoveSpeed (defaultSpeed);
+            float defaultSpeed = ball.GetDefaultSpeed();
+            ball.SetMoveSpeed(defaultSpeed);
         }
 
-        // Shooters
-        Shooter[] shooters = FindObjectsOfType<Shooter>( );
+        Shooter[] shooters = FindObjectsOfType<Shooter>();
         if (shooters.Length != 0)
         {
-            foreach (Shooter shooter in shooters) { Destroy (shooter.gameObject); }
+            foreach (Shooter shooter in shooters)
+            {
+                Destroy(shooter.gameObject);
+            }
         }
 
-        // PowerUps
-        PowerUp[] powerUps = FindObjectsOfType<PowerUp> ();
+        PowerUp[] powerUps = FindObjectsOfType<PowerUp>();
         if (powerUps.Length != 0)
         {
-            foreach (PowerUp powerUp in powerUps) { Destroy (powerUp.gameObject); }
+            foreach (PowerUp powerUp in powerUps)
+            {
+                Destroy(powerUp.gameObject);
+            }
         }
 
-        // Paddle
-        Paddle paddle = FindObjectOfType<Paddle> ();
-        if (paddle) { paddle.ResetPaddle (); }
+        Paddle paddle = FindObjectOfType<Paddle>();
+        if (paddle)
+        { 
+            paddle.ResetPaddle();
+        }
     }
 
     // Resets level if ball touches 'death zone'
-    public void ResetLevel ()
+    public void ResetLevel()
     {
         timeToSpawnAnotherBall = timeToWaitToSpawnAnotherBall;
         startTimeToSpawnAnotherBall = 5f;
@@ -603,27 +646,27 @@ public class GameSession : MonoBehaviour
         UpdateUI();
 
         // Reset objects
-        UndoFireBalls ();
-        ResetObjects ();
-        SceneManagerController.ReloadScene ();
+        UndoFireBalls();
+        ResetObjects();
+        SceneManagerController.ReloadScene();
     }
 
     // Destroys this
-    public void ResetGame (string sceneName)
+    public void ResetGame(string sceneName)
     {
         // Checks and cancels
-        if (!AudioController.Instance || !GameStatusController.Instance) { return; }
+        if (!AudioController.Instance || !GameStatusController.Instance) return;
 
-        AudioController.Instance.StopMusic ();
-        GameStatusController.Instance.SetNextSceneName (sceneName);
-        GameStatusController.Instance.SetHasStartedSong (false);
-        GameStatusController.Instance.SetCameFromLevel (true);
-        SceneManagerController.CallScene (SceneManagerController.LoadingSceneName);
-        Destroy (this.gameObject);
+        AudioController.Instance.StopMusic();
+        GameStatusController.Instance.SetNextSceneName(sceneName);
+        GameStatusController.Instance.SetHasStartedSong(false);
+        GameStatusController.Instance.SetCameFromLevel(true);
+        SceneManagerController.CallScene(SceneManagerController.LoadingSceneName);
+        Destroy(this.gameObject);
     }
 
-    public void DestroyInstance ()
+    public void DestroyInstance()
     {
-        Destroy (this.gameObject);
+        Destroy(this.gameObject);
     }
 }
