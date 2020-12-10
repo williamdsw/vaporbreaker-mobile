@@ -132,7 +132,7 @@ public class Ball : MonoBehaviour
         // Default values
         mainCamera = Camera.main;
         defaultSpeed = moveSpeed;
-        echoEffectSpawnerPrefab.tag = NamesTags.GetBallEchoTag();
+        echoEffectSpawnerPrefab.tag = NamesTags.BallEchoTag;
 
         // Locks only if it's the first ball
         int ballCount = FindObjectsOfType(GetType()).Length;
@@ -143,7 +143,7 @@ public class Ball : MonoBehaviour
             // Line between ball / pointer
             if (!initialLinePrefab)
             {
-                initialLinePrefab = GameObject.FindGameObjectWithTag(NamesTags.GetLineBetweenBallPointerTag());
+                initialLinePrefab = GameObject.FindGameObjectWithTag(NamesTags.LineBetweenBallPointerTag);
             }
 
             initialLineRenderer = initialLinePrefab.GetComponent<LineRenderer>();
@@ -195,7 +195,7 @@ public class Ball : MonoBehaviour
             if (GameSession.Instance.GetHasStarted())
             {
                 // Combo manipulator
-                if (other.gameObject.CompareTag(NamesTags.GetPaddleTag()) || other.gameObject.CompareTag(NamesTags.GetWallTag()))
+                if (other.gameObject.CompareTag(NamesTags.PaddleTag) || other.gameObject.CompareTag(NamesTags.WallTag))
                 {
                     GameSession.Instance.ResetCombo();
                 }
@@ -325,7 +325,7 @@ public class Ball : MonoBehaviour
         {
             // Instantiate and Destroy
             GameObject particles = Instantiate(paddleParticlesPrefab, contactPoint, paddleParticlesPrefab.transform.rotation) as GameObject;
-            particles.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.GetDebrisParentName()).transform);
+            particles.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.DebrisParentName).transform);
             ParticleSystem debrisParticleSystem = paddleParticlesPrefab.GetComponent<ParticleSystem>();
             float durationLength = debrisParticleSystem.main.duration + debrisParticleSystem.main.startLifetime.constant;
             Destroy(particles, durationLength);

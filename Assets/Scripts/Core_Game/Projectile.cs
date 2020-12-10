@@ -23,8 +23,8 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag(NamesTags.GetBreakableBlockTag()) ||
-            other.gameObject.CompareTag(NamesTags.GetUnbreakableBlockTag()))
+        if (other.gameObject.CompareTag(NamesTags.BreakableBlockTag) ||
+            other.gameObject.CompareTag(NamesTags.UnbreakableBlockTag))
         {
             this.gameObject.SetActive(false);
         }
@@ -32,8 +32,8 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag(NamesTags.GetBreakableBlockTag()) ||
-            other.gameObject.CompareTag(NamesTags.GetUnbreakableBlockTag()))
+        if (other.gameObject.CompareTag(NamesTags.BreakableBlockTag) ||
+            other.gameObject.CompareTag(NamesTags.UnbreakableBlockTag))
         {
             this.gameObject.SetActive(false);
         }

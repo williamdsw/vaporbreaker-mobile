@@ -42,7 +42,7 @@ public class Paddle : MonoBehaviour
         mainCamera = Camera.main;
         if (!joystickMovement)
         {
-            GameObject touchpad = GameObject.Find(NamesTags.GetTouchPadName());
+            GameObject touchpad = GameObject.Find(NamesTags.TouchPadName);
             joystickMovement = touchpad.GetComponent<JoystickMovement>();
         }
 

@@ -80,7 +80,7 @@ public class Block : MonoBehaviour
             {
                 collidedWithBall = (other.gameObject.GetComponent<Ball>() != null);
 
-                if (CompareTag(NamesTags.GetBreakableBlockTag()))
+                if (CompareTag(NamesTags.BreakableBlockTag))
                 {
                     HandleHit();
                 }
@@ -99,7 +99,7 @@ public class Block : MonoBehaviour
                 // Verifies the ball
                 collidedWithBall = (other.gameObject.GetComponent<Ball>() != null);
 
-                if (CompareTag(NamesTags.GetBreakableBlockTag()))
+                if (CompareTag(NamesTags.BreakableBlockTag))
                 {
                     HandleHit();
                 }
@@ -109,7 +109,7 @@ public class Block : MonoBehaviour
 
     private void CountBreakableBlocks()
     {
-        if (CompareTag(NamesTags.GetBreakableBlockTag()))
+        if (CompareTag(NamesTags.BreakableBlockTag))
         {
             GameSession.Instance.CountBlocks();
         }
@@ -207,7 +207,7 @@ public class Block : MonoBehaviour
             AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.ExplosionSound, AudioController.Instance.GetMaxSFXVolume() / 2f);
             int randomIndex = Random.Range(0, explosionPrefabs.Length);
             GameObject explosion = Instantiate(explosionPrefabs[randomIndex], this.transform.position, Quaternion.identity) as GameObject;
-            explosion.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.GetExplosionsParentName()).transform);
+            explosion.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.ExplosionsParentName).transform);
             Animator animator = explosion.GetComponent<Animator>();
             float animationLength = animator.GetCurrentAnimatorStateInfo(0).length;
             Destroy(explosion, animationLength);
@@ -224,7 +224,7 @@ public class Block : MonoBehaviour
         {
             // Instantiate and Destroy
             GameObject debris = Instantiate(particlesPrefab, this.transform.position, particlesPrefab.transform.rotation) as GameObject;
-            debris.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.GetDebrisParentName()).transform);
+            debris.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.DebrisParentName).transform);
 
             // Color
             ParticleSystem debrisParticleSystem = debris.GetComponent<ParticleSystem>();
@@ -246,7 +246,7 @@ public class Block : MonoBehaviour
 
         int randomIndex = CalculateIndexChance();
         GameObject powerUp = Instantiate(powerUpPrefabs[randomIndex].gameObject, this.transform.position, Quaternion.identity) as GameObject;
-        powerUp.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.GetPowerUpsParentName()).transform);
+        powerUp.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.PowerUpsParentName).transform);
         AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.ShowUpSound, AudioController.Instance.GetMaxSFXVolume());
     }
 

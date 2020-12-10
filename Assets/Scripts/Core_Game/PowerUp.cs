@@ -465,12 +465,12 @@ public class PowerUp : MonoBehaviour
 
     private void MakeUnbreakableToBreakable()
     {
-        if (GameObject.FindGameObjectsWithTag(NamesTags.GetUnbreakableBlockTag()).Length != 0)
+        if (GameObject.FindGameObjectsWithTag(NamesTags.UnbreakableBlockTag).Length != 0)
         {
-            GameObject[] unbreakables = GameObject.FindGameObjectsWithTag(NamesTags.GetUnbreakableBlockTag());
+            GameObject[] unbreakables = GameObject.FindGameObjectsWithTag(NamesTags.UnbreakableBlockTag);
             foreach (GameObject unbreakable in unbreakables)
             {
-                unbreakable.tag = NamesTags.GetBreakableBlockTag();
+                unbreakable.tag = NamesTags.BreakableBlockTag;
                 GameSession.Instance.CountBlocks();
                 unbreakable.GetComponent<Animator>().enabled = false;
 

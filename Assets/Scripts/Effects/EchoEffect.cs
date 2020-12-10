@@ -29,7 +29,7 @@ public class EchoEffect : MonoBehaviour
 
     private void DefineReferences()
     {
-        if (tag == NamesTags.GetBallEchoTag())
+        if (tag == NamesTags.BallEchoTag)
         {
             ball = this.transform.parent.GetComponent<Ball>();
         }
@@ -43,8 +43,8 @@ public class EchoEffect : MonoBehaviour
         if (timeBetweenSpawns <= 0)
         {
             GameObject echo = Instantiate(echoPrefab, transform.position, Quaternion.identity) as GameObject;
-            echo.transform.parent = GameSession.Instance.FindOrCreateObjectParent(NamesTags.GetEchosParentName()).transform;
-            if (tag == NamesTags.GetBallEchoTag() && ball)
+            echo.transform.parent = GameSession.Instance.FindOrCreateObjectParent(NamesTags.EchosParentName).transform;
+            if (tag == NamesTags.BallEchoTag && ball)
             {
                 echo.transform.localScale = ball.transform.localScale;
                 echo.transform.rotation = ball.transform.rotation;

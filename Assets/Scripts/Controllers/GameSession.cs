@@ -269,7 +269,7 @@ public class GameSession : MonoBehaviour
     private void ChooseBlocks ()
     {
         // Finds
-        GameObject[] blocks = GameObject.FindGameObjectsWithTag (NamesTags.GetBreakableBlockTag ());
+        GameObject[] blocks = GameObject.FindGameObjectsWithTag (NamesTags.BreakableBlockTag);
         if (blocks.Length == 0 ) { return; }
 
         // Calculates
@@ -296,7 +296,7 @@ public class GameSession : MonoBehaviour
                 foreach (Block block in blocks)
                 {
                     // Cancels
-                    if (block.CompareTag (NamesTags.GetUnbreakableBlockTag ())) { return; }
+                    if (block.CompareTag (NamesTags.UnbreakableBlockTag)) { return; }
 
                     switch (direction)
                     {
@@ -440,7 +440,7 @@ public class GameSession : MonoBehaviour
                 areBallOnFire = true;
 
                 // Check Blocks
-                GameObject[] blocks = GameObject.FindGameObjectsWithTag (NamesTags.GetBreakableBlockTag ());
+                GameObject[] blocks = GameObject.FindGameObjectsWithTag (NamesTags.BreakableBlockTag);
                 foreach (GameObject blockObject in blocks)
                 {
                     BoxCollider2D blockCollider = blockObject.GetComponent<BoxCollider2D>();
@@ -473,7 +473,7 @@ public class GameSession : MonoBehaviour
         areBallOnFire = false;
 
         // Check Blocks
-        GameObject[] blocks = GameObject.FindGameObjectsWithTag (NamesTags.GetBreakableBlockTag ());
+        GameObject[] blocks = GameObject.FindGameObjectsWithTag (NamesTags.BreakableBlockTag);
         foreach (GameObject blockObject in blocks)
         {
             BoxCollider2D blockCollider = blockObject.GetComponent<BoxCollider2D>();
