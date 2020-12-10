@@ -12,38 +12,39 @@ public class AnimationEffect : MonoBehaviour
     private Image image;
     private SpriteRenderer spriteRenderer;
 
-    //--------------------------------------------------------------------------------//
-    // MONOBEHAVIOUR
-
-    private void Awake () 
+    private void Awake()
     {
-        // Get components
         image = this.GetComponent<Image>();
-        if (!image) { spriteRenderer = this.GetComponent<SpriteRenderer>(); }
+        if (!image)
+        {
+            spriteRenderer = this.GetComponent<SpriteRenderer>();
+        }
     }
 
-    private void Start () 
+    private void Start()
     {
-        // Chooses random FPS
-        framesPerSecond = (randomFPS ? Random.Range (5, 30) : framesPerSecond);
+        framesPerSecond = (randomFPS ? Random.Range(5, 30) : framesPerSecond);
     }
 
-    private void FixedUpdate () 
+    private void FixedUpdate()
     {
-        AnimateImage ();
+        AnimateImage();
     }
 
-    //--------------------------------------------------------------------------------//
-    // HELPER FUNCTIONS
-
-    private void AnimateImage ()
+    private void AnimateImage()
     {
         //Cancel
-        if (spritesToAnimateList.Length == 0) { return; }
+        if (spritesToAnimateList.Length == 0) return;
 
         int index = (int) (Time.fixedTime * framesPerSecond) % spritesToAnimateList.Length;
 
-        if (image) { image.sprite = spritesToAnimateList[index]; }
-        else { spriteRenderer.sprite = spritesToAnimateList[index]; }
+        if (image)
+        {
+            image.sprite = spritesToAnimateList[index];
+        }
+        else if (spriteRenderer)
+        {
+            spriteRenderer.sprite = spritesToAnimateList[index];
+        }
     }
 }
