@@ -1,8 +1,7 @@
 ﻿
 public class UnityUtilities
 {
-    // Disables all analytics functions
-    public static void DisableAnalytics ()
+    public static void DisableAnalytics()
     {
         UnityEngine.Analytics.Analytics.enabled = false;
         UnityEngine.Analytics.Analytics.deviceStatsEnabled = false;

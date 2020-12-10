@@ -59,7 +59,7 @@ public class AboutController : MonoBehaviour
     {
         if (!creditsText) return;
 
-        string creditsRaw = FileManager.LoadAsset(FileManager.GetOtherFolderPath(), FileManager.GetCreditsPath());
+        string creditsRaw = FileManager.LoadAsset(FileManager.OtherFolderPath, FileManager.CreditsPath);
         if (string.IsNullOrEmpty(creditsRaw) || string.IsNullOrWhiteSpace(creditsRaw)) return;
         creditsText.SetText(creditsRaw);
     }

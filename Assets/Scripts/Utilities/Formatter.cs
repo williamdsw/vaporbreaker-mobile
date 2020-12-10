@@ -1,8 +1,6 @@
-﻿using System;
-
+﻿
 public class Formatter
 {
-    // Format time value
     public static string FormatEllapsedTime (int timer)
     {
         int hours = timer / 3600;
@@ -11,11 +9,10 @@ public class Formatter
         return string.Concat (hours.ToString ("00"), ":", minutes.ToString ("00"), ":", seconds.ToString ("00"));
     }
 
-    // Format level name
     public static string FormatLevelName (string levelName)
     {
         // Cancels
-        if (string.IsNullOrEmpty (levelName) || string.IsNullOrWhiteSpace (levelName)) { return null ; }
+        if (string.IsNullOrEmpty (levelName) || string.IsNullOrWhiteSpace (levelName)) { return null; }
         string newName = levelName.Replace ("_", " ");
         return newName;
     }

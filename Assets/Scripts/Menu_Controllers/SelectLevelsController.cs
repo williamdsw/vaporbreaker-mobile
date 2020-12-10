@@ -204,7 +204,7 @@ public class SelectLevelsController : MonoBehaviour
 
     private void LoadLevelThumbnails()
     {
-        string path = string.Concat(FileManager.GetFilesFolderPath(), FileManager.GetLevelsThumbnailsPath());
+        string path = string.Concat(FileManager.FilesFolderPath, FileManager.LevelsThumbnailsPath);
         levelThumbnails = Resources.LoadAll<Sprite>(path);
     }
 

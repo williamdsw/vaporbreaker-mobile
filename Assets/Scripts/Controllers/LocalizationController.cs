@@ -135,12 +135,12 @@ public class LocalizationController : MonoBehaviour
             case "English":
             default:
             {
-                folderPath = FileManager.GetLocalizationEnglishFolderPath(); break;
+                folderPath = FileManager.LocalizationEnglishFolderPath; break;
             }
 
             case "Portuguese":
             {
-                folderPath = FileManager.GetLocalizationPortugueseFolderPath(); break;
+                folderPath = FileManager.LocalizationPortugueseFolderPath; break;
             }
         }
 
@@ -152,7 +152,7 @@ public class LocalizationController : MonoBehaviour
         ClearLists();
 
         // Panels
-        string uiLabels = FileManager.LoadAsset(folderPath, FileManager.GetUILabelsPath());
+        string uiLabels = FileManager.LoadAsset(folderPath, FileManager.UILabelsPath);
         string[] panels = uiLabels.Split('\n');
 
         // Checks & Cancel
