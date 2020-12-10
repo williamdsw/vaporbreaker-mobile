@@ -6,20 +6,20 @@ using UnityEngine.UI;
 public class LevelDetailsController : MonoBehaviour
 {
     // Config
-    [Header ("UI Elements")]
+    [Header("UI Elements")]
     [SerializeField] private GameObject selectLevelsPanel;
     [SerializeField] private GameObject levelDetailsPanel;
     [SerializeField] private Button playButton;
     [SerializeField] private Button quitButton;
 
-    [Header ("Level Details Elements")]
+    [Header("Level Details Elements")]
     [SerializeField] private Image levelThumbnail;
     [SerializeField] private TextMeshProUGUI levelNameText;
     [SerializeField] private TextMeshProUGUI bestScoreText;
     [SerializeField] private TextMeshProUGUI bestTimeScoreText;
 
-    [Header ("Labels to Translate")]
-    [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI> ();
+    [Header("Labels to Translate")]
+    [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI>();
 
     // State
     private string levelSceneName;
@@ -28,75 +28,68 @@ public class LevelDetailsController : MonoBehaviour
     // Cached
     private static LevelDetailsController instance;
 
-    //--------------------------------------------------------------------------------//
-    // SETTERS
+    public void SetLevelSceneName(string levelSceneName)
+    {
+        this.levelSceneName = levelSceneName;
+    }
 
-    public void SetLevelSceneName (string levelSceneName) { this.levelSceneName = levelSceneName; }
+    public static LevelDetailsController Instance { get => instance; }
 
-    //--------------------------------------------------------------------------------//
-    // PROPERTIES
-
-    public static LevelDetailsController Instance { get { return instance; }}
-
-    //--------------------------------------------------------------------------------//
-    // MONOBEHAVIOUR
-
-    private void Awake () 
+    private void Awake()
     {
         instance = this;
     }
 
-    private void Start () 
+    private void Start()
     {
-        TranslateLabels ();
-        BindClickEvents ();
+        TranslateLabels();
+        BindClickEvents();
     }
 
-    //--------------------------------------------------------------------------------//
-    // HELPER FUNCTIONS
-
-    // Translate labels based on choosed language
-    private void TranslateLabels ()
+    private void TranslateLabels()
     {
-        // CANCELS
-        if (!LocalizationController.Instance) { return; }
-        
-        List<string> labels = new List<string> ();
-        foreach (string label in LocalizationController.Instance.GetLevelDetailsLabels ()) { labels.Add (label); }
-        if (labels.Count == 0 || uiLabels.Count == 0) { return; }
-        for (int index = 0; index < labels.Count; index++) { uiLabels[index].SetText (labels[index]); }
+        if (!LocalizationController.Instance) return;
+
+        List<string> labels = new List<string>();
+        foreach (string label in LocalizationController.Instance.GetLevelDetailsLabels())
+        {
+            labels.Add(label);
+        }
+
+        if (labels.Count == 0 || uiLabels.Count == 0) return;
+        for (int index = 0; index < labels.Count; index++)
+        {
+            uiLabels[index].SetText(labels[index]);
+        }
+
         levelTranslated = labels[0];
     }
 
-    private void BindClickEvents ()
+    private void BindClickEvents()
     {
-        // Cancels
-        if (!playButton || !quitButton) { return; }
+        if (!playButton || !quitButton) return;
 
-        playButton.onClick.AddListener (() => 
+        playButton.onClick.AddListener(() =>
         {
-            // Cancels
-            if (!SelectLevelsController.Instance) { return; }
-
-            SelectLevelsController.Instance.StartCallNextScene (levelSceneName);
+            if (!SelectLevelsController.Instance) return;
+            SelectLevelsController.Instance.StartCallNextScene(levelSceneName);
         });
 
-        quitButton.onClick.AddListener (() => 
+        quitButton.onClick.AddListener(() =>
         {
-            if (!selectLevelsPanel || !levelDetailsPanel) { return; }
-            levelDetailsPanel.SetActive (false);
-            selectLevelsPanel.SetActive (true);
+            if (!selectLevelsPanel || !levelDetailsPanel) return;
+            levelDetailsPanel.SetActive(false);
+            selectLevelsPanel.SetActive(true);
         });
     }
 
-    public void UpdateUI (string levelName, string bestScore, string bestTimeScore, Sprite levelThumbnailSprite)
+    public void UpdateUI(string levelName, string bestScore, string bestTimeScore, Sprite levelThumbnailSprite)
     {
-        // Cancels
-        if (!levelNameText || !bestScoreText || !bestTimeScoreText || !levelThumbnail) { return; }
+        if (!levelNameText || !bestScoreText || !bestTimeScoreText || !levelThumbnail) return;
 
-        levelNameText.SetText (string.Concat (levelTranslated, levelName));
-        bestScoreText.SetText (bestScore);
-        bestTimeScoreText.SetText (bestTimeScore);
+        levelNameText.SetText(string.Concat(levelTranslated, levelName));
+        bestScoreText.SetText(bestScore);
+        bestTimeScoreText.SetText(bestTimeScore);
         levelThumbnail.sprite = levelThumbnailSprite;
     }
 }

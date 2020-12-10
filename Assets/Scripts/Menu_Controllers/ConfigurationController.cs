@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ConfigurationController : MonoBehaviour
 {
     // Config
-    [Header ("UI Elements")]
+    [Header("UI Elements")]
     [SerializeField] private GameObject configurationPanel;
     [SerializeField] private GameObject selectLevelsPanel;
     [SerializeField] private GameObject aboutPanel;
@@ -18,8 +18,8 @@ public class ConfigurationController : MonoBehaviour
     [SerializeField] private Sprite soundOnSprite;
     [SerializeField] private Sprite soundOffSprite;
 
-    [Header ("Labels to Translate")]
-    [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI> ();
+    [Header("Labels to Translate")]
+    [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI>();
 
     // State
     private bool isMute;
@@ -30,95 +30,92 @@ public class ConfigurationController : MonoBehaviour
     private AudioSource audioSourceME;
     private AudioSource audioSourceSFX;
 
-    //--------------------------------------------------------------------------------//
-    // MONOBEHAVIOUR
-
-    private void Start () 
+    private void Start()
     {
         if (!audioSourceSFX || !audioSourceME || !audioSourceSFX)
         {
-            audioSourceBGM = GameObject.Find ("SourceBGM").GetComponent<AudioSource>();
-            audioSourceME = GameObject.Find ("SourceME").GetComponent<AudioSource>();
-            audioSourceSFX = GameObject.Find ("SourceSFX").GetComponent<AudioSource>();
+            audioSourceBGM = GameObject.Find("SourceBGM").GetComponent<AudioSource>();
+            audioSourceME = GameObject.Find("SourceME").GetComponent<AudioSource>();
+            audioSourceSFX = GameObject.Find("SourceSFX").GetComponent<AudioSource>();
         }
 
-        TranslateLabels ();
-        BindClickEvents ();
-        LoadSettings ();
+        TranslateLabels();
+        BindClickEvents();
+        LoadSettings();
     }
 
-    //--------------------------------------------------------------------------------//
-    // HELPER FUNCTIONS
-
-    // Translate labels based on choosed language
-    private void TranslateLabels ()
+    private void TranslateLabels()
     {
         // CANCELS
-        if (!LocalizationController.Instance) { return; }
-        
-        List<string> labels = new List<string> ();
-        foreach (string label in LocalizationController.Instance.GetConfigurationsLabels ()) { labels.Add (label); }
-        if (labels.Count == 0 || uiLabels.Count == 0) { return; }
-        for (int index = 0; index < labels.Count; index++) { uiLabels[index].SetText (labels[index]); }
+        if (!LocalizationController.Instance) return;
+
+        List<string> labels = new List<string>();
+        foreach (string label in LocalizationController.Instance.GetConfigurationsLabels())
+        {
+            labels.Add(label);
+        }
+
+        if (labels.Count == 0 || uiLabels.Count == 0) return;
+        for (int index = 0; index < labels.Count; index++)
+        {
+            uiLabels[index].SetText(labels[index]);
+        }
     }
 
-    private void BindClickEvents ()
+    private void BindClickEvents()
     {
-        // Cancels
-        if (volumeButtons.Length == 0 || muteFlags.Length == 0 || !resetProgressButton ||  !aboutButton || !quitButton) { return; }
+        if (volumeButtons.Length == 0 || muteFlags.Length == 0 || !resetProgressButton || !aboutButton || !quitButton) return;
 
         // BACKGROUND MUSIC
-        volumeButtons[0].onClick.AddListener (() =>
+        volumeButtons[0].onClick.AddListener(() =>
         {
-            Transform child = volumeButtons[0].transform.GetChild (0);
+            Transform child = volumeButtons[0].transform.GetChild(0);
             Image image = child.GetComponent<Image>();
-            ToggleAudio (audioSourceBGM, image, 0);
+            ToggleAudio(audioSourceBGM, image, 0);
         });
 
         // MUSIC EFFECTS
-        volumeButtons[1].onClick.AddListener (() =>
+        volumeButtons[1].onClick.AddListener(() =>
         {
-            Transform child = volumeButtons[1].transform.GetChild (0);
+            Transform child = volumeButtons[1].transform.GetChild(0);
             Image image = child.GetComponent<Image>();
-            ToggleAudio (audioSourceME, image, 1);
+            ToggleAudio(audioSourceME, image, 1);
         });
 
         // SOUND EFFECTS
-        volumeButtons[2].onClick.AddListener (() => 
+        volumeButtons[2].onClick.AddListener(() =>
         {
-            Transform child = volumeButtons[2].transform.GetChild (0);
+            Transform child = volumeButtons[2].transform.GetChild(0);
             Image image = child.GetComponent<Image>();
-            ToggleAudio (audioSourceSFX, image, 2);
+            ToggleAudio(audioSourceSFX, image, 2);
         });
 
-        aboutButton.onClick.AddListener (() => 
+        aboutButton.onClick.AddListener(() =>
         {
-            if (!configurationPanel || !aboutPanel) { return; }
-            configurationPanel.SetActive (false);
-            aboutPanel.SetActive (true);
+            if (!configurationPanel || !aboutPanel) return;
+            configurationPanel.SetActive(false);
+            aboutPanel.SetActive(true);
         });
 
-        resetProgressButton.onClick.AddListener (() =>
+        resetProgressButton.onClick.AddListener(() =>
         {
-            if (!confirmBox) { return; }
-            configurationPanel.SetActive (false);
-            confirmBox.SetActive (true);
+            if (!confirmBox) return;
+            configurationPanel.SetActive(false);
+            confirmBox.SetActive(true);
         });
 
-        quitButton.onClick.AddListener (() => 
+        quitButton.onClick.AddListener(() =>
         {
-            if (!configurationPanel || !selectLevelsPanel) { return; }
-            configurationPanel.SetActive (false);
-            selectLevelsPanel.SetActive (true);
-            SaveSettings ();
+            if (!configurationPanel || !selectLevelsPanel) return;
+            configurationPanel.SetActive(false);
+            selectLevelsPanel.SetActive(true);
+            SaveSettings();
         });
     }
 
-    private void ToggleAudio (AudioSource source, Image image, int index)
+    private void ToggleAudio(AudioSource source, Image image, int index)
     {
-        // Cancels
-        if (!source || !image) { return;}
-        if (!soundOnSprite || !soundOffSprite) { return; }
+        if (!source || !image || !soundOnSprite || !soundOffSprite) return;
 
         isMute = !isMute;
         muteFlags[index] = isMute;
@@ -126,61 +123,60 @@ public class ConfigurationController : MonoBehaviour
         image.sprite = (isMute ? soundOffSprite : soundOnSprite);
     }
 
-    // Define defaults values
-    private void DefaultValues ()
+    private void DefaultValues()
     {
-        for (int index = 0; index < muteFlags.Length; index++) { muteFlags[index] = false; }
-        UpdateUI ();
-        ApplyValues ();
+        for (int index = 0; index < muteFlags.Length; index++)
+        {
+            muteFlags[index] = false;
+        }
+
+        UpdateUI();
+        ApplyValues();
     }
 
-    private void ApplyValues ()
+    private void ApplyValues()
     {
         audioSourceBGM.mute = muteFlags[0];
         audioSourceME.mute = muteFlags[1];
         audioSourceSFX.mute = muteFlags[2];
     }
 
-    private void UpdateUI ()
+    private void UpdateUI()
     {
-        // Cancels
-        if (volumeButtons.Length == 0) { return; }
+        if (volumeButtons.Length == 0) return;
 
         int index = 0;
         foreach (Button button in volumeButtons)
         {
-            Transform child = button.transform.GetChild (0);
+            Transform child = button.transform.GetChild(0);
             Image image = child.GetComponent<Image>();
             image.sprite = (muteFlags[index] ? soundOffSprite : soundOnSprite);
             index++;
         }
     }
 
-    private void LoadSettings ()
+    private void LoadSettings()
     {
-        // Cancels
-        if (!AudioController.Instance) { return; }
+        if (!AudioController.Instance) return;
 
-        if (!PlayerPrefsController.HasPlayerPrefs ())
+        if (!PlayerPrefsController.HasPlayerPrefs())
         {
-            DefaultValues ();
+            DefaultValues();
             return;
         }
 
-        muteFlags[0] = bool.Parse (PlayerPrefsController.GetBGMVolumeMute ());
-        muteFlags[1] = bool.Parse (PlayerPrefsController.GetMEVolumeMute ());
-        muteFlags[2] = bool.Parse (PlayerPrefsController.GetSFXVolumeMute ());
-        UpdateUI ();
-        ApplyValues ();
+        muteFlags[0] = bool.Parse(PlayerPrefsController.GetBGMVolumeMute());
+        muteFlags[1] = bool.Parse(PlayerPrefsController.GetMEVolumeMute());
+        muteFlags[2] = bool.Parse(PlayerPrefsController.GetSFXVolumeMute());
+        UpdateUI();
+        ApplyValues();
     }
 
-
-    // Saves settings to PlayerPrefs
-    private void SaveSettings ()
+    private void SaveSettings()
     {
-        PlayerPrefsController.SetBGMVolumeMute (muteFlags[0].ToString ());
-        PlayerPrefsController.SetMEVolumeMute (muteFlags[1].ToString ());
-        PlayerPrefsController.SetSFXVolumeMute (muteFlags[2].ToString ());
-        PlayerPrefsController.SetHasPlayerPrefs (true.ToString ());
+        PlayerPrefsController.SetBGMVolumeMute(muteFlags[0].ToString());
+        PlayerPrefsController.SetMEVolumeMute(muteFlags[1].ToString());
+        PlayerPrefsController.SetSFXVolumeMute(muteFlags[2].ToString());
+        PlayerPrefsController.SetHasPlayerPrefs(true.ToString());
     }
 }
