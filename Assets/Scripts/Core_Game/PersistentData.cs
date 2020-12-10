@@ -2,57 +2,46 @@
 
 public class PersistentData : MonoBehaviour
 {
-    //State 
     private int startingSceneIndex;
     private static PersistentData instance;
 
-    //--------------------------------------------------------------------------------//
-    // PROPERTIES
+    public static PersistentData Instance { get => instance; }
 
-    public static PersistentData Instance { get { return instance; }}
-
-    //--------------------------------------------------------------------------------//
-    // MONOBEHAVIOUR
-
-    private void Awake () 
+    private void Awake()
     {
-        SetupSingleton ();
+        SetupSingleton();
     }
 
-    private void Start () 
+    private void Start()
     {
-        startingSceneIndex = SceneManagerController.GetActiveSceneIndex ();
+        startingSceneIndex = SceneManagerController.GetActiveSceneIndex();
     }
 
-    private void Update () 
+    private void Update()
     {
-        int currentSceneIndex = SceneManagerController.GetActiveSceneIndex ();
+        int currentSceneIndex = SceneManagerController.GetActiveSceneIndex();
         if (currentSceneIndex != startingSceneIndex)
         {
-            Destroy (this.gameObject);
+            Destroy(this.gameObject);
         }
     }
 
-    //--------------------------------------------------------------------------------//
-    // HELPER FUNCTIONS
-
-    // Define singleton
-    private void SetupSingleton ()
+    private void SetupSingleton()
     {
-        int numberOfInstances = FindObjectsOfType (GetType ()).Length;
+        int numberOfInstances = FindObjectsOfType(GetType()).Length;
         if (numberOfInstances > 1)
         {
-            DestroyImmediate (this.gameObject);
+            DestroyImmediate(this.gameObject);
         }
-        else 
+        else
         {
             instance = this;
-            DontDestroyOnLoad (this.gameObject);
+            DontDestroyOnLoad(this.gameObject);
         }
     }
 
-    public void DestroyInstance ()
+    public void DestroyInstance()
     {
-        DestroyImmediate (this.gameObject);
+        DestroyImmediate(this.gameObject);
     }
 }

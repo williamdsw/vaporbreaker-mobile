@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-[RequireComponent (typeof (SpriteRenderer))]
-[RequireComponent (typeof (BoxCollider2D))]
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(BoxCollider2D))]
 public class Paddle : MonoBehaviour
 {
-    [Header ("Configuration")]
+    [Header("Configuration")]
     [SerializeField] private Ball ball;
     [SerializeField] private Sprite[] paddleSprites;
     [SerializeField] private JoystickMovement joystickMovement;
@@ -15,7 +15,7 @@ public class Paddle : MonoBehaviour
     private float doubleSpeed = 0f;
     private float maxXCoordinate;
     private float minXCoordinate;
-     private float moveSpeed = 15f;
+    private float moveSpeed = 15f;
     private Vector3 currentDirection;
 
     // Cached Components
@@ -25,28 +25,24 @@ public class Paddle : MonoBehaviour
     // Cached Others
     private Camera mainCamera;
 
-    //--------------------------------------------------------------------------------//
-    // GETTER / SETTER
-
-    public Sprite GetSprite () { return spriteRenderer.sprite; }
-
-    //--------------------------------------------------------------------------------//
-    // MONOBEHAVIOUR
-
-    private void Awake () 
+    public Sprite GetSprite()
     {
-        // Find components
+        return spriteRenderer.sprite;
+    }
+
+    private void Awake()
+    {
         boxCollider2D = this.GetComponent<BoxCollider2D>();
         spriteRenderer = this.GetComponent<SpriteRenderer>();
     }
 
-    private void Start () 
+    private void Start()
     {
         // Find others
         mainCamera = Camera.main;
         if (!joystickMovement)
         {
-            GameObject touchpad = GameObject.Find (NamesTags.GetTouchPadName ());
+            GameObject touchpad = GameObject.Find(NamesTags.GetTouchPadName());
             joystickMovement = touchpad.GetComponent<JoystickMovement>();
         }
 
@@ -54,68 +50,61 @@ public class Paddle : MonoBehaviour
         defaultSpeed = moveSpeed;
         doubleSpeed = (moveSpeed * 2f);
 
-        DefineStartPosition ();
-        DefineBounds ();
+        DefineStartPosition();
+        DefineBounds();
     }
 
-    private void Update () 
+    private void Update()
     {
-        // Cancels
-        if (!GameSession.Instance) { return; }
+        if (!GameSession.Instance) return;
 
-        if (GameSession.Instance.GetActualGameState () == Enumerators.GameStates.GAMEPLAY)
+        if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
         {
-            DefineBounds ();
-            Move ();
-            LockPositionToScreen ();
+            DefineBounds();
+            Move();
+            LockPositionToScreen();
         }
     }
 
-    //--------------------------------------------------------------------------------//
-
-    // Define posicao inicial
-    private void DefineStartPosition ()
+    private void DefineStartPosition()
     {
-        Vector3 startPosition = new Vector3 (Screen.width / 2f, 0, 0);
-        startPosition = mainCamera.ScreenToWorldPoint (startPosition);
-        this.transform.position = new Vector3 (startPosition.x, this.transform.position.y, transform.position.z);
+        Vector3 startPosition = new Vector3(Screen.width / 2f, 0, 0);
+        startPosition = mainCamera.ScreenToWorldPoint(startPosition);
+        this.transform.position = new Vector3(startPosition.x, this.transform.position.y, transform.position.z);
     }
 
-    // Define limites
-    public void DefineBounds ()
+    public void DefineBounds()
     {
-        if (!mainCamera || !spriteRenderer) { return; }
+        if (!mainCamera || !spriteRenderer) return;
 
-        float minScreenX = mainCamera.ScreenToWorldPoint (new Vector3 (0, 0, 0)).x;
-        float maxScreenX = mainCamera.ScreenToWorldPoint (new Vector3 (Screen.width, 0, 0)).x;
+        float minScreenX = mainCamera.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
+        float maxScreenX = mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
         float spriteExtentsX = spriteRenderer.bounds.extents.x;
         minXCoordinate = minScreenX + spriteExtentsX;
         maxXCoordinate = maxScreenX - spriteExtentsX;
     }
 
-    private void Move ()
+    private void Move()
     {
-        currentDirection = new Vector3 (joystickMovement.InputDirection.x, 0, 0);
-        this.transform.position = new Vector3 (currentDirection.x, this.transform.position.y, this.transform.position.z);
+        currentDirection = new Vector3(joystickMovement.InputDirection.x, 0, 0);
+        this.transform.position = new Vector3(currentDirection.x, this.transform.position.y, this.transform.position.z);
     }
 
-    private void LockPositionToScreen ()
+    private void LockPositionToScreen()
     {
-        // Lock position
         float xPosition = transform.position.x;
-        xPosition = Mathf.Clamp (xPosition, minXCoordinate, maxXCoordinate);
-        transform.position = new Vector3 (xPosition, transform.position.y, transform.position.z);
+        xPosition = Mathf.Clamp(xPosition, minXCoordinate, maxXCoordinate);
+        transform.position = new Vector3(xPosition, transform.position.y, transform.position.z);
     }
 
     // Expands or shrink paddle size if index is valid
-    public void DefinePaddleSize (bool toExpand)
+    public void DefinePaddleSize(bool toExpand)
     {
-        // Check index
         currentPaddleIndex = (toExpand ? currentPaddleIndex + 1 : currentPaddleIndex - 1);
-        if (currentPaddleIndex < 0) 
-        { 
+        if (currentPaddleIndex < 0)
+        {
             currentPaddleIndex++;
-            return; 
+            return;
         }
         else if (currentPaddleIndex >= paddleSprites.Length)
         {
@@ -125,34 +114,39 @@ public class Paddle : MonoBehaviour
 
         // Define properties
         spriteRenderer.sprite = paddleSprites[currentPaddleIndex];
-        Destroy (boxCollider2D);
+        Destroy(boxCollider2D);
         boxCollider2D = this.gameObject.AddComponent<BoxCollider2D>();
-        DefineBounds ();
+        DefineBounds();
 
         // Case have shooter power up
         Shooter shooter = FindObjectOfType<Shooter>();
-        if (shooter) { shooter.DefineCannonsPosition (); }
+        if (shooter)
+        {
+            shooter.DefineCannonsPosition();
+        }
     }
 
-    // Resets the paddle
-    public void ResetPaddle ()
+    public void ResetPaddle()
     {
         currentPaddleIndex = 1;
 
         // Define properties
         spriteRenderer.sprite = paddleSprites[currentPaddleIndex];
-        Destroy (boxCollider2D);
+        Destroy(boxCollider2D);
         boxCollider2D = this.gameObject.AddComponent<BoxCollider2D>();
-        DefineBounds ();
+        DefineBounds();
 
         // Case have shooter power up
         Shooter shooter = FindObjectOfType<Shooter>();
-        if (shooter) { shooter.DefineCannonsPosition (); }
+        if (shooter)
+        {
+            shooter.DefineCannonsPosition();
+        }
     }
 
-    private void CheckAndFindBall ()
+    private void CheckAndFindBall()
     {
-        if (ball) { return; }
+        if (ball) return;
         ball = FindObjectOfType<Ball>();
     }
 }

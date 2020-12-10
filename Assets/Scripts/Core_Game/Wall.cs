@@ -1,49 +1,34 @@
 ﻿using UnityEngine;
 
-[RequireComponent (typeof (EdgeCollider2D))]
+[RequireComponent(typeof(EdgeCollider2D))]
 public class Wall : MonoBehaviour
 {
-    // Cached
     private EdgeCollider2D edgeCollider;
 
-    //--------------------------------------------------------------------------------//
-    // MONOBEHAVIOUR
-
-    private void Awake () 
+    private void Awake()
     {
         edgeCollider = this.GetComponent<EdgeCollider2D>();
     }
 
-    private void Start () 
+    private void Start()
     {
-        DefineColliderPoints ();
+        DefineColliderPoints();
     }
 
-    /*private void Update () 
-    {
-        if (!GameSession.Instance) { return; }
-        if (GameSession.Instance.GetActualGameState () != Enumerators.GameStates.GAMEPLAY) { return; }
-
-        DefineColliderPoints ();
-    }*/
-
-    //--------------------------------------------------------------------------------//
-    // HELPER FUNCTIONS
-
-    public void DefineColliderPoints ()
+    public void DefineColliderPoints()
     {
         Camera mainCamera = Camera.main;
 
         // Size Vectors
-        Vector2 screenHeight = new Vector2 (0, Screen.height);
-        Vector2 screenSize = new Vector2 (Screen.width, Screen.height);
-        Vector2 screenWidth = new Vector2 (Screen.width, 0);
+        Vector2 screenHeight = new Vector2(0, Screen.height);
+        Vector2 screenSize = new Vector2(Screen.width, Screen.height);
+        Vector2 screenWidth = new Vector2(Screen.width, 0);
 
         // Converts
-        Vector2 lowerLeftCorner = Camera.main.ScreenToWorldPoint (Vector2.zero);
-        Vector2 upperLeftCorner = Camera.main.ScreenToWorldPoint (screenHeight);
-        Vector2 upperRightCorner = Camera.main.ScreenToWorldPoint (screenSize);
-        Vector2 lowerRightCorner = Camera.main.ScreenToWorldPoint (screenWidth);
+        Vector2 lowerLeftCorner = Camera.main.ScreenToWorldPoint(Vector2.zero);
+        Vector2 upperLeftCorner = Camera.main.ScreenToWorldPoint(screenHeight);
+        Vector2 upperRightCorner = Camera.main.ScreenToWorldPoint(screenSize);
+        Vector2 lowerRightCorner = Camera.main.ScreenToWorldPoint(screenWidth);
 
         if (edgeCollider)
         {
