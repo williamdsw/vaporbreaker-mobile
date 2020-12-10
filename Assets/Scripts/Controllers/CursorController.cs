@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-[RequireComponent (typeof (SpriteRenderer))]
-[RequireComponent (typeof (Animator))]
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(Animator))]
 public class CursorController : MonoBehaviour
 {
     // Config params
@@ -13,51 +13,45 @@ public class CursorController : MonoBehaviour
     // Cached
     private SpriteRenderer spriteRenderer;
 
-    //--------------------------------------------------------------------------------//
-    // GETTERS / SETTERS
+    public SpriteRenderer GetSpriteRenderer()
+    {
+        return spriteRenderer;
+    }
 
-    public SpriteRenderer GetSpriteRenderer () { return spriteRenderer; }
-
-    //--------------------------------------------------------------------------------//
-
-    private void Awake () 
+    private void Awake()
     {
         spriteRenderer = this.GetComponent<SpriteRenderer>();
     }
 
-    private void Start () 
+    private void Start()
     {
-        DefineBounds ();
+        DefineBounds();
     }
 
-    private void Update () 
+    private void Update()
     {
-        // Cancels
-        if (!GameSession.Instance) { return; }
+        if (!GameSession.Instance) return;
 
-        if (GameSession.Instance.GetActualGameState () == Enumerators.GameStates.GAMEPLAY)
+        if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
         {
-            DefineBounds ();
-            MoveOnTouch ();
+            DefineBounds();
+            MoveOnTouch();
             LockPositionToScreen();
         }
     }
 
-    //--------------------------------------------------------------------------------//
-
     // Define bounds to camera
-    private void DefineBounds ()
+    private void DefineBounds()
     {
-        // Cancels
-        if (!spriteRenderer) { return; }
+        if (!spriteRenderer) return;
 
         // Values
-        Vector3 zeroPoints = new Vector3 (0, 0, 0);
-        Vector3 screenSize = new Vector3 (Screen.width, Screen.height, 0);
-        float minScreenX = Camera.main.ScreenToWorldPoint (zeroPoints).x;
-        float maxScreenX = Camera.main.ScreenToWorldPoint (screenSize).x;
-        float minScreenY = Camera.main.ScreenToWorldPoint (zeroPoints).y;
-        float maxScreenY = Camera.main.ScreenToWorldPoint (screenSize).y;
+        Vector3 zeroPoints = new Vector3(0, 0, 0);
+        Vector3 screenSize = new Vector3(Screen.width, Screen.height, 0);
+        float minScreenX = Camera.main.ScreenToWorldPoint(zeroPoints).x;
+        float maxScreenX = Camera.main.ScreenToWorldPoint(screenSize).x;
+        float minScreenY = Camera.main.ScreenToWorldPoint(zeroPoints).y;
+        float maxScreenY = Camera.main.ScreenToWorldPoint(screenSize).y;
         float spriteExtentsX = spriteRenderer.bounds.extents.x;
         float spriteExtentsY = spriteRenderer.bounds.extents.y;
 
@@ -72,28 +66,26 @@ public class CursorController : MonoBehaviour
     {
         if (Input.touchCount > 0)
         {
-            // Get and check Touch's position
             Touch touch = Input.GetTouch(0);
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
             if (touchPosition.y >= minYCoordinate && touchPosition.y <= maxYCoordinate)
             {
-                this.transform.position = new Vector3 (touchPosition.x, touchPosition.y, this.transform.position.z);
+                this.transform.position = new Vector3(touchPosition.x, touchPosition.y, this.transform.position.z);
             }
         }
     }
 
-    // Locks cursor to screen
-    private void LockPositionToScreen ()
+    private void LockPositionToScreen()
     {
         float xPosition = transform.position.x;
         float yPosition = transform.position.y;
-        xPosition = Mathf.Clamp (xPosition, minYCoordinate, maxXCoordinate);
-        yPosition = Mathf.Clamp (yPosition, minYCoordinate, maxYCoordinate);
-        transform.position = new Vector3 (xPosition, yPosition, transform.position.z);
+        xPosition = Mathf.Clamp(xPosition, minYCoordinate, maxXCoordinate);
+        yPosition = Mathf.Clamp(yPosition, minYCoordinate, maxYCoordinate);
+        transform.position = new Vector3(xPosition, yPosition, transform.position.z);
     }
 
-    public void DestroyInstance ()
+    public void DestroyInstance()
     {
-        Destroy (this.gameObject);
+        Destroy(this.gameObject);
     }
 }

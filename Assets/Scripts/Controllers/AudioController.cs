@@ -4,22 +4,22 @@ using UnityEngine;
 public class AudioController : MonoBehaviour
 {
     // Config
-    [Header ("Audio Sources")]
+    [Header("Audio Sources")]
     [SerializeField] private AudioSource audioSourceBGM;
     [SerializeField] private AudioSource audioSourceME;
     [SerializeField] private AudioSource audioSourceSFX;
 
-    [Header ("BGM")]
+    [Header("BGM")]
     [SerializeField] private AudioClip selectLevelsSong;
     [SerializeField] private AudioClip[] allNotLoopedSongs;
 
-    [Header ("ME")]
+    [Header("ME")]
     [SerializeField] private AudioClip retrogemnVoice;
     [SerializeField] private AudioClip fireEffect;
     [SerializeField] private AudioClip newScoreEffect;
     [SerializeField] private AudioClip successEffect;
 
-    [Header ("SFX")]
+    [Header("SFX")]
     [SerializeField] private AudioClip blipSound;
     [SerializeField] private AudioClip boomSound;
     [SerializeField] private AudioClip explosionSound;
@@ -43,139 +43,137 @@ public class AudioController : MonoBehaviour
     private bool loopMusic = false;
     private static AudioController instance;
 
-    //--------------------------------------------------------------------------------//
-    // GETTERS / SETTERS
+    public bool GetIsSongPlaying()
+    {
+        return isSongPlaying;
+    }
 
-    public bool GetIsSongPlaying () { return isSongPlaying; }
-    public float GetMaxBGMVolume () { return maxBGMVolume; }
-    public float GetMaxMEVolume () { return maxMEVolume; }
-    public float GetMaxSFXVolume () { return maxSFXVolume; }
+    public float GetMaxBGMVolume()
+    {
+        return maxBGMVolume;
+    }
 
-    public void SetIsSongPlaying (bool isSongPlaying) { this.isSongPlaying = isSongPlaying; }
-    public void SetMaxBGMVolume (float volume) { this.maxBGMVolume = volume; }
-    public void SetMaxMEVolume (float volume) { this.maxMEVolume = volume; }
-    public void SetMaxSFXVolume (float volume) { this.maxSFXVolume = volume; }
+    public float GetMaxMEVolume()
+    {
+        return maxMEVolume;
+    }
 
-    //--------------------------------------------------------------------------------//
-    // PROPERTIES
+    public float GetMaxSFXVolume()
+    {
+        return maxSFXVolume;
+    }
+
+    public void SetIsSongPlaying(bool isSongPlaying)
+    {
+        this.isSongPlaying = isSongPlaying;
+    }
+
+    public void SetMaxBGMVolume(float volume)
+    {
+        this.maxBGMVolume = volume;
+    }
+
+    public void SetMaxMEVolume(float volume)
+    {
+        this.maxMEVolume = volume;
+    }
+
+    public void SetMaxSFXVolume(float volume)
+    {
+        this.maxSFXVolume = volume;
+    }
 
     // BGM
-    public AudioClip SelectLevelsSong { get { return selectLevelsSong; } }
-    public AudioClip[] AllNotLoopedSongs { get { return allNotLoopedSongs; } }
+    public AudioClip SelectLevelsSong { get => selectLevelsSong; }
+    public AudioClip[] AllNotLoopedSongs { get => allNotLoopedSongs; }
 
     // ME
-    public AudioClip RetrogemnVoice { get { return retrogemnVoice; } }
-    public AudioClip FireEffect { get { return fireEffect; } }
-    public AudioClip NewScoreEffect { get { return newScoreEffect; } }
-    public AudioClip SuccessEffect { get { return successEffect; } }
+    public AudioClip RetrogemnVoice { get => retrogemnVoice; }
+    public AudioClip FireEffect { get => fireEffect; }
+    public AudioClip NewScoreEffect { get => newScoreEffect; }
+    public AudioClip SuccessEffect { get => successEffect; }
 
     // SFX
-    public AudioClip BlipSound { get { return blipSound; } }
-    public AudioClip BoomSound { get { return boomSound; } }
-    public AudioClip ExplosionSound { get { return explosionSound; } }
-    public AudioClip HittingFace { get { return hittingFace; } }
-    public AudioClip HittingWall { get { return hittingWall; } }
-    public AudioClip LaserPewSound { get { return laserPewSound; } }
-    public AudioClip PowerUpSound { get { return powerUpSound; } }
-    public AudioClip ShowUpSound { get { return showUpSound; } }
-    public AudioClip SlamSound { get { return slamSound; } }
+    public AudioClip BlipSound { get => blipSound; }
+    public AudioClip BoomSound { get => boomSound; }
+    public AudioClip ExplosionSound { get => explosionSound; }
+    public AudioClip HittingFace { get => hittingFace; }
+    public AudioClip HittingWall { get => hittingWall; }
+    public AudioClip LaserPewSound { get => laserPewSound; }
+    public AudioClip PowerUpSound { get => powerUpSound; }
+    public AudioClip ShowUpSound { get => showUpSound; }
+    public AudioClip SlamSound { get => slamSound; }
 
-    // SINGLETON
-    public static AudioController Instance { get { return instance; }}
+    public static AudioController Instance { get => instance; }
 
-    //--------------------------------------------------------------------------------//
-    // MONOBEHAVIOUR
-
-    private void Awake () 
+    private void Awake()
     {
-        SetupSingleton ();
+        SetupSingleton();
     }
 
-    //--------------------------------------------------------------------------------//
-    // HELPERS
-
-    // Implements singleton
-    private void SetupSingleton ()
+    private void SetupSingleton()
     {
-        int numberOfInstances = FindObjectsOfType (GetType ()).Length;
+        int numberOfInstances = FindObjectsOfType(GetType()).Length;
         if (numberOfInstances > 1)
         {
-            DestroyImmediate (this.gameObject);
+            DestroyImmediate(this.gameObject);
         }
-        else 
+        else
         {
             instance = this;
-            DontDestroyOnLoad (this.gameObject);
+            DontDestroyOnLoad(this.gameObject);
         }
     }
 
-    //--------------------------------------------------------------------------------//
-    // SFX FUNCTIONS
-
     // Play one shot of clip
-    public void PlaySFX (AudioClip clip, float volume)
+    public void PlaySFX(AudioClip clip, float volume)
     {
-        // Checks and cancel
-        if (!audioSourceSFX || !clip) { return; }
+        if (!audioSourceSFX || !clip) return;
 
         float temporaryVolume = (volume > maxSFXVolume ? maxSFXVolume : volume);
         audioSourceSFX.volume = temporaryVolume;
-        audioSourceSFX.PlayOneShot (clip);
+        audioSourceSFX.PlayOneShot(clip);
     }
 
     // Play clip at point
-    public void PlaySoundAtPoint (AudioClip clip, float volume)
+    public void PlaySoundAtPoint(AudioClip clip, float volume)
     {
-        // Checks and cancel
-        if (!clip || audioSourceSFX.mute) { return; }
+        if (!clip || audioSourceSFX.mute) return;
 
         float temporaryVolume = (volume > maxSFXVolume ? maxSFXVolume : volume);
-        AudioSource.PlayClipAtPoint (clip, Camera.main.transform.position, volume);
+        AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position, volume);
     }
 
-    //--------------------------------------------------------------------------------//
-    // ME FUNCTIONS
-
     // Plays Music Effect
-    public void PlayME (AudioClip clip, float volume, bool loop)
+    public void PlayME(AudioClip clip, float volume, bool loop)
     {
         // Checks and cancel
-        if (!audioSourceME || !clip) { return; }
+        if (!audioSourceME || !clip) return;
 
         float temporaryVolume = (volume > maxMEVolume ? maxMEVolume : volume);
         audioSourceME.volume = temporaryVolume;
         audioSourceME.clip = clip;
         audioSourceME.loop = loop;
-        audioSourceME.Play ();
+        audioSourceME.Play();
     }
 
-    public void StopME ()
+    public void StopME()
     {
-        // Checks and cancel
-        if (!audioSourceME) { return; }
+        if (!audioSourceME) return;
 
-        audioSourceME.Stop ();
+        audioSourceME.Stop();
         audioSourceME.loop = false;
     }
 
-    //--------------------------------------------------------------------------------//
-    // CLIP / SONG PROPERTIES
-
     // Get clip length
-    public float GetClipLength (AudioClip clip)
+    public float GetClipLength(AudioClip clip)
     {
-        // Checks and cancel
-        if (!clip) { return 0; }
-        return clip.length;
+        return (clip ? clip.length : 0);
     }
-    
-    //--------------------------------------------------------------------------------//
-    // BGM
 
-    public void ChangeMusic (AudioClip nextMusic, bool changeScene, string nextSceneName, bool loopMusic, bool changeOnMusicEnd)
+    public void ChangeMusic(AudioClip nextMusic, bool changeScene, string nextSceneName, bool loopMusic, bool changeOnMusicEnd)
     {
-        // Checks and cancel
-        if (!nextMusic) { return; }
+        if (!nextMusic) return;
 
         this.nextMusic = nextMusic;
         this.changeScene = changeScene;
@@ -183,28 +181,24 @@ public class AudioController : MonoBehaviour
         this.loopMusic = loopMusic;
         this.changeOnMusicEnd = changeOnMusicEnd;
 
-        StartCoroutine (ChangeMusicCoroutine ());
+        StartCoroutine(ChangeMusicCoroutine());
     }
 
-    public void StopMusic ()
+    public void StopMusic()
     {
-        StopAllCoroutines ();
-        StartCoroutine (StopMusicCoroutine ());
+        StopAllCoroutines();
+        StartCoroutine(StopMusicCoroutine());
         isSongPlaying = false;
     }
 
-    //--------------------------------------------------------------------------------//
-    // COROUTINES
-
-    private IEnumerator ChangeMusicCoroutine ()
+    private IEnumerator ChangeMusicCoroutine()
     {
-        // Checks and cancel
         if (!audioSourceBGM) { yield return null; }
 
         // Drops down volume
         for (float volume = maxBGMVolume; volume >= 0; volume -= 0.1f)
         {
-            yield return new WaitForSecondsRealtime (0.1f);
+            yield return new WaitForSecondsRealtime(0.1f);
             audioSourceBGM.volume = volume;
         }
 
@@ -213,39 +207,38 @@ public class AudioController : MonoBehaviour
         audioSourceBGM.volume = 0;
         audioSourceBGM.clip = nextMusic;
         audioSourceBGM.loop = loopMusic;
-        audioSourceBGM.Play ();
+        audioSourceBGM.Play();
         isSongPlaying = true;
 
         // Drops up volume
         for (float volume = 0; volume <= maxBGMVolume; volume += 0.1f)
         {
-            yield return new WaitForSecondsRealtime (0.1f);
+            yield return new WaitForSecondsRealtime(0.1f);
             audioSourceBGM.volume = volume;
         }
 
         if (!loopMusic && changeOnMusicEnd)
         {
             // Cancel
-            yield return new WaitForSecondsRealtime (audioSourceBGM.clip.length);
-            int index = Random.Range (0, allNotLoopedSongs.Length);
-            ChangeMusic (allNotLoopedSongs[index], false, "", false, true);
+            yield return new WaitForSecondsRealtime(audioSourceBGM.clip.length);
+            int index = Random.Range(0, allNotLoopedSongs.Length);
+            ChangeMusic(allNotLoopedSongs[index], false, "", false, true);
         }
     }
 
-    private IEnumerator StopMusicCoroutine ()
+    private IEnumerator StopMusicCoroutine()
     {
-        // Checks and cancel
         if (!audioSourceBGM) { yield return null; }
-        
+
         // Drops down volume
         for (float volume = maxBGMVolume; volume >= 0; volume -= 0.1f)
         {
-            yield return new WaitForSecondsRealtime (0.1f);
+            yield return new WaitForSecondsRealtime(0.1f);
             audioSourceBGM.volume = volume;
         }
 
         // Change and play
         audioSourceBGM.volume = 0;
-        audioSourceBGM.Stop ();
+        audioSourceBGM.Stop();
     }
 }

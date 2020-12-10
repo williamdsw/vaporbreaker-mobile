@@ -618,7 +618,7 @@ public class GameSession : MonoBehaviour
         GameStatusController.Instance.SetNextSceneName (sceneName);
         GameStatusController.Instance.SetHasStartedSong (false);
         GameStatusController.Instance.SetCameFromLevel (true);
-        SceneManagerController.CallScene (SceneManagerController.GetLoadingSceneName ());
+        SceneManagerController.CallScene (SceneManagerController.LoadingSceneName);
         Destroy (this.gameObject);
     }
 

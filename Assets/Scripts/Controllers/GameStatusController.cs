@@ -14,55 +14,115 @@ public class GameStatusController : MonoBehaviour
     [SerializeField] private bool isLevelCompleted = false;
     private static GameStatusController instance;
 
-    //--------------------------------------------------------------------------------//
-    // GETTERS / SETTERS
-
-    public string GetNextSceneName () { return nextSceneName; }
-    public int GetLevelIndex () { return levelIndex; }
-    public int GetNewScore () { return newScore; }
-    public int GetNewTimeScore () { return newTimeScore; }
-    public int GetOldScore () { return oldScore; }
-    public int GetOldTimeScore () { return oldTimeScore; }
-    public bool GetCameFromLevel () { return cameFromLevel; }
-    public bool GetHasStartedSong () { return hasStartedSong; }
-    public bool GetIsLevelCompleted () { return isLevelCompleted; }
-
-    public void SetNextSceneName (string sceneName) { this.nextSceneName = sceneName; }
-    public void SetLevelIndex (int levelIndex) { this.levelIndex = levelIndex; }
-    public void SetNewScore (int newScore) { this.newScore = newScore; }
-    public void SetNewTimeScore (int newTimeScore) { this.newTimeScore = newTimeScore; }
-    public void SetOldScore (int oldScore) { this.oldScore = oldScore; }
-    public void SetOldTimeScore (int oldTimeScore) { this.oldTimeScore = oldTimeScore; }
-    public void SetCameFromLevel (bool cameFromLevel) { this.cameFromLevel = cameFromLevel; }
-    public void SetHasStartedSong (bool hasStartedSong) { this.hasStartedSong = hasStartedSong; }
-    public void SetIsLevelCompleted (bool isLevelCompleted) { this.isLevelCompleted = isLevelCompleted; }
-
-    //--------------------------------------------------------------------------------//
-    // PROPERTIES
-
-    public static GameStatusController Instance { get { return instance; }}
-
-    //--------------------------------------------------------------------------------//
-
-    private void Awake () 
+    public string GetNextSceneName()
     {
-        SetupSingleton ();
+        return nextSceneName;
     }
 
-    //--------------------------------------------------------------------------------//
-
-    // Setups a singleton
-    private void SetupSingleton ()
+    public int GetLevelIndex()
     {
-        int numberOfInstances = FindObjectsOfType (GetType ()).Length;
+        return levelIndex;
+    }
+
+    public int GetNewScore()
+    {
+        return newScore;
+    }
+
+    public int GetNewTimeScore()
+    {
+        return newTimeScore;
+    }
+
+    public int GetOldScore()
+    {
+        return oldScore;
+    }
+
+    public int GetOldTimeScore()
+    {
+        return oldTimeScore;
+    }
+
+    public bool GetCameFromLevel()
+    {
+        return cameFromLevel;
+    }
+
+    public bool GetHasStartedSong()
+    {
+        return hasStartedSong;
+    }
+
+    public bool GetIsLevelCompleted()
+    {
+        return isLevelCompleted;
+    }
+
+
+    public void SetNextSceneName(string sceneName)
+    {
+        this.nextSceneName = sceneName;
+    }
+
+    public void SetLevelIndex(int levelIndex)
+    {
+        this.levelIndex = levelIndex;
+    }
+
+    public void SetNewScore(int newScore)
+    {
+        this.newScore = newScore;
+    }
+
+    public void SetNewTimeScore(int newTimeScore)
+    {
+        this.newTimeScore = newTimeScore;
+    }
+
+    public void SetOldScore(int oldScore)
+    {
+        this.oldScore = oldScore;
+    }
+
+    public void SetOldTimeScore(int oldTimeScore)
+    {
+        this.oldTimeScore = oldTimeScore;
+    }
+
+    public void SetCameFromLevel(bool cameFromLevel)
+    {
+        this.cameFromLevel = cameFromLevel;
+    }
+
+    public void SetHasStartedSong(bool hasStartedSong)
+    {
+        this.hasStartedSong = hasStartedSong;
+    }
+
+    public void SetIsLevelCompleted(bool isLevelCompleted)
+    {
+        this.isLevelCompleted = isLevelCompleted;
+    }
+
+    public static GameStatusController Instance { get => instance; }
+
+    private void Awake()
+    {
+        SetupSingleton();
+    }
+
+    private void SetupSingleton()
+    {
+        int numberOfInstances = FindObjectsOfType(GetType()).Length;
         if (numberOfInstances > 1)
         {
-            Destroy (this.gameObject);
+            Destroy(this.gameObject);
         }
-        else 
+        else
         {
             instance = this;
-            DontDestroyOnLoad (this.gameObject);
+            DontDestroyOnLoad(this.gameObject);
         }
     }
 }

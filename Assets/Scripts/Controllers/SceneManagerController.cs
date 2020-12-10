@@ -3,45 +3,36 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagerController
 {
-    private const string LOADING_SCENE_NAME = "Loading_Screen";
-    private const string SELECT_LEVELS_SCENE_NAME = "Select_Levels";
 
-    //--------------------------------------------------------------------------------//
-    // GETTERS
+    public static string LoadingSceneName => "Loading_Screen";
 
-    public static string GetLoadingSceneName () { return LOADING_SCENE_NAME; }
-    public static string GetSelectLevelsSceneName () { return SELECT_LEVELS_SCENE_NAME; }
+    public static string SelectLevelsSceneName => "Select_Levels";
 
-    //--------------------------------------------------------------------------------//
-
-    // Calls scene by name
-    public static void CallScene (string sceneName)
+    public static void CallScene(string sceneName)
     {
-        SceneManager.LoadScene (sceneName);
+        if (string.IsNullOrEmpty(sceneName) || string.IsNullOrWhiteSpace(sceneName)) return;
+        SceneManager.LoadScene(sceneName);
     }
 
-    // Calls scene async by name
-    public static AsyncOperation CallSceneAsync (string sceneName)
+    public static AsyncOperation CallSceneAsync(string sceneName)
     {
-        return SceneManager.LoadSceneAsync (sceneName);
+        if (string.IsNullOrEmpty(sceneName) || string.IsNullOrWhiteSpace(sceneName)) return null;
+        return SceneManager.LoadSceneAsync(sceneName);
     }
 
-    // Get active scene's index
-    public static int GetActiveSceneIndex ()
+    public static int GetActiveSceneIndex()
     {
-        return SceneManager.GetActiveScene ().buildIndex;
+        return SceneManager.GetActiveScene().buildIndex;
     }
 
-    // Quits the application
-    public static void QuitGame ()
+    public static void QuitGame()
     {
-        Application.Quit ();
+        Application.Quit();
     }
-    
-    // Reloads the actual scene
-    public static void ReloadScene ()
+
+    public static void ReloadScene()
     {
-        int sceneIndex = SceneManager.GetActiveScene ().buildIndex;
-        SceneManager.LoadSceneAsync (sceneIndex);
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadSceneAsync(sceneIndex);
     }
 }

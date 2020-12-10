@@ -130,7 +130,7 @@ public class FadeEffect : MonoBehaviour
         // Cancels
         if (!GameSession.Instance || !animator) { return; }
         animator.Rebind ();
-        GameSession.Instance.ResetGame (SceneManagerController.GetSelectLevelsSceneName ());
+        GameSession.Instance.ResetGame (SceneManagerController.SelectLevelsSceneName);
     }
 
     public void DefineGameState (int gameStateInt)

@@ -6,14 +6,14 @@ using UnityEngine.UI;
 
 public class LevelCompleteController : MonoBehaviour
 {
-    [Header ("UI Objects")]
+    [Header("UI Objects")]
     [SerializeField] private GameObject levelCompletedPanel;
     [SerializeField] private List<TextMeshProUGUI> labelsText;
     [SerializeField] private TextMeshProUGUI newScoreText;
     [SerializeField] private Button continueButton;
 
-    [Header ("Labels to Translate")]
-    [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI> ();
+    [Header("Labels to Translate")]
+    [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI>();
 
     // Config
     [SerializeField] private float defaultSecondsValue = 1f;
@@ -29,74 +29,79 @@ public class LevelCompleteController : MonoBehaviour
     // Cached
     private FadeEffect fadeEffect;
     private Ball[] balls;
-    private List<string> cachedTexts = new List<string> ();
+    private List<string> cachedTexts = new List<string>();
 
     //--------------------------------------------------------------------------------//
 
-    private void Start () 
+    private void Start()
     {
-        // Find objects
         fadeEffect = FindObjectOfType<FadeEffect>();
-        levelCompletedPanel.SetActive (false);
-        TranslateLabels ();
-        DefaultUIValues ();
-        BindClickEvents ();
+        levelCompletedPanel.SetActive(false);
+        TranslateLabels();
+        DefaultUIValues();
+        BindClickEvents();
     }
 
-    //--------------------------------------------------------------------------------//
-
     // Translate labels based on choosed language
-    private void TranslateLabels ()
+    private void TranslateLabels()
     {
-        if (!LocalizationController.Instance) { return; }
-        List<string> labels = new List<string> ();
-        foreach (string label in LocalizationController.Instance.GetLevelCompleteLabels ()) { labels.Add (label); }
-        if (labels.Count == 0 || uiLabels.Count == 0 || labels.Count != uiLabels.Count ) { return; }
-        for (int index = 0; index < labels.Count; index++) { uiLabels[index].SetText (labels[index]); }
+        if (!LocalizationController.Instance) return;
+        List<string> labels = new List<string>();
+        foreach (string label in LocalizationController.Instance.GetLevelCompleteLabels())
+        {
+            labels.Add(label);
+        }
+
+        if (labels.Count == 0 || uiLabels.Count == 0 || labels.Count != uiLabels.Count) return;
+        for (int index = 0; index < labels.Count; index++)
+        {
+            uiLabels[index].SetText(labels[index]);
+        }
+
         cachedTexts = labels;
     }
 
     // Define default UI
-    private void DefaultUIValues ()
+    private void DefaultUIValues()
     {
-        if (labelsText.Count == 0 || !newScoreText || !continueButton) { return; }
+        if (labelsText.Count == 0 || !newScoreText || !continueButton) return;
 
         foreach (TextMeshProUGUI labelText in labelsText)
         {
             GameObject parent = labelText.gameObject.transform.parent.gameObject;
-            parent.SetActive (false);
+            parent.SetActive(false);
         }
 
         newScoreText.enabled = false;
-        continueButton.gameObject.SetActive (false);
+        continueButton.gameObject.SetActive(false);
     }
 
     // Binds onClick of button
-    public void BindClickEvents ()
+    public void BindClickEvents()
     {
-        if (!continueButton) { return; }
-        continueButton.onClick.AddListener (() =>
+        if (!continueButton) return;
+        continueButton.onClick.AddListener(() =>
         {
             continueButton.interactable = false;
-            StartCoroutine (FadeCoroutine ());
+            StartCoroutine(FadeCoroutine());
         });
     }
 
-    public void CallLevelComplete (float timeScore, int bestCombo, int currentScore)
+    public void CallLevelComplete(float timeScore, int bestCombo, int currentScore)
     {
         // Finds the balls
         balls = FindObjectsOfType<Ball>();
 
         // Passing values
-        this.timeScore = Mathf.FloorToInt (timeScore);
+        this.timeScore = Mathf.FloorToInt(timeScore);
         this.bestCombo = bestCombo;
         this.currentScore = currentScore;
         this.numberOfBalls = balls.Length;
 
-        StartCoroutine (LevelComplete ());
+        StartCoroutine(LevelComplete());
     }
 
-    private void CalculateTotalScore ()
+    private void CalculateTotalScore()
     {
         // Calculates total time
         int totalTimeScore = 0;
@@ -121,7 +126,7 @@ public class LevelCompleteController : MonoBehaviour
         totalScore += (numberOfBalls >= 1 ? numberOfBalls * 50000 : 0);
         totalScore += (bestCombo > 1 ? bestCombo * 50000 : 0);
 
-        if (labelsText.Count == 0 || uiLabels.Count == 0 || cachedTexts.Count == 0) { return; }
+        if (labelsText.Count == 0 || uiLabels.Count == 0 || cachedTexts.Count == 0) return;
 
         // Update UI
         int[] values = { currentScore, totalTimeScore, bestCombo, numberOfBalls, totalScore };
@@ -132,66 +137,70 @@ public class LevelCompleteController : MonoBehaviour
         }
     }
 
-    //--------------------------------------------------------------------------------//
-    // COROUTINES
-
-    private IEnumerator LevelComplete ()
+    private IEnumerator LevelComplete()
     {
         if (!AudioController.Instance || !GameStatusController.Instance || !GameSession.Instance) { yield return null; }
 
         // Destroy current objects
-        foreach (Ball ball in balls) { ball.StopBall (); }
-        PowerUp[] powerUps = FindObjectsOfType<PowerUp>();
-        foreach (PowerUp powerUp in powerUps) { powerUp.StopPowerUp (); }
+        foreach (Ball ball in balls)
+        {
+            ball.StopBall();
+        }
 
-        AudioController.Instance.StopME ();
-        AudioController.Instance.StopMusic ();
-        CalculateTotalScore ();
+        PowerUp[] powerUps = FindObjectsOfType<PowerUp>();
+        foreach (PowerUp powerUp in powerUps)
+        {
+            powerUp.StopPowerUp();
+        }
+
+        AudioController.Instance.StopME();
+        AudioController.Instance.StopMusic();
+        CalculateTotalScore();
 
         // Pass values
-        GameStatusController.Instance.SetNewScore (totalScore);
-        GameStatusController.Instance.SetNewTimeScore (timeScore);
-        GameStatusController.Instance.SetIsLevelCompleted (true);
+        GameStatusController.Instance.SetNewScore(totalScore);
+        GameStatusController.Instance.SetNewTimeScore(timeScore);
+        GameStatusController.Instance.SetIsLevelCompleted(true);
 
         // Plays success sound
-        yield return new WaitForSecondsRealtime (defaultSecondsValue);
-        AudioController.Instance.PlaySFX (AudioController.Instance.SuccessEffect, AudioController.Instance.GetMaxSFXVolume ());
+        yield return new WaitForSecondsRealtime(defaultSecondsValue);
+        AudioController.Instance.PlaySFX(AudioController.Instance.SuccessEffect, AudioController.Instance.GetMaxSFXVolume());
 
         // Show panel
-        yield return new WaitForSecondsRealtime (defaultSecondsValue);
-        levelCompletedPanel.SetActive (true);
+        yield return new WaitForSecondsRealtime(defaultSecondsValue);
+        levelCompletedPanel.SetActive(true);
 
         // Shows each text
-        yield return new WaitForSecondsRealtime (defaultSecondsValue);
+        yield return new WaitForSecondsRealtime(defaultSecondsValue);
         for (int index = 0; index < labelsText.Count; index++)
         {
-            AudioController.Instance.PlaySFX (AudioController.Instance.HittingFace, AudioController.Instance.GetMaxSFXVolume ());
+            AudioController.Instance.PlaySFX(AudioController.Instance.HittingFace, AudioController.Instance.GetMaxSFXVolume());
             GameObject labelParent = labelsText[index].gameObject.transform.parent.gameObject;
-            labelParent.SetActive (true);
-            yield return new WaitForSecondsRealtime (defaultSecondsValue / 2);
+            labelParent.SetActive(true);
+            yield return new WaitForSecondsRealtime(defaultSecondsValue / 2);
         }
 
         // Case have a new score
-        if (totalScore > GameStatusController.Instance.GetOldScore ())
+        if (totalScore > GameStatusController.Instance.GetOldScore())
         {
-            AudioController.Instance.PlaySFX (AudioController.Instance.NewScoreEffect, AudioController.Instance.GetMaxSFXVolume ());
+            AudioController.Instance.PlaySFX(AudioController.Instance.NewScoreEffect, AudioController.Instance.GetMaxSFXVolume());
             newScoreText.enabled = true;
             newScoreText.GetComponent<FlashTextEffect>().enabled = true;
-            yield return new WaitForSecondsRealtime (defaultSecondsValue * 2);
+            yield return new WaitForSecondsRealtime(defaultSecondsValue * 2);
         }
 
-        continueButton.gameObject.SetActive (true);
+        continueButton.gameObject.SetActive(true);
     }
 
-    private IEnumerator FadeCoroutine ()
+    private IEnumerator FadeCoroutine()
     {
         // Calls fade
         if (!GameSession.Instance || !fadeEffect) { yield return null; }
         fadeEffect = FindObjectOfType<FadeEffect>();
-        fadeEffect.ResetAnimationFunctions ();
-        float fadeOutLength = fadeEffect.GetFadeOutLength ();
-        fadeEffect.FadeToLevel ();
-        yield return new WaitForSecondsRealtime (fadeOutLength);
-        GameSession.Instance.ResetGame (SceneManagerController.GetSelectLevelsSceneName ());
+        fadeEffect.ResetAnimationFunctions();
+        float fadeOutLength = fadeEffect.GetFadeOutLength();
+        fadeEffect.FadeToLevel();
+        yield return new WaitForSecondsRealtime(fadeOutLength);
+        GameSession.Instance.ResetGame(SceneManagerController.SelectLevelsSceneName);
     }
 }

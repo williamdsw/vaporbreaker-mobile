@@ -34,7 +34,7 @@ public class LoadingController : MonoBehaviour
         fadeEffect = FindObjectOfType<FadeEffect>();
 
         if (GameStatusController.Instance.GetCameFromLevel () || 
-            GameStatusController.Instance.GetNextSceneName ().Equals (SceneManagerController.GetSelectLevelsSceneName ()))
+            GameStatusController.Instance.GetNextSceneName ().Equals (SceneManagerController.SelectLevelsSceneName))
         {
             loadingPanel.SetActive (false);
             StartCoroutine (CallNextScene ());

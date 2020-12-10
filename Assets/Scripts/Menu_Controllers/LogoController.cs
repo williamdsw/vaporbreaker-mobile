@@ -69,7 +69,7 @@ public class LogoController : MonoBehaviour
         }
 
         yield return new WaitForSecondsRealtime (timeToWait);
-        StartCoroutine (CallNextScene (SceneManagerController.GetSelectLevelsSceneName ()));
+        StartCoroutine (CallNextScene (SceneManagerController.SelectLevelsSceneName));
     }
 
     private IEnumerator CallNextScene (string nextSceneName)
@@ -83,6 +83,6 @@ public class LogoController : MonoBehaviour
         GameStatusController.Instance.SetNextSceneName (nextSceneName);
         GameStatusController.Instance.SetCameFromLevel (false);
         GameStatusController.Instance.SetIsLevelCompleted (false);
-        SceneManagerController.CallScene (SceneManagerController.GetLoadingSceneName ());
+        SceneManagerController.CallScene (SceneManagerController.LoadingSceneName);
     }
 }

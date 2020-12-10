@@ -376,7 +376,7 @@ public class SelectLevelsController : MonoBehaviour
         // Pass data
         GameStatusController.Instance.SetNextSceneName (nextSceneName);
         GameStatusController.Instance.SetCameFromLevel (false);
-        SceneManagerController.CallScene (SceneManagerController.GetLoadingSceneName ());
+        SceneManagerController.CallScene (SceneManagerController.LoadingSceneName);
     }
 
     // Save progress
