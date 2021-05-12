@@ -1,12 +1,15 @@
 ﻿
-public class UnityUtilities
+namespace Utilities
 {
-    public static void DisableAnalytics()
+    public class UnityUtilities
     {
-        UnityEngine.Analytics.Analytics.enabled = false;
-        UnityEngine.Analytics.Analytics.deviceStatsEnabled = false;
-        UnityEngine.Analytics.Analytics.initializeOnStartup = false;
-        UnityEngine.Analytics.Analytics.limitUserTracking = false;
-        UnityEngine.Analytics.PerformanceReporting.enabled = false;
+        public static void DisableAnalytics()
+        {
+            UnityEngine.Analytics.Analytics.enabled = false;
+            UnityEngine.Analytics.Analytics.deviceStatsEnabled = false;
+            UnityEngine.Analytics.Analytics.initializeOnStartup = false;
+            UnityEngine.Analytics.Analytics.limitUserTracking = false;
+            UnityEngine.Analytics.PerformanceReporting.enabled = false;
+        }
     }
 }

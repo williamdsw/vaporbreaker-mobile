@@ -1,29 +1,32 @@
 ﻿using UnityEngine;
 
-public class LineRendererScroller : MonoBehaviour
+namespace Effects
 {
-    // Config
-    private float xMovementSpeed = -5f;
-    private float yMovementSpeed = 0f;
-
-    // Cached
-    private Material material;
-    private LineRenderer lineRenderer;
-    private Vector2 offset;
-
-    private void Awake()
+    public class LineRendererScroller : MonoBehaviour
     {
-        lineRenderer = this.GetComponent<LineRenderer>();
-    }
+        // Config
+        private float xMovementSpeed = -5f;
+        private float yMovementSpeed = 0f;
 
-    private void Start()
-    {
-        material = lineRenderer.material;
-        offset = new Vector2(xMovementSpeed, yMovementSpeed);
-    }
+        // Cached
+        private Material material;
+        private LineRenderer lineRenderer;
+        private Vector2 offset;
 
-    private void FixedUpdate()
-    {
-        material.mainTextureOffset += (offset * Time.fixedDeltaTime);
+        private void Awake()
+        {
+            lineRenderer = this.GetComponent<LineRenderer>();
+        }
+
+        private void Start()
+        {
+            material = lineRenderer.material;
+            offset = new Vector2(xMovementSpeed, yMovementSpeed);
+        }
+
+        private void FixedUpdate()
+        {
+            material.mainTextureOffset += (offset * Time.fixedDeltaTime);
+        }
     }
 }

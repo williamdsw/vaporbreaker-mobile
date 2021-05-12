@@ -1,60 +1,65 @@
-﻿using UnityEngine;
+﻿using Controllers.Core;
+using UnityEngine;
+using Utilities;
 
-public class BackgroundScroller : MonoBehaviour
+namespace Effects
 {
-    // Config
-    [SerializeField] private bool randomMaterial;
-    [SerializeField] private bool randomMovementSpeeds;
-    [SerializeField] private float xMovementSpeed = 0.1f;
-    [SerializeField] private float yMovementSpeed = 0.1f;
-    [SerializeField] private Material[] listOfMaterials;
-
-    // Const
-    private const float TEXTURE_OFFSET_VALUE = 0.2f;
-
-    // State
-    private bool canOffsetTexture = false;
-
-    // Cached
-    private Material material;
-    private Renderer myRenderer;
-    private Vector2 offset;
-
-    private void Awake()
+    public class BackgroundScroller : MonoBehaviour
     {
-        myRenderer = this.GetComponent<Renderer>();
-    }
+        // Config
+        [SerializeField] private bool randomMaterial;
+        [SerializeField] private bool randomMovementSpeeds;
+        [SerializeField] private float xMovementSpeed = 0.1f;
+        [SerializeField] private float yMovementSpeed = 0.1f;
+        [SerializeField] private Material[] listOfMaterials;
 
-    private void Start()
-    {
-        // Chooses random material
-        if (randomMaterial)
+        // Const
+        private const float TEXTURE_OFFSET_VALUE = 0.2f;
+
+        // State
+        private bool canOffsetTexture = false;
+
+        // Cached
+        private Material material;
+        private Renderer myRenderer;
+        private Vector2 offset;
+
+        private void Awake()
         {
-            if (listOfMaterials.Length == 0) return;
-            int index = Random.Range(0, listOfMaterials.Length);
-            myRenderer.material = listOfMaterials[index];
+            myRenderer = this.GetComponent<Renderer>();
         }
 
-        // Chooses movement speed
-        if (randomMovementSpeeds)
+        private void Start()
         {
-            xMovementSpeed = Random.Range(-TEXTURE_OFFSET_VALUE, TEXTURE_OFFSET_VALUE);
-            yMovementSpeed = Random.Range(-TEXTURE_OFFSET_VALUE, TEXTURE_OFFSET_VALUE);
+            // Chooses random material
+            if (randomMaterial)
+            {
+                if (listOfMaterials.Length == 0) return;
+                int index = Random.Range(0, listOfMaterials.Length);
+                myRenderer.material = listOfMaterials[index];
+            }
+
+            // Chooses movement speed
+            if (randomMovementSpeeds)
+            {
+                xMovementSpeed = Random.Range(-TEXTURE_OFFSET_VALUE, TEXTURE_OFFSET_VALUE);
+                yMovementSpeed = Random.Range(-TEXTURE_OFFSET_VALUE, TEXTURE_OFFSET_VALUE);
+            }
+
+            material = myRenderer.material;
+            offset = new Vector2(xMovementSpeed, yMovementSpeed);
+            canOffsetTexture = (material.name.Contains("Grid"));
         }
 
-        material = myRenderer.material;
-        offset = new Vector2(xMovementSpeed, yMovementSpeed);
-        canOffsetTexture = (material.name.Contains("Grid"));
-    }
-
-    private void FixedUpdate()
-    {
-        if (!GameSession.Instance) return;
-        if (GameSession.Instance.GetActualGameState() != Enumerators.GameStates.GAMEPLAY) return;
-
-        if (canOffsetTexture)
+        private void FixedUpdate()
         {
-            material.mainTextureOffset += (offset * Time.fixedDeltaTime);
+            if (!GameSession.Instance) return;
+            if (GameSession.Instance.GetActualGameState() != Enumerators.GameStates.GAMEPLAY) return;
+
+            if (canOffsetTexture)
+            {
+                material.mainTextureOffset += (offset * Time.fixedDeltaTime);
+            }
         }
     }
 }

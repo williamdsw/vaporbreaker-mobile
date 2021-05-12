@@ -2,46 +2,49 @@
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-public class ProgressManager
+namespace Utilities
 {
-    private static string fileName = "/SaveProgress.dat";
-    private static string filePath = string.Concat(Application.persistentDataPath, fileName);
-
-    public static bool HasProgress()
+    public class ProgressManager
     {
-        return File.Exists(filePath);
-    }
+        private static string fileName = "/SaveProgress.dat";
+        private static string filePath = string.Concat(Application.persistentDataPath, fileName);
 
-    public static PlayerProgress LoadProgress()
-    {
-        PlayerProgress progress = new PlayerProgress();
-
-        if (HasProgress())
+        public static bool HasProgress()
         {
-            using (FileStream fileStream = File.Open(filePath, FileMode.Open))
+            return File.Exists(filePath);
+        }
+
+        public static PlayerProgress LoadProgress()
+        {
+            PlayerProgress progress = new PlayerProgress();
+
+            if (HasProgress())
+            {
+                using (FileStream fileStream = File.Open(filePath, FileMode.Open))
+                {
+                    BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    progress = (PlayerProgress)binaryFormatter.Deserialize(fileStream);
+                }
+            }
+
+            return progress;
+        }
+
+        public static void SaveProgress(PlayerProgress progress)
+        {
+            using (FileStream fileStream = File.Create(filePath))
             {
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
-                progress = (PlayerProgress)binaryFormatter.Deserialize(fileStream);
+                binaryFormatter.Serialize(fileStream, progress);
             }
         }
 
-        return progress;
-    }
-
-    public static void SaveProgress(PlayerProgress progress)
-    {
-        using (FileStream fileStream = File.Create(filePath))
+        public static void DeleteProgress()
         {
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
-            binaryFormatter.Serialize(fileStream, progress);
-        }
-    }
-
-    public static void DeleteProgress()
-    {
-        if (HasProgress())
-        {
-            File.Delete(filePath);
+            if (HasProgress())
+            {
+                File.Delete(filePath);
+            }
         }
     }
 }

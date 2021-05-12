@@ -1,64 +1,70 @@
-﻿using UnityEngine;
+﻿using Controllers.Core;
+using Core;
+using UnityEngine;
+using Utilities;
 
-public class EchoEffect : MonoBehaviour
+namespace Effects
 {
-    // Params Config
-    [SerializeField] private GameObject echoPrefab;
-    private float startTimeBetweenSpanws = 0.05f;
-    private float timeBetweenSpawns = 0;
-    private float timeToSelfDestruct = 1f;
-
-    // Cached
-    private Ball ball;
-    private Paddle paddle;
-
-    public void SetTimeToSelfDestruct(float time)
+    public class EchoEffect : MonoBehaviour
     {
-        this.timeToSelfDestruct = time;
-    }
+        // Params Config
+        [SerializeField] private GameObject echoPrefab;
+        private float startTimeBetweenSpanws = 0.05f;
+        private float timeBetweenSpawns = 0;
+        private float timeToSelfDestruct = 1f;
 
-    private void Start()
-    {
-        DefineReferences();
-    }
+        // Cached
+        private Ball ball;
+        private Paddle paddle;
 
-    private void Update()
-    {
-        SpawnEchoEffect();
-    }
-
-    private void DefineReferences()
-    {
-        if (tag == NamesTags.BallEchoTag)
+        public void SetTimeToSelfDestruct(float time)
         {
-            ball = this.transform.parent.GetComponent<Ball>();
+            this.timeToSelfDestruct = time;
         }
-    }
 
-    private void SpawnEchoEffect()
-    {
-        if (!GameSession.Instance) return;
-        if (GameSession.Instance.GetActualGameState() != Enumerators.GameStates.GAMEPLAY) return;
-
-        if (timeBetweenSpawns <= 0)
+        private void Start()
         {
-            GameObject echo = Instantiate(echoPrefab, transform.position, Quaternion.identity) as GameObject;
-            echo.transform.parent = GameSession.Instance.FindOrCreateObjectParent(NamesTags.EchosParentName).transform;
-            if (tag == NamesTags.BallEchoTag && ball)
+            DefineReferences();
+        }
+
+        private void Update()
+        {
+            SpawnEchoEffect();
+        }
+
+        private void DefineReferences()
+        {
+            if (tag == NamesTags.BallEchoTag)
             {
-                echo.transform.localScale = ball.transform.localScale;
-                echo.transform.rotation = ball.transform.rotation;
-                SpriteRenderer spriteRenderer = echo.GetComponent<SpriteRenderer>();
-                spriteRenderer.color = ball.GetBallColor();
-                spriteRenderer.sprite = ball.GetSprite();
+                ball = this.transform.parent.GetComponent<Ball>();
             }
-
-            Destroy(echo, timeToSelfDestruct);
-            timeBetweenSpawns = startTimeBetweenSpanws;
         }
-        else
+
+        private void SpawnEchoEffect()
         {
-            timeBetweenSpawns -= Time.deltaTime;
+            if (!GameSession.Instance) return;
+            if (GameSession.Instance.GetActualGameState() != Enumerators.GameStates.GAMEPLAY) return;
+
+            if (timeBetweenSpawns <= 0)
+            {
+                GameObject echo = Instantiate(echoPrefab, transform.position, Quaternion.identity) as GameObject;
+                echo.transform.parent = GameSession.Instance.FindOrCreateObjectParent(NamesTags.EchosParentName).transform;
+                if (tag == NamesTags.BallEchoTag && ball)
+                {
+                    echo.transform.localScale = ball.transform.localScale;
+                    echo.transform.rotation = ball.transform.rotation;
+                    SpriteRenderer spriteRenderer = echo.GetComponent<SpriteRenderer>();
+                    spriteRenderer.color = ball.GetBallColor();
+                    spriteRenderer.sprite = ball.GetSprite();
+                }
+
+                Destroy(echo, timeToSelfDestruct);
+                timeBetweenSpawns = startTimeBetweenSpanws;
+            }
+            else
+            {
+                timeBetweenSpawns -= Time.deltaTime;
+            }
         }
     }
 }

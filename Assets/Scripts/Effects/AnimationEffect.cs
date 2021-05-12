@@ -1,50 +1,53 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class AnimationEffect : MonoBehaviour
+namespace Effects
 {
-    // Config
-    [SerializeField] private Sprite[] spritesToAnimateList;
-    [SerializeField] private bool randomFPS = false;
-    [SerializeField] private float framesPerSecond = 10;
-
-    // Cached Components
-    private Image image;
-    private SpriteRenderer spriteRenderer;
-
-    private void Awake()
+    public class AnimationEffect : MonoBehaviour
     {
-        image = this.GetComponent<Image>();
-        if (!image)
+        // Config
+        [SerializeField] private Sprite[] spritesToAnimateList;
+        [SerializeField] private bool randomFPS = false;
+        [SerializeField] private float framesPerSecond = 10;
+
+        // Cached Components
+        private Image image;
+        private SpriteRenderer spriteRenderer;
+
+        private void Awake()
         {
-            spriteRenderer = this.GetComponent<SpriteRenderer>();
+            image = this.GetComponent<Image>();
+            if (!image)
+            {
+                spriteRenderer = this.GetComponent<SpriteRenderer>();
+            }
         }
-    }
 
-    private void Start()
-    {
-        framesPerSecond = (randomFPS ? Random.Range(5, 30) : framesPerSecond);
-    }
-
-    private void FixedUpdate()
-    {
-        AnimateImage();
-    }
-
-    private void AnimateImage()
-    {
-        //Cancel
-        if (spritesToAnimateList.Length == 0) return;
-
-        int index = (int) (Time.fixedTime * framesPerSecond) % spritesToAnimateList.Length;
-
-        if (image)
+        private void Start()
         {
-            image.sprite = spritesToAnimateList[index];
+            framesPerSecond = (randomFPS ? Random.Range(5, 30) : framesPerSecond);
         }
-        else if (spriteRenderer)
+
+        private void FixedUpdate()
         {
-            spriteRenderer.sprite = spritesToAnimateList[index];
+            AnimateImage();
+        }
+
+        private void AnimateImage()
+        {
+            //Cancel
+            if (spritesToAnimateList.Length == 0) return;
+
+            int index = (int)(Time.fixedTime * framesPerSecond) % spritesToAnimateList.Length;
+
+            if (image)
+            {
+                image.sprite = spritesToAnimateList[index];
+            }
+            else if (spriteRenderer)
+            {
+                spriteRenderer.sprite = spritesToAnimateList[index];
+            }
         }
     }
 }
