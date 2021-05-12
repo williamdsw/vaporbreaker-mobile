@@ -104,8 +104,8 @@ namespace Controllers.Core
             float fadeOutLength = fadeEffect.GetFadeOutLength();
             fadeEffect.FadeToLevel();
             yield return new WaitForSecondsRealtime(fadeOutLength);
-            GameStatusController.Instance.SetIsLevelCompleted(false);
-            GameStatusController.Instance.SetCameFromLevel(false);
+            GameStatusController.Instance.IsLevelCompleted = false;
+            GameStatusController.Instance.CameFromLevel = false;
             PersistentData.Instance.DestroyInstance();
             GameSession.Instance.DestroyInstance();
             SceneManagerController.ReloadScene();
@@ -128,8 +128,8 @@ namespace Controllers.Core
             float fadeOutLength = fadeEffect.GetFadeOutLength();
             fadeEffect.FadeToLevel();
             yield return new WaitForSecondsRealtime(fadeOutLength);
-            GameStatusController.Instance.SetIsLevelCompleted(false);
-            GameStatusController.Instance.SetCameFromLevel(true);
+            GameStatusController.Instance.IsLevelCompleted = false;
+            GameStatusController.Instance.CameFromLevel = true;
             GameSession.Instance.ResetGame(sceneName);
         }
     }

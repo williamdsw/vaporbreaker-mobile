@@ -14,9 +14,12 @@ namespace Effects
         private Animator animator;
         private Enumerators.GameStates newGameState;
 
+        public static FadeEffect Instance { get; private set; }
+
         private void Awake()
         {
-            animator = this.GetComponent<Animator>();
+            Instance = this;
+            animator = GetComponent<Animator>();
         }
 
         private void Start()
@@ -30,8 +33,6 @@ namespace Effects
 
         private void CreateFadeInEvents()
         {
-            if (!animator) return;
-
             AnimationClip fadeInClip = animator.runtimeAnimatorController.animationClips[0];
             fadeInClip.events = null;
 
@@ -54,8 +55,6 @@ namespace Effects
 
         private void CreateFadeOutEvents()
         {
-            if (!animator) return;
-
             AnimationClip fadeOutClip = animator.runtimeAnimatorController.animationClips[1];
             fadeOutClip.events = null;
 
@@ -75,8 +74,6 @@ namespace Effects
 
         public void ResetFadeOutEventsToLevelMenu()
         {
-            if (!animator) return;
-
             AnimationClip fadeOutClip = animator.runtimeAnimatorController.animationClips[1];
             fadeOutClip.events = null;
 
@@ -101,36 +98,28 @@ namespace Effects
             }
         }
 
-        public float GetFadeOutLength()
-        {
-            return (animator ? animator.runtimeAnimatorController.animationClips[1].length : 0);
-        }
+        public float GetFadeOutLength() => (animator ? animator.runtimeAnimatorController.animationClips[1].length : 0);
 
         public void FadeToLevel()
         {
-            if (!animator) return;
             animator.Rebind();
             animator.SetTrigger("FadeOut");
         }
 
         public void CallResetLevel()
         {
-            if (!GameSession.Instance || !animator) return;
             animator.Rebind();
             GameSession.Instance.ResetLevel();
         }
 
         public void CallLevelMenu()
         {
-            if (!GameSession.Instance || !animator) return;
             animator.Rebind();
             GameSession.Instance.ResetGame(SceneManagerController.SelectLevelsSceneName);
         }
 
         public void DefineGameState(int gameStateInt)
         {
-            if (!GameSession.Instance) return;
-
             switch (gameStateInt)
             {
                 case 0: newGameState = Enumerators.GameStates.GAMEPLAY; break;

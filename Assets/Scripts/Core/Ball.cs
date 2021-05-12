@@ -213,7 +213,7 @@ namespace Core
                                 if (other.GetContact(0).normal != Vector2.down)
                                 {
                                     ClampVelocity();
-                                    AudioController.Instance.PlaySFX(AudioController.Instance.BlipSound, AudioController.Instance.GetMaxSFXVolume());
+                                    AudioController.Instance.PlaySFX(AudioController.Instance.BlipSound, AudioController.Instance.MaxSFXVolume);
                                 }
 
                                 // Case ball is fast
@@ -238,7 +238,7 @@ namespace Core
                         case "Wall":
                             {
                                 ClampVelocity();
-                                AudioController.Instance.PlaySFX(AudioController.Instance.BlipSound, AudioController.Instance.GetMaxSFXVolume());
+                                AudioController.Instance.PlaySFX(AudioController.Instance.BlipSound, AudioController.Instance.MaxSFXVolume);
                                 break;
                             }
 

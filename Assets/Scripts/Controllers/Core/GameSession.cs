@@ -430,7 +430,7 @@ namespace Controllers.Core
                     canMoveBlocks = (numberOfOcorrences >= 1);
                     if (canMoveBlocks)
                     {
-                        AudioController.Instance.PlaySFX(AudioController.Instance.HittingWall, AudioController.Instance.GetMaxSFXVolume());
+                        AudioController.Instance.PlaySFX(AudioController.Instance.HittingWall, AudioController.Instance.MaxSFXVolume);
                     }
                 }
             }
@@ -504,7 +504,7 @@ namespace Controllers.Core
                         ball.ChangeBallSprite(true);
                     }
 
-                    AudioController.Instance.PlayME(AudioController.Instance.FireEffect, AudioController.Instance.GetMaxMEVolume() / 2f, true);
+                    AudioController.Instance.PlayME(AudioController.Instance.FireEffect, AudioController.Instance.MaxMEVolume / 2f, true);
 
                     // Calls cancel after 'n' seconds
                     Invoke("UndoFireBalls", timeToPutOutBallFire);
@@ -662,9 +662,9 @@ namespace Controllers.Core
             if (!AudioController.Instance || !GameStatusController.Instance) return;
 
             AudioController.Instance.StopMusic();
-            GameStatusController.Instance.SetNextSceneName(sceneName);
-            GameStatusController.Instance.SetHasStartedSong(false);
-            GameStatusController.Instance.SetCameFromLevel(true);
+            GameStatusController.Instance.NextSceneName = sceneName;
+            GameStatusController.Instance.HasStartedSong = false;
+            GameStatusController.Instance.CameFromLevel = true;
             SceneManagerController.CallScene(SceneManagerController.LoadingSceneName);
             Destroy(this.gameObject);
         }

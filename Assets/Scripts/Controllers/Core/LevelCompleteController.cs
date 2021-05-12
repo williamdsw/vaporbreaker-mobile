@@ -162,13 +162,13 @@ namespace Controllers.Core
             CalculateTotalScore();
 
             // Pass values
-            GameStatusController.Instance.SetNewScore(totalScore);
-            GameStatusController.Instance.SetNewTimeScore(timeScore);
-            GameStatusController.Instance.SetIsLevelCompleted(true);
+            GameStatusController.Instance.NewScore = totalScore;
+            GameStatusController.Instance.NewTimeScore = timeScore;
+            GameStatusController.Instance.IsLevelCompleted = true;
 
             // Plays success sound
             yield return new WaitForSecondsRealtime(defaultSecondsValue);
-            AudioController.Instance.PlaySFX(AudioController.Instance.SuccessEffect, AudioController.Instance.GetMaxSFXVolume());
+            AudioController.Instance.PlaySFX(AudioController.Instance.SuccessEffect, AudioController.Instance.MaxSFXVolume);
 
             // Show panel
             yield return new WaitForSecondsRealtime(defaultSecondsValue);
@@ -178,16 +178,16 @@ namespace Controllers.Core
             yield return new WaitForSecondsRealtime(defaultSecondsValue);
             for (int index = 0; index < labelsText.Count; index++)
             {
-                AudioController.Instance.PlaySFX(AudioController.Instance.HittingFace, AudioController.Instance.GetMaxSFXVolume());
+                AudioController.Instance.PlaySFX(AudioController.Instance.HittingFace, AudioController.Instance.MaxSFXVolume);
                 GameObject labelParent = labelsText[index].gameObject.transform.parent.gameObject;
                 labelParent.SetActive(true);
                 yield return new WaitForSecondsRealtime(defaultSecondsValue / 2);
             }
 
             // Case have a new score
-            if (totalScore > GameStatusController.Instance.GetOldScore())
+            if (totalScore > GameStatusController.Instance.OldScore)
             {
-                AudioController.Instance.PlaySFX(AudioController.Instance.NewScoreEffect, AudioController.Instance.GetMaxSFXVolume());
+                AudioController.Instance.PlaySFX(AudioController.Instance.NewScoreEffect, AudioController.Instance.MaxSFXVolume);
                 newScoreText.enabled = true;
                 newScoreText.GetComponent<FlashTextEffect>().enabled = true;
                 yield return new WaitForSecondsRealtime(defaultSecondsValue * 2);

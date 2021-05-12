@@ -79,7 +79,7 @@ namespace Controllers.Menu
 
             // Play music
             AudioController.Instance.ChangeMusic(AudioController.Instance.SelectLevelsSong, false, "", true, false);
-            GameStatusController.Instance.SetHasStartedSong(true);
+            GameStatusController.Instance.HasStartedSong = true;
 
             // Resets for animation works
             Time.timeScale = 1f;
@@ -195,11 +195,11 @@ namespace Controllers.Menu
                     LevelDetailsController.Instance.UpdateUI(levelName, bestScore, bestTimeScore, levelThumbnails[currentIndex]);
 
                     // Pass data
-                    GameStatusController.Instance.SetLevelIndex(currentIndex);
-                    GameStatusController.Instance.SetNewScore(0);
-                    GameStatusController.Instance.SetNewTimeScore(0);
-                    GameStatusController.Instance.SetOldScore(highScoresList[currentIndex]);
-                    GameStatusController.Instance.SetOldTimeScore(highTimeScoresList[currentIndex]);
+                    GameStatusController.Instance.LevelIndex = currentIndex;
+                    GameStatusController.Instance.NewScore = 0;
+                    GameStatusController.Instance.NewTimeScore = 0;
+                    GameStatusController.Instance.OldScore = highScoresList[currentIndex];
+                    GameStatusController.Instance.OldTimeScore = highTimeScoresList[currentIndex];
 
                     // Panels
                     selectLevelsPanel.SetActive(false);
@@ -230,35 +230,35 @@ namespace Controllers.Menu
 
         private void VerifyIfCameFromLevel()
         {
-            if (!GameStatusController.Instance && !GameStatusController.Instance.GetCameFromLevel()) return;
+            if (!GameStatusController.Instance && !GameStatusController.Instance.CameFromLevel) return;
 
-            currentLevelIndex = GameStatusController.Instance.GetLevelIndex();
+            currentLevelIndex = GameStatusController.Instance.LevelIndex;
 
             // Status
-            if (GameStatusController.Instance.GetIsLevelCompleted())
+            if (GameStatusController.Instance.IsLevelCompleted)
             {
-                if (GameStatusController.Instance.GetNewScore() > GameStatusController.Instance.GetOldScore())
+                if (GameStatusController.Instance.NewScore > GameStatusController.Instance.OldScore)
                 {
-                    highScoresList[currentLevelIndex] = GameStatusController.Instance.GetNewScore();
+                    highScoresList[currentLevelIndex] = GameStatusController.Instance.NewScore;
                 }
                 else
                 {
-                    highScoresList[currentLevelIndex] = GameStatusController.Instance.GetOldScore();
+                    highScoresList[currentLevelIndex] = GameStatusController.Instance.OldScore;
                 }
 
-                if (GameStatusController.Instance.GetOldTimeScore() == defaultTime)
+                if (GameStatusController.Instance.OldTimeScore == defaultTime)
                 {
-                    highTimeScoresList[currentLevelIndex] = GameStatusController.Instance.GetNewTimeScore();
+                    highTimeScoresList[currentLevelIndex] = GameStatusController.Instance.NewTimeScore;
                 }
                 else
                 {
-                    if (GameStatusController.Instance.GetNewTimeScore() < GameStatusController.Instance.GetOldTimeScore())
+                    if (GameStatusController.Instance.NewTimeScore < GameStatusController.Instance.OldTimeScore)
                     {
-                        highTimeScoresList[currentLevelIndex] = GameStatusController.Instance.GetNewTimeScore();
+                        highTimeScoresList[currentLevelIndex] = GameStatusController.Instance.NewTimeScore;
                     }
                     else
                     {
-                        highTimeScoresList[currentLevelIndex] = GameStatusController.Instance.GetOldTimeScore();
+                        highTimeScoresList[currentLevelIndex] = GameStatusController.Instance.OldTimeScore;
                     }
                 }
 
@@ -356,8 +356,8 @@ namespace Controllers.Menu
             yield return new WaitForSecondsRealtime(fadeOutLength);
 
             // Pass data
-            GameStatusController.Instance.SetNextSceneName(nextSceneName);
-            GameStatusController.Instance.SetCameFromLevel(false);
+            GameStatusController.Instance.NextSceneName = nextSceneName;
+            GameStatusController.Instance.CameFromLevel = false;
             SceneManagerController.CallScene(SceneManagerController.LoadingSceneName);
         }
 

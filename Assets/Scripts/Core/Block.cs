@@ -147,7 +147,7 @@ namespace Core
             }
 
             // SFX & VFX
-            AudioController.Instance.PlaySFX(AudioController.Instance.SlamSound, AudioController.Instance.GetMaxSFXVolume() / 2f);
+            AudioController.Instance.PlaySFX(AudioController.Instance.SlamSound, AudioController.Instance.MaxSFXVolume / 2f);
             SpawnDebris();
         }
 
@@ -209,7 +209,7 @@ namespace Core
 
             if (explosionPrefabs.Length >= 1)
             {
-                AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.ExplosionSound, AudioController.Instance.GetMaxSFXVolume() / 2f);
+                AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.ExplosionSound, AudioController.Instance.MaxSFXVolume / 2f);
                 int randomIndex = Random.Range(0, explosionPrefabs.Length);
                 GameObject explosion = Instantiate(explosionPrefabs[randomIndex], this.transform.position, Quaternion.identity) as GameObject;
                 explosion.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.ExplosionsParentName).transform);
@@ -252,7 +252,7 @@ namespace Core
             int randomIndex = CalculateIndexChance();
             GameObject powerUp = Instantiate(powerUpPrefabs[randomIndex].gameObject, this.transform.position, Quaternion.identity) as GameObject;
             powerUp.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.PowerUpsParentName).transform);
-            AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.ShowUpSound, AudioController.Instance.GetMaxSFXVolume());
+            AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.ShowUpSound, AudioController.Instance.MaxSFXVolume);
         }
 
         // Calculate chance percent and possibly decide when have other options... 

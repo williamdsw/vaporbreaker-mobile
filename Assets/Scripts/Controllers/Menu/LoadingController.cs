@@ -36,8 +36,8 @@ namespace Controllers.Menu
 
             fadeEffect = FindObjectOfType<FadeEffect>();
 
-            if (GameStatusController.Instance.GetCameFromLevel() ||
-                GameStatusController.Instance.GetNextSceneName().Equals(SceneManagerController.SelectLevelsSceneName))
+            if (GameStatusController.Instance.CameFromLevel ||
+                GameStatusController.Instance.NextSceneName.Equals(SceneManagerController.SelectLevelsSceneName))
             {
                 loadingPanel.SetActive(false);
                 StartCoroutine(CallNextScene());
@@ -128,7 +128,7 @@ namespace Controllers.Menu
             yield return new WaitForSecondsRealtime(fadeOutLength);
 
             // Calls next scene
-            string nextSceneName = GameStatusController.Instance.GetNextSceneName();
+            string nextSceneName = GameStatusController.Instance.NextSceneName;
             operation = SceneManagerController.CallSceneAsync(nextSceneName);
         }
     }

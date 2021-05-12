@@ -125,7 +125,7 @@ namespace Core
         private void DealCollisionWithPaddle()
         {
             Destroy(this.gameObject);
-            AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.PowerUpSound, AudioController.Instance.GetMaxSFXVolume());
+            AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.PowerUpSound, AudioController.Instance.MaxSFXVolume);
             string name = this.gameObject.name;
             name = name.Replace("(Clone)", "");
             ApplyPowerUpEffect(name);
