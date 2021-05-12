@@ -12,7 +12,6 @@ namespace Controllers.Menu
 
     public class LoadingController : MonoBehaviour
     {
-        // Config
         [Header("UI Elements")]
         [SerializeField] private GameObject loadingPanel;
         [SerializeField] private GameObject[] instructionPanels;
@@ -22,19 +21,13 @@ namespace Controllers.Menu
         [Header("Labels to Translate")]
         [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI>();
 
-        private float timeToWait = 1f;
+        // || Const
 
-        // State
-        private AsyncOperation operation;
-
-        // Cached
-        private FadeEffect fadeEffect;
+        private const float TIME_TO_WAIT = 1f;
 
         private void Start()
         {
             UnityUtilities.DisableAnalytics();
-
-            fadeEffect = FindObjectOfType<FadeEffect>();
 
             if (GameStatusController.Instance.CameFromLevel ||
                 GameStatusController.Instance.NextSceneName.Equals(SceneManagerController.SelectLevelsSceneName))
@@ -51,9 +44,6 @@ namespace Controllers.Menu
 
         private void TranslateLabels()
         {
-            // CANCELS
-            if (!LocalizationController.Instance) return;
-
             List<string> labels = new List<string>();
             foreach (string label in LocalizationController.Instance.GetInstructions01Labels())
             {
@@ -70,7 +60,6 @@ namespace Controllers.Menu
                 labels.Add(label);
             }
 
-            if (labels.Count == 0 || uiLabels.Count == 0 || labels.Count != uiLabels.Count) return;
             for (int index = 0; index < labels.Count; index++)
             {
                 uiLabels[index].SetText(labels[index]);
@@ -79,9 +68,6 @@ namespace Controllers.Menu
 
         private void BindClickEvents()
         {
-            // Check and Cancels
-            if (instructionPanels.Length == 0 || gotoButtons.Length == 0 || !continueButton) return;
-
             // INSTRUCTION PANEL 01 - RIGHT BUTTON
             gotoButtons[0].onClick.AddListener(() =>
             {
@@ -119,17 +105,15 @@ namespace Controllers.Menu
 
         private IEnumerator CallNextScene()
         {
-            if (!fadeEffect || !GameStatusController.Instance) { yield return null; }
-
             // Fade Out effect
-            yield return new WaitForSecondsRealtime(timeToWait);
-            float fadeOutLength = fadeEffect.GetFadeOutLength();
-            fadeEffect.FadeToLevel();
+            yield return new WaitForSecondsRealtime(TIME_TO_WAIT);
+            float fadeOutLength = FadeEffect.Instance.GetFadeOutLength();
+            FadeEffect.Instance.FadeToLevel();
             yield return new WaitForSecondsRealtime(fadeOutLength);
 
             // Calls next scene
             string nextSceneName = GameStatusController.Instance.NextSceneName;
-            operation = SceneManagerController.CallSceneAsync(nextSceneName);
+            AsyncOperation operation = SceneManagerController.CallSceneAsync(nextSceneName);
         }
     }
 }
