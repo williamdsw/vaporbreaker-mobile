@@ -6,29 +6,22 @@ using Utilities;
 
 namespace Core
 {
+    [RequireComponent(typeof(Image))]
     public class JoystickMovement : MonoBehaviour, IDragHandler, IPointerDownHandler
     {
-        private Vector3 inputDirection;
         private Image backgroundImage;
 
-        public Vector3 InputDirection { get => this.inputDirection; }
+        public Vector3 InputDirection { get; private set; }
 
-        private void Awake()
-        {
-            backgroundImage = this.GetComponent<Image>();
-        }
+        private void Awake() => backgroundImage = GetComponent<Image>();
 
-        private void Start()
-        {
-            inputDirection = Vector2.zero;
-        }
+        private void Start() => InputDirection = Vector2.zero;
 
         private void Update()
         {
-            if (!GameSession.Instance) return;
             if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.TRANSITION)
             {
-                inputDirection = Vector2.zero;
+                InputDirection = Vector2.zero;
             }
         }
 
@@ -37,13 +30,10 @@ namespace Core
             Vector2 position = Vector2.zero;
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(backgroundImage.rectTransform, pointerEventData.position, pointerEventData.pressEventCamera, out position))
             {
-                inputDirection = Camera.main.ScreenToWorldPoint(pointerEventData.position);
+                InputDirection = Camera.main.ScreenToWorldPoint(pointerEventData.position);
             }
         }
 
-        public virtual void OnPointerDown(PointerEventData pointerEventData)
-        {
-            OnDrag(pointerEventData);
-        }
+        public virtual void OnPointerDown(PointerEventData pointerEventData) => OnDrag(pointerEventData);
     }
 }

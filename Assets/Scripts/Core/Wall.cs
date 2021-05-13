@@ -7,15 +7,9 @@ namespace Core
     {
         private EdgeCollider2D edgeCollider;
 
-        private void Awake()
-        {
-            edgeCollider = this.GetComponent<EdgeCollider2D>();
-        }
+        private void Awake() => edgeCollider = GetComponent<EdgeCollider2D>();
 
-        private void Start()
-        {
-            DefineColliderPoints();
-        }
+        private void Start() => DefineColliderPoints();
 
         public void DefineColliderPoints()
         {
@@ -32,13 +26,10 @@ namespace Core
             Vector2 upperRightCorner = Camera.main.ScreenToWorldPoint(screenSize);
             Vector2 lowerRightCorner = Camera.main.ScreenToWorldPoint(screenWidth);
 
-            if (edgeCollider)
+            edgeCollider.points = new Vector2[]
             {
-                edgeCollider.points = new Vector2[]
-                {
                 lowerLeftCorner , upperLeftCorner , upperRightCorner  , lowerRightCorner
-                };
-            }
+            };
         }
     }
 }

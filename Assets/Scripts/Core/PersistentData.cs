@@ -5,27 +5,24 @@ namespace Core
 {
     public class PersistentData : MonoBehaviour
     {
+        // || State
+
         private int startingSceneIndex;
-        private static PersistentData instance;
 
-        public static PersistentData Instance { get => instance; }
+        // || Properties
 
-        private void Awake()
-        {
-            SetupSingleton();
-        }
+        public static PersistentData Instance { get; private set; }
 
-        private void Start()
-        {
-            startingSceneIndex = SceneManagerController.GetActiveSceneIndex();
-        }
+        private void Awake() => SetupSingleton();
+
+        private void Start() => startingSceneIndex = SceneManagerController.GetActiveSceneIndex();
 
         private void Update()
         {
             int currentSceneIndex = SceneManagerController.GetActiveSceneIndex();
             if (currentSceneIndex != startingSceneIndex)
             {
-                Destroy(this.gameObject);
+                Destroy(gameObject);
             }
         }
 
@@ -34,18 +31,18 @@ namespace Core
             int numberOfInstances = FindObjectsOfType(GetType()).Length;
             if (numberOfInstances > 1)
             {
-                DestroyImmediate(this.gameObject);
+                DestroyInstance();
             }
             else
             {
-                instance = this;
-                DontDestroyOnLoad(this.gameObject);
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
             }
         }
 
         public void DestroyInstance()
         {
-            DestroyImmediate(this.gameObject);
+            DestroyImmediate(gameObject);
         }
     }
 }

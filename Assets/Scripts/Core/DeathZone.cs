@@ -6,29 +6,18 @@ using Utilities;
 
 namespace Core
 {
-
     public class DeathZone : MonoBehaviour
     {
+        // || Cached References
         private EdgeCollider2D edgeCollider;
         private Ball[] balls;
-        private FadeEffect fadeEffect;
 
-        private void Awake()
-        {
-            edgeCollider = this.GetComponent<EdgeCollider2D>();
-        }
+        private void Awake() => edgeCollider = GetComponent<EdgeCollider2D>();
 
-        private void Start()
-        {
-            fadeEffect = FindObjectOfType<FadeEffect>();
-            DefineColliderPoints();
-        }
+        private void Start() => DefineColliderPoints();
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            // Check and cancels
-            if (!GameSession.Instance || !AudioController.Instance) return;
-
             if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
             {
                 if (other.gameObject.CompareTag(NamesTags.BallTag))
@@ -79,7 +68,7 @@ namespace Core
             float soundLength = AudioController.Instance.GetClipLength(AudioController.Instance.BoomSound);
             AudioController.Instance.PlaySFX(AudioController.Instance.BoomSound, 0.8f);
             yield return new WaitForSecondsRealtime(soundLength);
-            fadeEffect.FadeToLevel();
+            FadeEffect.Instance.FadeToLevel();
         }
     }
 }

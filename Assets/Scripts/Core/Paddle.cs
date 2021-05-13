@@ -29,15 +29,12 @@ namespace Core
         // Cached Others
         private Camera mainCamera;
 
-        public Sprite GetSprite()
-        {
-            return spriteRenderer.sprite;
-        }
+        public Sprite GetSprite() => spriteRenderer.sprite;
 
         private void Awake()
         {
-            boxCollider2D = this.GetComponent<BoxCollider2D>();
-            spriteRenderer = this.GetComponent<SpriteRenderer>();
+            boxCollider2D = GetComponent<BoxCollider2D>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         private void Start()
@@ -60,8 +57,6 @@ namespace Core
 
         private void Update()
         {
-            if (!GameSession.Instance) return;
-
             if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
             {
                 DefineBounds();
@@ -74,13 +69,11 @@ namespace Core
         {
             Vector3 startPosition = new Vector3(Screen.width / 2f, 0, 0);
             startPosition = mainCamera.ScreenToWorldPoint(startPosition);
-            this.transform.position = new Vector3(startPosition.x, this.transform.position.y, transform.position.z);
+            transform.position = new Vector3(startPosition.x, this.transform.position.y, transform.position.z);
         }
 
         public void DefineBounds()
         {
-            if (!mainCamera || !spriteRenderer) return;
-
             float minScreenX = mainCamera.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
             float maxScreenX = mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
             float spriteExtentsX = spriteRenderer.bounds.extents.x;
@@ -91,7 +84,7 @@ namespace Core
         private void Move()
         {
             currentDirection = new Vector3(joystickMovement.InputDirection.x, 0, 0);
-            this.transform.position = new Vector3(currentDirection.x, this.transform.position.y, this.transform.position.z);
+            transform.position = new Vector3(currentDirection.x, this.transform.position.y, this.transform.position.z);
         }
 
         private void LockPositionToScreen()
@@ -119,7 +112,7 @@ namespace Core
             // Define properties
             spriteRenderer.sprite = paddleSprites[currentPaddleIndex];
             Destroy(boxCollider2D);
-            boxCollider2D = this.gameObject.AddComponent<BoxCollider2D>();
+            boxCollider2D = gameObject.AddComponent<BoxCollider2D>();
             DefineBounds();
 
             // Case have shooter power up
@@ -137,7 +130,7 @@ namespace Core
             // Define properties
             spriteRenderer.sprite = paddleSprites[currentPaddleIndex];
             Destroy(boxCollider2D);
-            boxCollider2D = this.gameObject.AddComponent<BoxCollider2D>();
+            boxCollider2D = gameObject.AddComponent<BoxCollider2D>();
             DefineBounds();
 
             // Case have shooter power up

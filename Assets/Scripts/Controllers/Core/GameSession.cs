@@ -147,7 +147,7 @@ namespace Controllers.Core
             {
                 case Enumerators.GameStates.LEVEL_COMPLETE:
                     {
-                        pauseController.SetCanPause(false);
+                        pauseController.CanPause = false;
                         canvasGroup.interactable = true;
                         break;
                     }
@@ -155,7 +155,7 @@ namespace Controllers.Core
                 case Enumerators.GameStates.GAMEPLAY:
                     {
                         Time.timeScale = 1f;
-                        pauseController.SetCanPause(true);
+                        pauseController.CanPause = true;
                         canvasGroup.interactable = true;
                         break;
                     }
@@ -163,14 +163,14 @@ namespace Controllers.Core
                 case Enumerators.GameStates.PAUSE:
                     {
                         Time.timeScale = 0f;
-                        pauseController.SetCanPause(true);
+                        pauseController.CanPause = true;
                         canvasGroup.interactable = true;
                         break;
                     }
 
                 case Enumerators.GameStates.TRANSITION:
                     {
-                        pauseController.SetCanPause(false);
+                        pauseController.CanPause = false;
                         canvasGroup.interactable = false;
                         break;
                     }
@@ -330,7 +330,7 @@ namespace Controllers.Core
             for (int i = 1; i <= numberOfRandomBlocks; i++)
             {
                 int index = Random.Range(0, blocks.Length);
-                blocks[index].GetComponent<Block>().SetCanSpawnPowerUp(true);
+                blocks[index].GetComponent<Block>().CanSpawnPowerUp = true;
             }
         }
 
@@ -353,7 +353,7 @@ namespace Controllers.Core
                             case "Right":
                                 {
                                     Vector3 rightPosition = new Vector3(block.transform.position.x + 1f, block.transform.position.y, 0f);
-                                    if (rightPosition.x <= BlockGrid.MaxXCoordinate)
+                                    if (rightPosition.x <= BlockGrid.MaxXYCoordinates.x)
                                     {
                                         if (!BlockGrid.CheckPosition(rightPosition)) return;
                                         if (!BlockGrid.GetBlock(rightPosition))
@@ -371,7 +371,7 @@ namespace Controllers.Core
                             case "Left":
                                 {
                                     Vector3 leftPosition = new Vector3(block.transform.position.x - 1f, block.transform.position.y, 0f);
-                                    if (leftPosition.x >= BlockGrid.MinXCoordinate)
+                                    if (leftPosition.x >= BlockGrid.MinXYCoordinates.x)
                                     {
                                         if (!BlockGrid.CheckPosition(leftPosition)) return;
                                         if (!BlockGrid.GetBlock(leftPosition))
@@ -389,7 +389,7 @@ namespace Controllers.Core
                             case "Down":
                                 {
                                     Vector3 downPosition = new Vector3(block.transform.position.x, block.transform.position.y - 0.5f, 0f);
-                                    if (downPosition.y >= BlockGrid.MinYCoordinate)
+                                    if (downPosition.y >= BlockGrid.MinXYCoordinates.y)
                                     {
                                         if (!BlockGrid.CheckPosition(downPosition)) return;
                                         if (!BlockGrid.GetBlock(downPosition))
@@ -407,7 +407,7 @@ namespace Controllers.Core
                             case "Up":
                                 {
                                     Vector3 upPosition = new Vector3(block.transform.position.x, block.transform.position.y + 0.5f, 0f);
-                                    if (upPosition.y <= BlockGrid.MaxYCoordinate)
+                                    if (upPosition.y <= BlockGrid.MaxXYCoordinates.y)
                                     {
                                         if (!BlockGrid.CheckPosition(upPosition)) return;
                                         if (!BlockGrid.GetBlock(upPosition))
@@ -444,9 +444,9 @@ namespace Controllers.Core
 
             // Finds and populate the grid
             Block[] blocks = FindObjectsOfType<Block>();
-            for (float y = BlockGrid.MinYCoordinate; y <= BlockGrid.MaxYCoordinate; y += 0.5f)
+            for (float y = BlockGrid.MinXYCoordinates.y; y <= BlockGrid.MaxXYCoordinates.y; y += 0.5f)
             {
-                for (float x = BlockGrid.MinXCoordinate; x <= BlockGrid.MaxXCoordinate; x++)
+                for (float x = BlockGrid.MinXYCoordinates.x; x <= BlockGrid.MaxXYCoordinates.x; x++)
                 {
                     Vector3 position = new Vector3(x, y, 0f);
 
@@ -493,14 +493,14 @@ namespace Controllers.Core
                         BoxCollider2D blockCollider = blockObject.GetComponent<BoxCollider2D>();
                         blockCollider.isTrigger = true;
                         Block block = blockObject.GetComponent<Block>();
-                        block.SetMaxHits(1);
+                        block.MaxHits = 1;
                     }
 
                     // Check Balls
                     Ball[] balls = FindObjectsOfType<Ball>();
                     foreach (Ball ball in balls)
                     {
-                        ball.SetIsBallOnFire(true);
+                        ball.IsBallOnFire = true;
                         ball.ChangeBallSprite(true);
                     }
 
@@ -526,14 +526,14 @@ namespace Controllers.Core
                 BoxCollider2D blockCollider = blockObject.GetComponent<BoxCollider2D>();
                 blockCollider.isTrigger = false;
                 Block block = blockObject.GetComponent<Block>();
-                block.SetMaxHits(block.GetStartMaxHits());
+                block.MaxHits = block.StartMaxHits;
             }
 
             // Check Balls
             Ball[] balls = FindObjectsOfType<Ball>();
             foreach (Ball ball in balls)
             {
-                ball.SetIsBallOnFire(false);
+                ball.IsBallOnFire = false;
                 ball.ChangeBallSprite(false);
             }
 
@@ -585,10 +585,10 @@ namespace Controllers.Core
                                 Rigidbody2D ballRB = firstBall.GetComponent<Rigidbody2D>();
                                 Ball newBall = Instantiate(firstBall, firstBall.transform.position, Quaternion.identity) as Ball;
                                 Rigidbody2D newBallRB = newBall.GetComponent<Rigidbody2D>();
-                                newBallRB.velocity = (ballRB.velocity.normalized * -1 * Time.deltaTime * firstBall.GetMoveSpeed());
-                                newBall.SetMoveSpeed(firstBall.GetDefaultSpeed());
-                                newBall.SetIsBallOnFire(firstBall.GetIsBallOnFire());
-                                newBall.ChangeBallSprite(newBall.GetIsBallOnFire());
+                                newBallRB.velocity = (ballRB.velocity.normalized * -1 * Time.deltaTime * firstBall.MoveSpeed);
+                                newBall.MoveSpeed = firstBall.DefaultSpeed;
+                                newBall.IsBallOnFire = firstBall.IsBallOnFire;
+                                newBall.ChangeBallSprite(newBall.IsBallOnFire);
                                 currentNumberOfBalls++;
                             }
                         }
@@ -606,8 +606,8 @@ namespace Controllers.Core
             foreach (Ball ball in balls)
             {
                 ball.transform.localScale = Vector2.one;
-                float defaultSpeed = ball.GetDefaultSpeed();
-                ball.SetMoveSpeed(defaultSpeed);
+                float defaultSpeed = ball.DefaultSpeed;
+                ball.MoveSpeed = defaultSpeed;
             }
 
             Shooter[] shooters = FindObjectsOfType<Shooter>();

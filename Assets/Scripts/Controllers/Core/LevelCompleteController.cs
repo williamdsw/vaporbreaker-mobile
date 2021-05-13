@@ -30,16 +30,11 @@ namespace Controllers.Core
         private int totalScore = 0;
         private float countdownTimer = 3f;
 
-        // Cached
-        private FadeEffect fadeEffect;
         private Ball[] balls;
         private List<string> cachedTexts = new List<string>();
 
-        //--------------------------------------------------------------------------------//
-
         private void Start()
         {
-            fadeEffect = FindObjectOfType<FadeEffect>();
             levelCompletedPanel.SetActive(false);
             TranslateLabels();
             DefaultUIValues();
@@ -49,14 +44,12 @@ namespace Controllers.Core
         // Translate labels based on choosed language
         private void TranslateLabels()
         {
-            if (!LocalizationController.Instance) return;
             List<string> labels = new List<string>();
             foreach (string label in LocalizationController.Instance.GetLevelCompleteLabels())
             {
                 labels.Add(label);
             }
 
-            if (labels.Count == 0 || uiLabels.Count == 0 || labels.Count != uiLabels.Count) return;
             for (int index = 0; index < labels.Count; index++)
             {
                 uiLabels[index].SetText(labels[index]);
@@ -65,11 +58,8 @@ namespace Controllers.Core
             cachedTexts = labels;
         }
 
-        // Define default UI
         private void DefaultUIValues()
         {
-            if (labelsText.Count == 0 || !newScoreText || !continueButton) return;
-
             foreach (TextMeshProUGUI labelText in labelsText)
             {
                 GameObject parent = labelText.gameObject.transform.parent.gameObject;
@@ -80,10 +70,8 @@ namespace Controllers.Core
             continueButton.gameObject.SetActive(false);
         }
 
-        // Binds onClick of button
         public void BindClickEvents()
         {
-            if (!continueButton) return;
             continueButton.onClick.AddListener(() =>
             {
                 continueButton.interactable = false;
@@ -130,8 +118,6 @@ namespace Controllers.Core
             totalScore += (numberOfBalls >= 1 ? numberOfBalls * 50000 : 0);
             totalScore += (bestCombo > 1 ? bestCombo * 50000 : 0);
 
-            if (labelsText.Count == 0 || uiLabels.Count == 0 || cachedTexts.Count == 0) return;
-
             // Update UI
             int[] values = { currentScore, totalTimeScore, bestCombo, numberOfBalls, totalScore };
             for (int index = 0; index < values.Length; index++)
@@ -143,8 +129,6 @@ namespace Controllers.Core
 
         private IEnumerator LevelComplete()
         {
-            if (!AudioController.Instance || !GameStatusController.Instance || !GameSession.Instance) { yield return null; }
-
             // Destroy current objects
             foreach (Ball ball in balls)
             {
@@ -198,12 +182,9 @@ namespace Controllers.Core
 
         private IEnumerator FadeCoroutine()
         {
-            // Calls fade
-            if (!GameSession.Instance || !fadeEffect) { yield return null; }
-            fadeEffect = FindObjectOfType<FadeEffect>();
-            fadeEffect.ResetAnimationFunctions();
-            float fadeOutLength = fadeEffect.GetFadeOutLength();
-            fadeEffect.FadeToLevel();
+            FadeEffect.Instance.ResetAnimationFunctions();
+            float fadeOutLength = FadeEffect.Instance.GetFadeOutLength();
+            FadeEffect.Instance.FadeToLevel();
             yield return new WaitForSecondsRealtime(fadeOutLength);
             GameSession.Instance.ResetGame(SceneManagerController.SelectLevelsSceneName);
         }

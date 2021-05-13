@@ -11,6 +11,8 @@ namespace Controllers.Core
 {
     public class PauseController : MonoBehaviour
     {
+        // || Inspector References
+
         [Header("Pause UI Objects")]
         [SerializeField] private GameObject pauseMenu;
         [SerializeField] private Button pauseButtonMenu;
@@ -19,32 +21,17 @@ namespace Controllers.Core
         [Header("Labels to Translate")]
         [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI>();
 
-        // State
-        private bool canPause = true;
+        // || State
         private bool pauseState = false;
 
-        // Cached
-        private FadeEffect fadeEffect;
+        // || Properties
 
-        public bool GetCanPause()
-        {
-            return canPause;
-        }
+        public bool CanPause { private get; set; } = true;
 
-        public void SetCanPause(bool canPause)
-        {
-            this.canPause = canPause;
-        }
+        private void Awake() => pauseMenu.SetActive(false);
 
         private void Start()
         {
-            fadeEffect = FindObjectOfType<FadeEffect>();
-
-            if (pauseMenu)
-            {
-                pauseMenu.SetActive(false);
-            }
-
             TranslateLabels();
             BindButtonClickEvents();
         }
@@ -52,14 +39,12 @@ namespace Controllers.Core
         // Translate labels based on choosed language
         private void TranslateLabels()
         {
-            if (!LocalizationController.Instance) return;
             List<string> labels = new List<string>();
             foreach (string label in LocalizationController.Instance.GetPauseLabels())
             {
                 labels.Add(label);
             }
 
-            if (labels.Count == 0 || uiLabels.Count == 0 || labels.Count != uiLabels.Count) return;
             for (int index = 0; index < labels.Count; index++)
             {
                 uiLabels[index].SetText(labels[index]);
@@ -68,8 +53,6 @@ namespace Controllers.Core
 
         private void BindButtonClickEvents()
         {
-            if (!pauseButtonMenu || allPauseMenuButtons.Length == 0) return;
-
             // 0 = Resume, 1 = Restart, 2 = Levels
             pauseButtonMenu.onClick.AddListener(() => PauseGame());
             allPauseMenuButtons[0].onClick.AddListener(() => PauseGame());
@@ -79,8 +62,6 @@ namespace Controllers.Core
 
         public void PauseGame()
         {
-            if (!GameSession.Instance) return;
-
             // State
             pauseState = !pauseState;
             pauseMenu.SetActive(pauseState);
@@ -90,19 +71,10 @@ namespace Controllers.Core
         // Reset actual level
         private IEnumerator ResetLevelCoroutine()
         {
-            if (!GameSession.Instance || !GameStatusController.Instance || !PersistentData.Instance) { yield return null; }
-
             GameSession.Instance.SetActualGameState(Enumerators.GameStates.TRANSITION);
-
-            // Fades Out
-            if (!fadeEffect)
-            {
-                fadeEffect = FindObjectOfType<FadeEffect>();
-            }
-
-            fadeEffect.ResetAnimationFunctions();
-            float fadeOutLength = fadeEffect.GetFadeOutLength();
-            fadeEffect.FadeToLevel();
+            FadeEffect.Instance.ResetAnimationFunctions();
+            float fadeOutLength = FadeEffect.Instance.GetFadeOutLength();
+            FadeEffect.Instance.FadeToLevel();
             yield return new WaitForSecondsRealtime(fadeOutLength);
             GameStatusController.Instance.IsLevelCompleted = false;
             GameStatusController.Instance.CameFromLevel = false;
@@ -114,19 +86,10 @@ namespace Controllers.Core
         // Reset to Select Levels
         private IEnumerator ResetGameCoroutine(string sceneName)
         {
-            if (!GameSession.Instance || !GameStatusController.Instance) { yield return null; }
-
             GameSession.Instance.SetActualGameState(Enumerators.GameStates.TRANSITION);
-
-            // Fades Out
-            if (!fadeEffect)
-            {
-                fadeEffect = FindObjectOfType<FadeEffect>();
-            }
-
-            fadeEffect.ResetAnimationFunctions();
-            float fadeOutLength = fadeEffect.GetFadeOutLength();
-            fadeEffect.FadeToLevel();
+            FadeEffect.Instance.ResetAnimationFunctions();
+            float fadeOutLength = FadeEffect.Instance.GetFadeOutLength();
+            FadeEffect.Instance.FadeToLevel();
             yield return new WaitForSecondsRealtime(fadeOutLength);
             GameStatusController.Instance.IsLevelCompleted = false;
             GameStatusController.Instance.CameFromLevel = true;

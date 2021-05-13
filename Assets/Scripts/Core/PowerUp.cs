@@ -312,8 +312,7 @@ namespace Core
             {
                 foreach (Block block in blocks)
                 {
-                    block.SetMaxHits(1);
-                    block.SetStartMaxHits(1);
+                    block.MaxHits = block.StartMaxHits = 1;
                 }
             }
         }
@@ -328,14 +327,14 @@ namespace Core
                     Vector3 newLocalScale = ball.transform.localScale;
                     if (makeBigger)
                     {
-                        if (newLocalScale.x < ball.GetMaxBallLocalScale())
+                        if (newLocalScale.x < ball.MaxBallLocalScale)
                         {
                             newLocalScale *= 2f;
                         }
                     }
                     else
                     {
-                        if (newLocalScale.x > ball.GetMinBallLocalScale())
+                        if (newLocalScale.x > ball.MinBallLocalScale)
                         {
                             newLocalScale /= 2f;
                         }
@@ -354,35 +353,35 @@ namespace Core
                 foreach (Ball ball in balls)
                 {
                     Rigidbody2D ballRB = ball.GetComponent<Rigidbody2D>();
-                    float moveSpeed = ball.GetMoveSpeed();
-                    float ballRotationDegree = ball.GetBallRotationDegree();
+                    float moveSpeed = ball.MoveSpeed;
+                    float ballRotationDegree = ball.BallRotationDegree;
                     if (moveFaster)
                     {
-                        if (moveSpeed < ball.GetMaxMoveSpeed())
+                        if (moveSpeed < ball.MaxMoveSpeed)
                         {
                             moveSpeed += 100f;
                         }
 
-                        if (ballRotationDegree < ball.GetMaxBallRotationDegree())
+                        if (ballRotationDegree < ball.MaxBallRotationDegree)
                         {
                             ballRotationDegree *= 2;
                         }
                     }
                     else
                     {
-                        if (moveSpeed > ball.GetMinMoveSpeed())
+                        if (moveSpeed > ball.MinMoveSpeed)
                         {
                             moveSpeed -= 100f;
                         }
 
-                        if (ballRotationDegree > ball.GetMinBallRotationDegree())
+                        if (ballRotationDegree > ball.MinBallRotationDegree)
                         {
                             ballRotationDegree /= 2;
                         }
                     }
 
-                    ball.SetMoveSpeed(moveSpeed);
-                    ball.SetBallRotationDegree(ballRotationDegree);
+                    ball.MoveSpeed = moveSpeed;
+                    ball.BallRotationDegree = ballRotationDegree;
                     ballRB.velocity = (ballRB.velocity.normalized * Time.deltaTime * moveSpeed);
                 }
             }
@@ -400,8 +399,8 @@ namespace Core
 
                     // Movement
                     Rigidbody2D ballRB = ball.GetComponent<Rigidbody2D>();
-                    float defaultSpeed = ball.GetDefaultSpeed();
-                    ball.SetMoveSpeed(defaultSpeed);
+                    float defaultSpeed = ball.DefaultSpeed;
+                    ball.MoveSpeed = defaultSpeed;
                     ballRB.velocity = (ballRB.velocity.normalized * Time.deltaTime * defaultSpeed);
                 }
             }
@@ -424,11 +423,11 @@ namespace Core
                     Rigidbody2D ballRB = ball.GetComponent<Rigidbody2D>();
                     Ball newBall = Instantiate(ball, ball.transform.position, Quaternion.identity) as Ball;
                     Rigidbody2D newBallRB = newBall.GetComponent<Rigidbody2D>();
-                    newBallRB.velocity = (ballRB.velocity.normalized * -1 * Time.deltaTime * ball.GetMoveSpeed());
-                    newBall.SetMoveSpeed(ball.GetMoveSpeed());
-                    if (ball.GetIsBallOnFire())
+                    newBallRB.velocity = (ballRB.velocity.normalized * -1 * Time.deltaTime * ball.MoveSpeed);
+                    newBall.MoveSpeed = ball.MoveSpeed;
+                    if (ball.IsBallOnFire)
                     {
-                        newBall.SetIsBallOnFire(true);
+                        newBall.IsBallOnFire = true;
                         newBall.ChangeBallSprite(true);
                     }
                 }

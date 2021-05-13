@@ -9,7 +9,7 @@ namespace Core
     [RequireComponent(typeof(Rigidbody2D))]
     public class Ball : MonoBehaviour
     {
-        [Header("Configuration Parameters")]
+        [Header("Required Configuration Parameters")]
         [SerializeField] private EchoEffect echoEffectSpawnerPrefab;
         [SerializeField] private GameObject initialLinePrefab;
         [SerializeField] private GameObject paddleParticlesPrefab;
@@ -17,27 +17,11 @@ namespace Core
         [SerializeField] private Sprite defaultBallSprite;
         [SerializeField] private Sprite fireballSprite;
 
-        // Speed config
-        private float defaultSpeed = 300f;
-        private float maxMoveSpeed = 600f;
-        private float minMoveSpeed = 200f;
-        private float moveSpeed = 300f;
-
-        // Scale config
-        private float maxBallLocalScale = 8f;
-        private float minBallLocalScale = 0.5f;
-
-        // Rotation config
-        private float ballRotationDegree = 20f;
-        private float maxBallRotationDegree = 90f;
-        private float minBallRotationDegree = 10f;
-
         // State
         private Vector3 paddleToBallPosition;
         private Vector3 remainingPosition;
         private Color32 defaultBallColor;
         private Color32 fireBallColor = Color.white;
-        private bool isBallOnFire = false;
 
         // Cached Components
         private LineRenderer initialLineRenderer;
@@ -46,97 +30,35 @@ namespace Core
 
         // Cached Other Objects
         private Camera mainCamera;
-        private CursorController cursorController;
 
-        public Color GetBallColor()
-        {
-            return spriteRenderer.color;
-        }
+        // || Ball Configuration
 
-        public float GetBallRotationDegree()
-        {
-            return ballRotationDegree;
-        }
+        public bool IsBallOnFire { get; set; } = false;
+        public float DefaultSpeed { get; set; } = 300f;
+        public float MoveSpeed { get; set; } = 300f;
+        public float MinMoveSpeed => 200f;
+        public float MaxMoveSpeed => 600f;
+        public float MinBallLocalScale => 0.5f;
+        public float MaxBallLocalScale => 8f;
+        public float BallRotationDegree { get; set; } = 20f;
+        public float MinBallRotationDegree => 10f;
+        public float MaxBallRotationDegree => 90f;
 
-        public float GetDefaultSpeed()
-        {
-            return defaultSpeed;
-        }
+        public Color GetBallColor() => spriteRenderer.color;
 
-        public bool GetIsBallOnFire()
-        {
-            return isBallOnFire;
-        }
-
-        public float GetMaxBallLocalScale()
-        {
-            return maxBallLocalScale;
-        }
-
-        public float GetMaxBallRotationDegree()
-        {
-            return maxBallRotationDegree;
-        }
-
-        public float GetMaxMoveSpeed()
-        {
-            return maxMoveSpeed;
-        }
-
-        public float GetMinBallLocalScale()
-        {
-            return minBallLocalScale;
-        }
-
-        public float GetMinBallRotationDegree()
-        {
-            return minBallRotationDegree;
-        }
-
-        public float GetMinMoveSpeed()
-        {
-            return minMoveSpeed;
-        }
-
-        public float GetMoveSpeed()
-        {
-            return moveSpeed;
-        }
-
-        public Sprite GetSprite()
-        {
-            return spriteRenderer.sprite;
-        }
-
-        public void SetBallRotationDegree(float ballRotationDegree)
-        {
-            this.ballRotationDegree = ballRotationDegree;
-        }
-
-        public void SetIsBallOnFire(bool isBallOnFire)
-        {
-            this.isBallOnFire = isBallOnFire;
-        }
-
-        public void SetMoveSpeed(float moveSpeed)
-        {
-            this.moveSpeed = moveSpeed;
-        }
+        public Sprite GetSprite() => spriteRenderer.sprite;
 
         private void Awake()
         {
-            spriteRenderer = this.GetComponent<SpriteRenderer>();
-            rigidBody2D = this.GetComponent<Rigidbody2D>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            rigidBody2D = GetComponent<Rigidbody2D>();
         }
 
         private void Start()
         {
-            // Other Objects
-            cursorController = FindObjectOfType<CursorController>();
-
             // Default values
             mainCamera = Camera.main;
-            defaultSpeed = moveSpeed;
+            DefaultSpeed = MoveSpeed;
             echoEffectSpawnerPrefab.tag = NamesTags.BallEchoTag;
 
             // Locks only if it's the first ball
@@ -159,19 +81,17 @@ namespace Core
                     paddle = FindObjectOfType<Paddle>();
                 }
 
-                paddleToBallPosition = this.transform.position - paddle.transform.position;
-                this.transform.position = new Vector3(paddle.transform.position.x, paddle.transform.position.y + 0.25f, paddle.transform.position.z);
+                paddleToBallPosition = (transform.position - paddle.transform.position);
+                transform.position = new Vector3(paddle.transform.position.x, paddle.transform.position.y + 0.25f, paddle.transform.position.z);
                 DrawLineToMouse();
             }
 
             ChooseRandomColor();
-            ChangeBallSprite(this.isBallOnFire);
+            ChangeBallSprite(IsBallOnFire);
         }
 
         private void Update()
         {
-            if (!GameSession.Instance) return;
-
             if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
             {
                 if (!GameSession.Instance.GetHasStarted())
@@ -193,8 +113,6 @@ namespace Core
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (!GameSession.Instance || !AudioController.Instance) return;
-
             if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
             {
                 if (GameSession.Instance.GetHasStarted())
@@ -209,38 +127,38 @@ namespace Core
                     {
                         // Colision with paddle
                         case "Paddle":
-                            {
-                                if (other.GetContact(0).normal != Vector2.down)
-                                {
-                                    ClampVelocity();
-                                    AudioController.Instance.PlaySFX(AudioController.Instance.BlipSound, AudioController.Instance.MaxSFXVolume);
-                                }
-
-                                // Case ball is fast
-                                if (other.GetContact(0).normal == Vector2.up)
-                                {
-                                    if (moveSpeed > defaultSpeed)
-                                    {
-                                        SpawnPaddleDebris(other.GetContact(0).point);
-                                    }
-                                }
-
-                                // Case "Move Blocks" power-up is activated
-                                if (GameSession.Instance.GetCanMoveBlocks())
-                                {
-                                    GameSession.Instance.MoveBlocks(GameSession.Instance.GetBlockDirection());
-                                }
-
-                                break;
-                            }
-
-                        // Colision with walls
-                        case "Wall":
+                        {
+                            if (other.GetContact(0).normal != Vector2.down)
                             {
                                 ClampVelocity();
                                 AudioController.Instance.PlaySFX(AudioController.Instance.BlipSound, AudioController.Instance.MaxSFXVolume);
-                                break;
                             }
+
+                            // Case ball is fast
+                            if (other.GetContact(0).normal == Vector2.up)
+                            {
+                                if (MoveSpeed > DefaultSpeed)
+                                {
+                                    SpawnPaddleDebris(other.GetContact(0).point);
+                                }
+                            }
+
+                            // Case "Move Blocks" power-up is activated
+                            if (GameSession.Instance.GetCanMoveBlocks())
+                            {
+                                GameSession.Instance.MoveBlocks(GameSession.Instance.GetBlockDirection());
+                            }
+
+                            break;
+                        }
+
+                        // Colision with walls
+                        case "Wall":
+                        {
+                            ClampVelocity();
+                            AudioController.Instance.PlaySFX(AudioController.Instance.BlipSound, AudioController.Instance.MaxSFXVolume);
+                            break;
+                        }
 
                         case "Breakable": case "Unbreakable": ClampVelocity(); break;
                         default: break;
@@ -252,13 +170,13 @@ namespace Core
         private void LockBallToPaddle()
         {
             Vector3 paddlePosition = new Vector3(paddle.transform.position.x, paddle.transform.position.y, 0f);
-            this.transform.position = new Vector3(paddlePosition.x + paddleToBallPosition.x, paddlePosition.y + 0.35f, transform.position.z);
+            transform.position = new Vector3(paddlePosition.x + paddleToBallPosition.x, paddlePosition.y + 0.35f, transform.position.z);
         }
 
         private void CalculateDistanceToMouse()
         {
-            Vector3 mousePosition = cursorController.transform.position;
-            remainingPosition = mousePosition - this.transform.position;
+            Vector3 mousePosition = CursorController.Instance.transform.position;
+            remainingPosition = (mousePosition - transform.position);
             remainingPosition.z = 0f;
         }
 
@@ -275,10 +193,10 @@ namespace Core
 
                 // Other
                 remainingPosition.Normalize();
-                rigidBody2D.velocity = (remainingPosition * moveSpeed * Time.deltaTime);
+                rigidBody2D.velocity = (remainingPosition * MoveSpeed * Time.deltaTime);
                 initialLineRenderer.enabled = false;
                 echoEffectSpawnerPrefab.gameObject.SetActive(true);
-                cursorController.gameObject.SetActive(false);
+                CursorController.Instance.gameObject.SetActive(false);
             }
         }
 
@@ -291,7 +209,7 @@ namespace Core
             }
 
             // Positions
-            Vector3 pointerPosition = cursorController.transform.position;
+            Vector3 pointerPosition = CursorController.Instance.transform.position;
             Vector3 ballPosition = this.transform.position;
             ballPosition.y += 0.2f;
             ballPosition = new Vector3(ballPosition.x, ballPosition.y, ballPosition.z);
@@ -311,13 +229,12 @@ namespace Core
         private void RotateBall()
         {
             Vector3 eulerAngles = transform.rotation.eulerAngles;
-            eulerAngles.z += ballRotationDegree;
+            eulerAngles.z += BallRotationDegree;
             transform.rotation = Quaternion.Euler(eulerAngles);
         }
 
         public void ChooseRandomColor()
         {
-            if (!spriteRenderer) return;
             Color randomColor = Random.ColorHSV(0f, 1f, 0f, 1f, 0.4f, 1f);
             spriteRenderer.color = randomColor;
             defaultBallColor = randomColor;
@@ -326,28 +243,20 @@ namespace Core
         // Spawns debris on paddle collision
         private void SpawnPaddleDebris(Vector2 contactPoint)
         {
-            if (paddleParticlesPrefab)
-            {
-                // Instantiate and Destroy
-                GameObject particles = Instantiate(paddleParticlesPrefab, contactPoint, paddleParticlesPrefab.transform.rotation) as GameObject;
-                particles.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.DebrisParentName).transform);
-                ParticleSystem debrisParticleSystem = paddleParticlesPrefab.GetComponent<ParticleSystem>();
-                float durationLength = debrisParticleSystem.main.duration + debrisParticleSystem.main.startLifetime.constant;
-                Destroy(particles, durationLength);
-            }
+            // Instantiate and Destroy
+            GameObject particles = Instantiate(paddleParticlesPrefab, contactPoint, paddleParticlesPrefab.transform.rotation) as GameObject;
+            particles.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.DebrisParentName).transform);
+            ParticleSystem debrisParticleSystem = paddleParticlesPrefab.GetComponent<ParticleSystem>();
+            float durationLength = (debrisParticleSystem.main.duration + debrisParticleSystem.main.startLifetime.constant);
+            Destroy(particles, durationLength);
         }
 
         public void ChangeBallSprite(bool isOnFire)
         {
-            if (!defaultBallSprite || !fireballSprite) return;
             spriteRenderer.sprite = (isOnFire ? fireballSprite : defaultBallSprite);
             spriteRenderer.color = (isOnFire ? fireBallColor : defaultBallColor);
         }
 
-        public void StopBall()
-        {
-            if (!rigidBody2D) return;
-            rigidBody2D.velocity = Vector2.zero;
-        }
+        public void StopBall() => rigidBody2D.velocity = Vector2.zero;
     }
 }

@@ -7,34 +7,25 @@ namespace Controllers.Core
     [RequireComponent(typeof(Animator))]
     public class CursorController : MonoBehaviour
     {
-        // Config params
-        [SerializeField] private float minXCoordinate = 0f;
-        [SerializeField] private float maxXCoordinate = 0f;
-        [SerializeField] private float minYCoordinate = 0f;
-        [SerializeField] private float maxYCoordinate = 0f;
+        [SerializeField] private Vector2 minXYCoordinates = Vector2.zero;
+        [SerializeField] private Vector2 maxXYCoordinates = Vector2.zero;
 
-        // Cached
+        // || Cached
         private SpriteRenderer spriteRenderer;
 
-        public SpriteRenderer GetSpriteRenderer()
-        {
-            return spriteRenderer;
-        }
+        // || Properties
+        public static CursorController Instance { get; private set; }
 
         private void Awake()
         {
-            spriteRenderer = this.GetComponent<SpriteRenderer>();
+            Instance = this;
+            spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
-        private void Start()
-        {
-            DefineBounds();
-        }
+        private void Start() => DefineBounds();
 
         private void Update()
         {
-            if (!GameSession.Instance) return;
-
             if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
             {
                 DefineBounds();
@@ -46,8 +37,6 @@ namespace Controllers.Core
         // Define bounds to camera
         private void DefineBounds()
         {
-            if (!spriteRenderer) return;
-
             // Values
             Vector3 zeroPoints = new Vector3(0, 0, 0);
             Vector3 screenSize = new Vector3(Screen.width, Screen.height, 0);
@@ -59,10 +48,10 @@ namespace Controllers.Core
             float spriteExtentsY = spriteRenderer.bounds.extents.y;
 
             // Set
-            minXCoordinate = (minScreenX + spriteExtentsX);
-            maxXCoordinate = (maxScreenX - spriteExtentsX);
-            minYCoordinate = (minScreenY + spriteExtentsY) + 4f;
-            maxYCoordinate = (maxScreenY - spriteExtentsY) - 1.5f;
+            minXYCoordinates.x = (minScreenX + spriteExtentsX);
+            maxXYCoordinates.x = (maxScreenX - spriteExtentsX);
+            minXYCoordinates.y = (minScreenY + spriteExtentsY) + 4f;
+            maxXYCoordinates.y = (maxScreenY - spriteExtentsY) - 1.5f;
         }
 
         private void MoveOnTouch()
@@ -71,7 +60,7 @@ namespace Controllers.Core
             {
                 Touch touch = Input.GetTouch(0);
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-                if (touchPosition.y >= minYCoordinate && touchPosition.y <= maxYCoordinate)
+                if (touchPosition.y >= minXYCoordinates.y && touchPosition.y <= maxXYCoordinates.y)
                 {
                     this.transform.position = new Vector3(touchPosition.x, touchPosition.y, this.transform.position.z);
                 }
@@ -82,14 +71,9 @@ namespace Controllers.Core
         {
             float xPosition = transform.position.x;
             float yPosition = transform.position.y;
-            xPosition = Mathf.Clamp(xPosition, minYCoordinate, maxXCoordinate);
-            yPosition = Mathf.Clamp(yPosition, minYCoordinate, maxYCoordinate);
+            xPosition = Mathf.Clamp(xPosition, minXYCoordinates.x, maxXYCoordinates.x);
+            yPosition = Mathf.Clamp(yPosition, minXYCoordinates.y, maxXYCoordinates.y);
             transform.position = new Vector3(xPosition, yPosition, transform.position.z);
-        }
-
-        public void DestroyInstance()
-        {
-            Destroy(this.gameObject);
         }
     }
 }

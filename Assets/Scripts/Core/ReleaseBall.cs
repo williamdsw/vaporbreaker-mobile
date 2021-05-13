@@ -9,9 +9,6 @@ namespace Core
     {
         public virtual void OnPointerUp(PointerEventData pointerEventData)
         {
-            // Cancels
-            if (!GameSession.Instance) return;
-
             if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
             {
                 if (!GameSession.Instance.GetHasStarted())

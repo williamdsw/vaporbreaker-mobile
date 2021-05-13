@@ -4,7 +4,6 @@ using Utilities;
 
 namespace Controllers.Core
 {
-
     public class LocalizationController : MonoBehaviour
     {
         // Menus
@@ -18,9 +17,6 @@ namespace Controllers.Core
         private List<string> levelDetailsLabels = new List<string>();
         private List<string> pauseLabels = new List<string>();
         private List<string> selectLevelsLabels = new List<string>();
-
-        // Singleton
-        private static LocalizationController instance;
 
         // Menus
         public List<string> GetAboutLabels()
@@ -73,7 +69,7 @@ namespace Controllers.Core
             return selectLevelsLabels;
         }
 
-        public static LocalizationController Instance { get => instance; }
+        public static LocalizationController Instance { get; private set; }
 
         private void Awake()
         {
@@ -91,7 +87,7 @@ namespace Controllers.Core
             }
             else
             {
-                instance = this;
+                Instance = this;
                 DontDestroyOnLoad(this.gameObject);
             }
         }
@@ -120,15 +116,8 @@ namespace Controllers.Core
                 switch (Application.systemLanguage)
                 {
                     case SystemLanguage.English:
-                    default:
-                        {
-                            language = SystemLanguage.English.ToString(); break;
-                        }
-
-                    case SystemLanguage.Portuguese:
-                        {
-                            language = SystemLanguage.Portuguese.ToString(); break;
-                        }
+                    default: language = SystemLanguage.English.ToString(); break;
+                    case SystemLanguage.Portuguese: language = SystemLanguage.Portuguese.ToString(); break;
                 }
 
                 PlayerPrefsController.Language = language;
@@ -137,15 +126,8 @@ namespace Controllers.Core
             switch (language)
             {
                 case "English":
-                default:
-                    {
-                        folderPath = FileManager.LocalizationEnglishFolderPath; break;
-                    }
-
-                case "Portuguese":
-                    {
-                        folderPath = FileManager.LocalizationPortugueseFolderPath; break;
-                    }
+                default: folderPath = FileManager.LocalizationEnglishFolderPath; break;
+                case "Portuguese": folderPath = FileManager.LocalizationPortugueseFolderPath; break;
             }
 
             LoadLocalization(folderPath);
@@ -164,9 +146,9 @@ namespace Controllers.Core
 
             List<string>[] labelsList =
             {
-            selectLevelsLabels, configurationsLabels, aboutLabels, confirmBoxLabels, levelDetailsLabels,
-            instructions01Labels, instructions02Labels, instructions03Labels, pauseLabels, levelCompleteLabels
-        };
+                selectLevelsLabels, configurationsLabels, aboutLabels, confirmBoxLabels, levelDetailsLabels,
+                instructions01Labels, instructions02Labels, instructions03Labels, pauseLabels, levelCompleteLabels
+            };
 
             for (int index = 0; index < panels.Length; index++)
             {

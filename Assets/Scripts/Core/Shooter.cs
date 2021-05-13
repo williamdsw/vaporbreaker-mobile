@@ -7,16 +7,18 @@ namespace Core
 {
     public class Shooter : MonoBehaviour
     {
-        // Config
+        // | Inspector References
+
+        [Header("Required References")]
         [SerializeField] private GameObject[] cannons;
         [SerializeField] private Projectile[] projectiles;
         [SerializeField] private Transform[] shootingPoints;
 
-        // Object pooling
+        // || Object pooling
         private List<GameObject> projectilesList = new List<GameObject>();
         private const int MAX_NUMBER_OF_PROJECTILES = 30;
 
-        // Cached
+        // || Cached
         private Paddle paddle;
 
         private void Start()
@@ -29,8 +31,6 @@ namespace Core
 
         private void CreateProjectilesPool()
         {
-            if (!GameSession.Instance) return;
-
             for (int i = 0; i < MAX_NUMBER_OF_PROJECTILES; i++)
             {
                 int index = Random.Range(0, projectiles.Length);
@@ -43,17 +43,15 @@ namespace Core
 
         public void Shoot()
         {
-            if (!AudioController.Instance || shootingPoints.Length == 0) return;
-
             foreach (Transform point in shootingPoints)
             {
-                for (int index = 0; index < projectilesList.Count; index++)
+                foreach (GameObject obj in projectilesList)
                 {
-                    if (!projectilesList[index].activeInHierarchy)
+                    if (!obj.activeInHierarchy)
                     {
-                        projectilesList[index].transform.SetPositionAndRotation(point.position, projectilesList[index].transform.rotation);
-                        projectilesList[index].SetActive(true);
-                        projectilesList[index].GetComponent<Projectile>().MoveProjectile();
+                        obj.transform.SetPositionAndRotation(point.position, obj.transform.rotation);
+                        obj.SetActive(true);
+                        obj.GetComponent<Projectile>().MoveProjectile();
                         break;
                     }
                 }
@@ -64,8 +62,6 @@ namespace Core
 
         public void DefineCannonsPosition()
         {
-            if (cannons.Length == 0) return;
-
             // Get components
             SpriteRenderer paddleSR = paddle.GetComponent<SpriteRenderer>();
             SpriteRenderer cannonSR = cannons[0].GetComponent<SpriteRenderer>();
