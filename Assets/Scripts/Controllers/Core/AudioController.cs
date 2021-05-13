@@ -73,6 +73,9 @@ namespace Controllers.Core
         public AudioClip SlamSound => slamSound;
 
         public static AudioController Instance { get; private set; }
+        public AudioSource AudioSourceBGM => audioSourceBGM;
+        public AudioSource AudioSourceME => audioSourceME;
+        public AudioSource AudioSourceSFX => audioSourceSFX;
 
         private void Awake() => SetupSingleton();
 
@@ -94,14 +97,14 @@ namespace Controllers.Core
         public void PlaySFX(AudioClip clip, float volume)
         {
             float temporaryVolume = (volume > MAX_SFX_VOLUME ? MAX_SFX_VOLUME : volume);
-            audioSourceSFX.volume = temporaryVolume;
-            audioSourceSFX.PlayOneShot(clip);
+            AudioSourceSFX.volume = temporaryVolume;
+            AudioSourceSFX.PlayOneShot(clip);
         }
 
         // Play clip at point
         public void PlaySoundAtPoint(AudioClip clip, float volume)
         {
-            if (audioSourceSFX.mute) return;
+            if (AudioSourceSFX.mute) return;
 
             float temporaryVolume = (volume > MAX_SFX_VOLUME ? MAX_SFX_VOLUME : volume);
             AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position, volume);
@@ -111,16 +114,16 @@ namespace Controllers.Core
         public void PlayME(AudioClip clip, float volume, bool loop)
         {
             float temporaryVolume = (volume > MAX_ME_VOLUME ? MAX_ME_VOLUME : volume);
-            audioSourceME.volume = temporaryVolume;
-            audioSourceME.clip = clip;
-            audioSourceME.loop = loop;
-            audioSourceME.Play();
+            AudioSourceME.volume = temporaryVolume;
+            AudioSourceME.clip = clip;
+            AudioSourceME.loop = loop;
+            AudioSourceME.Play();
         }
 
         public void StopME()
         {
-            audioSourceME.Stop();
-            audioSourceME.loop = false;
+            AudioSourceME.Stop();
+            AudioSourceME.loop = false;
         }
 
         public float GetClipLength(AudioClip clip) => (clip ? clip.length : 0);
@@ -151,27 +154,27 @@ namespace Controllers.Core
             for (float volume = MAX_BGM_VOLUME; volume >= 0; volume -= VOLUME_INCREMENT)
             {
                 yield return new WaitForSecondsRealtime(VOLUME_INCREMENT);
-                audioSourceBGM.volume = volume;
+                AudioSourceBGM.volume = volume;
             }
 
             // Change and play
             isSongPlaying = false;
-            audioSourceBGM.volume = 0;
-            audioSourceBGM.clip = nextMusic;
-            audioSourceBGM.loop = loopMusic;
-            audioSourceBGM.Play();
+            AudioSourceBGM.volume = 0;
+            AudioSourceBGM.clip = nextMusic;
+            AudioSourceBGM.loop = loopMusic;
+            AudioSourceBGM.Play();
             isSongPlaying = true;
 
             // Drops up volume
             for (float volume = 0; volume <= MAX_BGM_VOLUME; volume += VOLUME_INCREMENT)
             {
                 yield return new WaitForSecondsRealtime(VOLUME_INCREMENT);
-                audioSourceBGM.volume = volume;
+                AudioSourceBGM.volume = volume;
             }
 
             if (!loopMusic && changeOnMusicEnd)
             {
-                yield return new WaitForSecondsRealtime(audioSourceBGM.clip.length);
+                yield return new WaitForSecondsRealtime(AudioSourceBGM.clip.length);
                 int index = Random.Range(0, allNotLoopedSongs.Length);
                 ChangeMusic(allNotLoopedSongs[index], false, string.Empty, false, true);
             }
@@ -183,12 +186,12 @@ namespace Controllers.Core
             for (float volume = MAX_BGM_VOLUME; volume >= 0; volume -= VOLUME_INCREMENT)
             {
                 yield return new WaitForSecondsRealtime(VOLUME_INCREMENT);
-                audioSourceBGM.volume = volume;
+                AudioSourceBGM.volume = volume;
             }
 
             // Change and play
-            audioSourceBGM.volume = 0;
-            audioSourceBGM.Stop();
+            AudioSourceBGM.volume = 0;
+            AudioSourceBGM.Stop();
         }
     }
 }

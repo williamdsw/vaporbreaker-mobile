@@ -113,7 +113,7 @@ namespace Controllers.Core
 
         private void DefineLocalization()
         {
-            string language = PlayerPrefsController.GetLanguage();
+            string language = PlayerPrefsController.Language;
             string folderPath = string.Empty;
             if (string.IsNullOrEmpty(language) || string.IsNullOrWhiteSpace(language))
             {
@@ -131,7 +131,7 @@ namespace Controllers.Core
                         }
                 }
 
-                PlayerPrefsController.SetLanguage(language);
+                PlayerPrefsController.Language = language;
             }
 
             switch (language)

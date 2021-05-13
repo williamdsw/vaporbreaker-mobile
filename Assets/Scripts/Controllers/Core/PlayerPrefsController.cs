@@ -4,75 +4,72 @@ namespace Controllers.Core
 {
     public class PlayerPrefsController
     {
-        // keys
-        private const string BGM_VOLUME_MUTE_KEY = "BGM_Volume_Mute_Key";
-        private const string HAS_PLAYER_PREFS_KEY = "Has_Player_Prefs";
-        private const string LANGUAGE_KEY = "Language";
-        private const string ME_VOLUME_MUTE_KEY = "ME_Volume_Mute_Key";
-        private const string SFX_VOLUME_MUTE_KEY = "SFX_Volume_Mute_Key";
-
-        public static string GetBGMVolumeMute()
+        private class Keys
         {
-            return PlayerPrefs.GetString(BGM_VOLUME_MUTE_KEY);
+            public static string IsBackgroundMusicMute => "IsBackgroundMusicMute";
+            public static string HasPlayerPrefs => "HasPlayerPrefs";
+            public static string Language => "Language";
+            public static string IsMusicEffectsMute => "IsMusicEffectsMute";
+            public static string IsSoundEffectsMute => "IsSoundEffectsMute";
         }
 
-        public static string GetMEVolumeMute()
+        public static string IsBackgroundMusicMute
         {
-            return PlayerPrefs.GetString(ME_VOLUME_MUTE_KEY);
-        }
-
-        public static string GetSFXVolumeMute()
-        {
-            return PlayerPrefs.GetString(SFX_VOLUME_MUTE_KEY);
-        }
-
-        public static string GetLanguage()
-        {
-            return PlayerPrefs.GetString(LANGUAGE_KEY);
-        }
-
-        public static bool HasPlayerPrefs()
-        {
-            return !string.IsNullOrEmpty(PlayerPrefs.GetString(HAS_PLAYER_PREFS_KEY));
-        }
-
-        public static void SetBGMVolumeMute(string isMute)
-        {
-            if (!string.IsNullOrEmpty(isMute) && !string.IsNullOrWhiteSpace(isMute))
+            get => PlayerPrefs.GetString(Keys.IsBackgroundMusicMute);
+            set
             {
-                PlayerPrefs.SetString(BGM_VOLUME_MUTE_KEY, isMute);
+                if (!string.IsNullOrEmpty(value) && !string.IsNullOrWhiteSpace(value))
+                {
+                    PlayerPrefs.SetString(Keys.IsBackgroundMusicMute, value);
+                }
             }
         }
 
-        public static void SetMEVolumeMute(string isMute)
+        public static string IsMusicEffectsMute
         {
-            if (!string.IsNullOrEmpty(isMute) && !string.IsNullOrWhiteSpace(isMute))
+            get => PlayerPrefs.GetString(Keys.IsMusicEffectsMute);
+            set
             {
-                PlayerPrefs.SetString(ME_VOLUME_MUTE_KEY, isMute);
+                if (!string.IsNullOrEmpty(value) && !string.IsNullOrWhiteSpace(value))
+                {
+                    PlayerPrefs.SetString(Keys.IsMusicEffectsMute, value);
+                }
             }
         }
 
-        public static void SetSFXVolumeMute(string isMute)
+        public static string IsSoundEffectsMute
         {
-            if (!string.IsNullOrEmpty(isMute) && !string.IsNullOrWhiteSpace(isMute))
+            get => PlayerPrefs.GetString(Keys.IsSoundEffectsMute);
+            set
             {
-                PlayerPrefs.SetString(SFX_VOLUME_MUTE_KEY, isMute);
+                if (!string.IsNullOrEmpty(value) && !string.IsNullOrWhiteSpace(value))
+                {
+                    PlayerPrefs.SetString(Keys.IsSoundEffectsMute, value);
+                }
             }
         }
 
-        public static void SetHasPlayerPrefs(string hasPlayerPrefs)
+        public static string Language
         {
-            if (!string.IsNullOrEmpty(hasPlayerPrefs) && !string.IsNullOrWhiteSpace(hasPlayerPrefs))
+            get => PlayerPrefs.GetString(Keys.Language);
+            set
             {
-                PlayerPrefs.SetString(HAS_PLAYER_PREFS_KEY, hasPlayerPrefs);
+                if (!string.IsNullOrEmpty(value) && !string.IsNullOrWhiteSpace(value))
+                {
+                    PlayerPrefs.SetString(Keys.Language, value);
+                }
             }
         }
 
-        public static void SetLanguage(string language)
+        public static bool HasPlayerPrefs
         {
-            if (!string.IsNullOrEmpty(language) && !string.IsNullOrWhiteSpace(language))
+            get => !string.IsNullOrEmpty(PlayerPrefs.GetString(Keys.HasPlayerPrefs));
+            set
             {
-                PlayerPrefs.SetString(LANGUAGE_KEY, language);
+                if (!string.IsNullOrEmpty(value.ToString()) && !string.IsNullOrWhiteSpace(value.ToString()))
+                {
+                    PlayerPrefs.SetString(Keys.HasPlayerPrefs, value.ToString());
+                }
             }
         }
     }

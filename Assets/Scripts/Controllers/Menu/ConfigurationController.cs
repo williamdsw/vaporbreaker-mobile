@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 namespace Controllers.Menu
 {
-
     public class ConfigurationController : MonoBehaviour
     {
         // Config
@@ -26,40 +25,53 @@ namespace Controllers.Menu
         [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI>();
 
         // State
-        private bool isMute;
-        [SerializeField] private bool[] muteFlags = { false, false, false };
+        private bool[] muteFlags = { false, false, false };
+        private List<Image> volumeButtonImages = new List<Image>();
+        private AudioSource[] sources;
+        private string[] audioPrefs;
 
-        // Cached
-        private AudioSource audioSourceBGM;
-        private AudioSource audioSourceME;
-        private AudioSource audioSourceSFX;
+        private void Awake()
+        {
+            sources = new AudioSource[3]
+            {
+                AudioController.Instance.AudioSourceBGM,
+                AudioController.Instance.AudioSourceME,
+                AudioController.Instance.AudioSourceSFX,
+            };
+
+            audioPrefs = new string[3]
+            {
+                PlayerPrefsController.IsBackgroundMusicMute.ToString(),
+                PlayerPrefsController.IsMusicEffectsMute.ToString(),
+                PlayerPrefsController.IsSoundEffectsMute.ToString(),
+            };
+        }
 
         private void Start()
         {
-            if (!audioSourceSFX || !audioSourceME || !audioSourceSFX)
-            {
-                audioSourceBGM = GameObject.Find("SourceBGM").GetComponent<AudioSource>();
-                audioSourceME = GameObject.Find("SourceME").GetComponent<AudioSource>();
-                audioSourceSFX = GameObject.Find("SourceSFX").GetComponent<AudioSource>();
-            }
-
             TranslateLabels();
+            GetReferences();
             BindClickEvents();
             LoadSettings();
         }
 
+        private void GetReferences()
+        {
+            foreach (Button item in volumeButtons)
+            {
+                Transform child = item.transform.GetChild(0);
+                volumeButtonImages.Add(child.GetComponent<Image>());
+            }
+        }
+
         private void TranslateLabels()
         {
-            // CANCELS
-            if (!LocalizationController.Instance) return;
-
             List<string> labels = new List<string>();
             foreach (string label in LocalizationController.Instance.GetConfigurationsLabels())
             {
                 labels.Add(label);
             }
 
-            if (labels.Count == 0 || uiLabels.Count == 0) return;
             for (int index = 0; index < labels.Count; index++)
             {
                 uiLabels[index].SetText(labels[index]);
@@ -68,63 +80,37 @@ namespace Controllers.Menu
 
         private void BindClickEvents()
         {
-            if (volumeButtons.Length == 0 || muteFlags.Length == 0 || !resetProgressButton || !aboutButton || !quitButton) return;
-
-            // BACKGROUND MUSIC
-            volumeButtons[0].onClick.AddListener(() =>
+            for (int index = 0; index < volumeButtons.Length; index++)
             {
-                Transform child = volumeButtons[0].transform.GetChild(0);
-                Image image = child.GetComponent<Image>();
-                ToggleAudio(audioSourceBGM, image, 0);
-            });
-
-            // MUSIC EFFECTS
-            volumeButtons[1].onClick.AddListener(() =>
-            {
-                Transform child = volumeButtons[1].transform.GetChild(0);
-                Image image = child.GetComponent<Image>();
-                ToggleAudio(audioSourceME, image, 1);
-            });
-
-            // SOUND EFFECTS
-            volumeButtons[2].onClick.AddListener(() =>
-            {
-                Transform child = volumeButtons[2].transform.GetChild(0);
-                Image image = child.GetComponent<Image>();
-                ToggleAudio(audioSourceSFX, image, 2);
-            });
+                int keep = index;
+                volumeButtons[index].onClick.AddListener(() => ToggleAudio(keep));
+            }
 
             aboutButton.onClick.AddListener(() =>
             {
-                if (!configurationPanel || !aboutPanel) return;
                 configurationPanel.SetActive(false);
                 aboutPanel.SetActive(true);
             });
 
             resetProgressButton.onClick.AddListener(() =>
             {
-                if (!confirmBox) return;
                 configurationPanel.SetActive(false);
                 confirmBox.SetActive(true);
             });
 
             quitButton.onClick.AddListener(() =>
             {
-                if (!configurationPanel || !selectLevelsPanel) return;
                 configurationPanel.SetActive(false);
                 selectLevelsPanel.SetActive(true);
                 SaveSettings();
             });
         }
 
-        private void ToggleAudio(AudioSource source, Image image, int index)
+        private void ToggleAudio(int index)
         {
-            if (!source || !image || !soundOnSprite || !soundOffSprite) return;
-
-            isMute = !isMute;
-            muteFlags[index] = isMute;
-            source.mute = isMute;
-            image.sprite = (isMute ? soundOffSprite : soundOnSprite);
+            muteFlags[index] = !muteFlags[index];
+            sources[index].mute = muteFlags[index];
+            volumeButtonImages[index].sprite = (muteFlags[index] ? soundOffSprite : soundOnSprite);
         }
 
         private void DefaultValues()
@@ -140,48 +126,43 @@ namespace Controllers.Menu
 
         private void ApplyValues()
         {
-            audioSourceBGM.mute = muteFlags[0];
-            audioSourceME.mute = muteFlags[1];
-            audioSourceSFX.mute = muteFlags[2];
+            for (int index = 0; index < muteFlags.Length; index++)
+            {
+                sources[index].mute = muteFlags[index];
+            }
         }
 
         private void UpdateUI()
         {
-            if (volumeButtons.Length == 0) return;
-
-            int index = 0;
-            foreach (Button button in volumeButtons)
+            for (int index = 0; index < volumeButtonImages.Count; index++)
             {
-                Transform child = button.transform.GetChild(0);
-                Image image = child.GetComponent<Image>();
-                image.sprite = (muteFlags[index] ? soundOffSprite : soundOnSprite);
-                index++;
+                volumeButtonImages[index].sprite = (muteFlags[index] ? soundOffSprite : soundOnSprite);
             }
         }
 
         private void LoadSettings()
         {
-            if (!AudioController.Instance) return;
-
-            if (!PlayerPrefsController.HasPlayerPrefs())
+            if (!PlayerPrefsController.HasPlayerPrefs)
             {
                 DefaultValues();
                 return;
             }
 
-            muteFlags[0] = bool.Parse(PlayerPrefsController.GetBGMVolumeMute());
-            muteFlags[1] = bool.Parse(PlayerPrefsController.GetMEVolumeMute());
-            muteFlags[2] = bool.Parse(PlayerPrefsController.GetSFXVolumeMute());
+            for (int index = 0; index < muteFlags.Length; index++)
+            {
+                muteFlags[index] = (!string.IsNullOrEmpty(audioPrefs[index]) ? bool.Parse(audioPrefs[index]) : false);
+            }
+
             UpdateUI();
             ApplyValues();
         }
 
         private void SaveSettings()
         {
-            PlayerPrefsController.SetBGMVolumeMute(muteFlags[0].ToString());
-            PlayerPrefsController.SetMEVolumeMute(muteFlags[1].ToString());
-            PlayerPrefsController.SetSFXVolumeMute(muteFlags[2].ToString());
-            PlayerPrefsController.SetHasPlayerPrefs(true.ToString());
+            PlayerPrefsController.IsBackgroundMusicMute = muteFlags[0].ToString();
+            PlayerPrefsController.IsMusicEffectsMute = muteFlags[1].ToString();
+            PlayerPrefsController.IsSoundEffectsMute = muteFlags[2].ToString();
+            PlayerPrefsController.HasPlayerPrefs = true;
         }
     }
 }

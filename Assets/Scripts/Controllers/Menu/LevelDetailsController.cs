@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 namespace Controllers.Menu
 {
-
     public class LevelDetailsController : MonoBehaviour
     {
         // Config
@@ -25,24 +24,15 @@ namespace Controllers.Menu
         [Header("Labels to Translate")]
         [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI>();
 
-        // State
-        private string levelSceneName;
+        // || State
         private string levelTranslated;
 
-        // Cached
-        private static LevelDetailsController instance;
+        // || Properties
 
-        public void SetLevelSceneName(string levelSceneName)
-        {
-            this.levelSceneName = levelSceneName;
-        }
+        public static LevelDetailsController Instance { get; private set; }
+        public string LevelSceneName { private get; set; }
 
-        public static LevelDetailsController Instance { get => instance; }
-
-        private void Awake()
-        {
-            instance = this;
-        }
+        private void Awake() => Instance = this;
 
         private void Start()
         {
@@ -52,15 +42,12 @@ namespace Controllers.Menu
 
         private void TranslateLabels()
         {
-            if (!LocalizationController.Instance) return;
-
             List<string> labels = new List<string>();
             foreach (string label in LocalizationController.Instance.GetLevelDetailsLabels())
             {
                 labels.Add(label);
             }
 
-            if (labels.Count == 0 || uiLabels.Count == 0) return;
             for (int index = 0; index < labels.Count; index++)
             {
                 uiLabels[index].SetText(labels[index]);
@@ -71,17 +58,9 @@ namespace Controllers.Menu
 
         private void BindClickEvents()
         {
-            if (!playButton || !quitButton) return;
-
-            playButton.onClick.AddListener(() =>
-            {
-                if (!SelectLevelsController.Instance) return;
-                SelectLevelsController.Instance.StartCallNextScene(levelSceneName);
-            });
-
+            playButton.onClick.AddListener(() => SelectLevelsController.Instance.StartCallNextScene(LevelSceneName));
             quitButton.onClick.AddListener(() =>
             {
-                if (!selectLevelsPanel || !levelDetailsPanel) return;
                 levelDetailsPanel.SetActive(false);
                 selectLevelsPanel.SetActive(true);
             });
@@ -89,8 +68,6 @@ namespace Controllers.Menu
 
         public void UpdateUI(string levelName, string bestScore, string bestTimeScore, Sprite levelThumbnailSprite)
         {
-            if (!levelNameText || !bestScoreText || !bestTimeScoreText || !levelThumbnail) return;
-
             levelNameText.SetText(string.Concat(levelTranslated, levelName));
             bestScoreText.SetText(bestScore);
             bestTimeScoreText.SetText(bestTimeScore);

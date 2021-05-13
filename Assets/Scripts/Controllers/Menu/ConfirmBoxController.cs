@@ -26,15 +26,12 @@ namespace Controllers.Menu
 
         private void TranslateLabels()
         {
-            if (!LocalizationController.Instance) return;
-
             List<string> labels = new List<string>();
             foreach (string label in LocalizationController.Instance.GetConfirmBoxLabels())
             {
                 labels.Add(label);
             }
 
-            if (labels.Count == 0 || uiLabels.Count == 0 || labels.Count != uiLabels.Count) return;
             for (int index = 0; index < labels.Count; index++)
             {
                 uiLabels[index].SetText(labels[index]);
@@ -43,13 +40,9 @@ namespace Controllers.Menu
 
         private void BindClickEvents()
         {
-            // Cancels
-            if (!noButton || !yesButton) return;
-
             // Closes the panel
             noButton.onClick.AddListener(() =>
             {
-                if (!configurationPanel || !confirmBox) return;
                 confirmBox.SetActive(false);
                 configurationPanel.SetActive(true);
             });
@@ -57,13 +50,9 @@ namespace Controllers.Menu
             // Reset progress...
             yesButton.onClick.AddListener(() =>
             {
-                // Checks and cancels
-                if (!selectLevelsPanel || !confirmBox) return;
-                if (!SelectLevelsController.Instance) return;
-
                 // Resets all progress and updates buttons
                 SelectLevelsController.Instance.ResetProgress();
-                SelectLevelsController.Instance.CleanLevelButtons();
+                StartCoroutine(SelectLevelsController.Instance.ClearLevelButtons());
                 confirmBox.SetActive(false);
                 selectLevelsPanel.SetActive(true);
             });

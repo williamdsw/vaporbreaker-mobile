@@ -28,8 +28,6 @@ namespace Controllers.Menu
         // Translate labels based on choosed language
         private void TranslateLabels()
         {
-            if (!LocalizationController.Instance) return;
-
             List<string> labels = new List<string>();
             foreach (string label in LocalizationController.Instance.GetAboutLabels())
             {
@@ -45,14 +43,9 @@ namespace Controllers.Menu
 
         private void BindClickEvents()
         {
-            if (!quitButton) return;
-
             quitButton.onClick.AddListener(() =>
             {
-            // Cancels
-            if (!SelectLevelsController.Instance) return;
-                if (SelectLevelsController.Instance.GetActualGameState() != Enumerators.GameStates.GAMEPLAY) return;
-                if (!aboutPanel || !configurationPanel) return;
+                if (SelectLevelsController.Instance.ActualGameState != Enumerators.GameStates.GAMEPLAY) return;
 
                 aboutPanel.SetActive(false);
                 configurationPanel.SetActive(true);
@@ -61,11 +54,12 @@ namespace Controllers.Menu
 
         private void LoadCredits()
         {
-            if (!creditsText) return;
-
-            string creditsRaw = FileManager.LoadAsset(FileManager.OtherFolderPath, FileManager.CreditsPath);
-            if (string.IsNullOrEmpty(creditsRaw) || string.IsNullOrWhiteSpace(creditsRaw)) return;
-            creditsText.SetText(creditsRaw);
+            StartCoroutine(FileManager.LoadAssetAsync(FileManager.OtherFolderPath, FileManager.CreditsPath,
+            content =>
+            {
+                if (string.IsNullOrEmpty(content) || string.IsNullOrWhiteSpace(content)) return;
+                creditsText.SetText(content);
+            }));
         }
     }
 }

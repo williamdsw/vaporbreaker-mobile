@@ -9,7 +9,6 @@ using Utilities;
 
 namespace Controllers.Menu
 {
-
     public class SelectLevelsController : MonoBehaviour
     {
         [Header("Main Elements")]
@@ -46,36 +45,24 @@ namespace Controllers.Menu
         private Enumerators.GameStates actualGameState = Enumerators.GameStates.GAMEPLAY;
 
         // Cached Others
-        private FadeEffect fadeEffect;
         private PlayerProgress progress = new PlayerProgress();
-        private static SelectLevelsController instance;
 
-        public Enumerators.GameStates GetActualGameState()
+        public static SelectLevelsController Instance { get; private set; }
+        public Enumerators.GameStates ActualGameState
         {
-            return this.actualGameState;
+            get => actualGameState;
+            set
+            {
+                actualGameState = value;
+                canvasGroup.interactable = (ActualGameState == Enumerators.GameStates.GAMEPLAY);
+            }
         }
 
-        public void SetActualGameState(Enumerators.GameStates newGameState)
-        {
-            this.actualGameState = newGameState;
-            canvasGroup.interactable = (actualGameState == Enumerators.GameStates.GAMEPLAY);
-        }
-
-        public static SelectLevelsController Instance { get => instance; }
-
-        private void Awake()
-        {
-            instance = this;
-        }
+        private void Awake() => Instance = this;
 
         private void Start()
         {
             UnityUtilities.DisableAnalytics();
-
-            if (!AudioController.Instance || !GameStatusController.Instance) return;
-
-            // Find 
-            fadeEffect = FindObjectOfType<FadeEffect>();
 
             // Play music
             AudioController.Instance.ChangeMusic(AudioController.Instance.SelectLevelsSong, false, "", true, false);
@@ -96,15 +83,12 @@ namespace Controllers.Menu
 
         private void TranslateLabels()
         {
-            if (!LocalizationController.Instance) return;
-
             List<string> labels = new List<string>();
             foreach (string label in LocalizationController.Instance.GetSelectLevelsLabels())
             {
                 labels.Add(label);
             }
 
-            if (labels.Count == 0 || uiLabels.Count == 0) return;
             for (int index = 0; index < labels.Count; index++)
             {
                 uiLabels[index].SetText(labels[index]);
@@ -113,33 +97,28 @@ namespace Controllers.Menu
 
         private void BindClickEvents()
         {
-            if (!configurationsButton || !quitApplicationButton) return;
-
             configurationsButton.onClick.AddListener(() =>
             {
-                if (actualGameState != Enumerators.GameStates.GAMEPLAY) return;
-                if (!selectLevelsPanel || !configurationPanel) return;
-
+                if (ActualGameState != Enumerators.GameStates.GAMEPLAY) return;
                 selectLevelsPanel.SetActive(false);
                 configurationPanel.SetActive(true);
             });
 
             quitApplicationButton.onClick.AddListener(() =>
             {
-                if (actualGameState != Enumerators.GameStates.GAMEPLAY) return;
+                if (ActualGameState != Enumerators.GameStates.GAMEPLAY) return;
                 SceneManagerController.QuitGame();
             });
         }
 
-        public void CleanLevelButtons()
+        public IEnumerator ClearLevelButtons()
         {
-            if (!levelButtonsContainer) return;
-
-            for (int index = 0; index < levelButtonsContainer.transform.childCount; index++)
+            foreach (Transform child in levelButtonsContainer.transform)
             {
-                Transform child = levelButtonsContainer.transform.GetChild(index);
                 Destroy(child.gameObject);
             }
+
+            yield return new WaitUntil(() => levelButtonsContainer.transform.childCount == 0);
 
             LoadLevelButtons();
             StartCoroutine(SaveProgress());
@@ -171,7 +150,7 @@ namespace Controllers.Menu
                 {
                     // Static Effect
                     GameObject staticEffect = levelButton.transform.GetChild(1).gameObject;
-                    if (staticEffect) { staticEffect.SetActive(true); }
+                    if (staticEffect != null) { staticEffect.SetActive(true); }
                 }
 
                 // Button
@@ -179,10 +158,6 @@ namespace Controllers.Menu
                 button.interactable = isLevelUnlockedList[index];
                 button.onClick.AddListener(() =>
                 {
-                    // Cancels
-                    if (!LevelDetailsController.Instance || !GameStatusController.Instance) return;
-                    if (!selectLevelsPanel || !levelDetailsPanel) return;
-
                     // Data
                     string indexString = levelButton.name;
                     indexString = indexString.Replace("Level_", "");
@@ -191,7 +166,7 @@ namespace Controllers.Menu
                     levelName = levelName.Replace("Level ", "");
                     string bestScore = Formatter.FormatToCurrency(highScoresList[currentIndex]);
                     string bestTimeScore = (highTimeScoresList[currentIndex] == 0 ? string.Empty : Formatter.FormatEllapsedTime(highTimeScoresList[currentIndex]));
-                    LevelDetailsController.Instance.SetLevelSceneName(levelsNamesList[currentIndex]);
+                    LevelDetailsController.Instance.LevelSceneName = levelsNamesList[currentIndex];
                     LevelDetailsController.Instance.UpdateUI(levelName, bestScore, bestTimeScore, levelThumbnails[currentIndex]);
 
                     // Pass data
@@ -230,7 +205,7 @@ namespace Controllers.Menu
 
         private void VerifyIfCameFromLevel()
         {
-            if (!GameStatusController.Instance && !GameStatusController.Instance.CameFromLevel) return;
+            if (!GameStatusController.Instance.CameFromLevel) return;
 
             currentLevelIndex = GameStatusController.Instance.LevelIndex;
 
@@ -289,15 +264,12 @@ namespace Controllers.Menu
 
         public void StartCallNextScene(string nextSceneName)
         {
-            if (actualGameState != Enumerators.GameStates.GAMEPLAY) return;
+            if (ActualGameState != Enumerators.GameStates.GAMEPLAY) return;
             StartCoroutine(CallNextScene(nextSceneName));
         }
 
         private void UpdateUI()
         {
-            // Check and Cancels
-            if (!levelButtonsScrollRect || !levelButtonsContainer) return;
-
             int nextCurrentLevelIndex = (currentLevelIndex + 1);
             if (nextCurrentLevelIndex >= 4 && nextCurrentLevelIndex <= 99)
             {
@@ -345,14 +317,11 @@ namespace Controllers.Menu
         // Wait fade out length to fade out to next scene
         private IEnumerator CallNextScene(string nextSceneName)
         {
-            // Cancels
-            if (!fadeEffect || !GameStatusController.Instance) { yield return null; }
-
-            this.SetActualGameState(Enumerators.GameStates.TRANSITION);
+            ActualGameState = Enumerators.GameStates.TRANSITION;
 
             // Fade Out effect
-            float fadeOutLength = fadeEffect.GetFadeOutLength();
-            fadeEffect.FadeToLevel();
+            float fadeOutLength = FadeEffect.Instance.GetFadeOutLength();
+            FadeEffect.Instance.FadeToLevel();
             yield return new WaitForSecondsRealtime(fadeOutLength);
 
             // Pass data
@@ -364,7 +333,7 @@ namespace Controllers.Menu
         // Save progress
         private IEnumerator SaveProgress()
         {
-            this.SetActualGameState(Enumerators.GameStates.SAVE_LOAD);
+            ActualGameState = Enumerators.GameStates.SAVE_LOAD;
             savingElement.SetActive(true);
 
             // Passing values
@@ -381,7 +350,7 @@ namespace Controllers.Menu
             // Waits and return
             yield return new WaitForSecondsRealtime(timeToWaitAfterSave);
             savingElement.SetActive(false);
-            this.SetActualGameState(Enumerators.GameStates.GAMEPLAY);
+            ActualGameState = Enumerators.GameStates.GAMEPLAY;
         }
     }
 }

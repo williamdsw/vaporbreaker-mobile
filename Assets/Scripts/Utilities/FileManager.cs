@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace Utilities
 {
@@ -26,6 +28,17 @@ namespace Utilities
             TextAsset textAsset = Resources.Load(newPath) as TextAsset;
             string content = (textAsset ? textAsset.text : string.Empty);
             return content;
+        }
+
+        public static IEnumerator LoadAssetAsync(string folderName, string filePath, UnityAction<string> callback)
+        {
+            string newPath = (string.IsNullOrEmpty(folderName) ? filePath : string.Concat(folderName, filePath));
+            newPath = string.Concat("Files/", newPath);
+            ResourceRequest request = Resources.LoadAsync<TextAsset>(newPath);
+            yield return request;
+            yield return new WaitUntil(() => request.isDone);
+            TextAsset textAsset = request.asset as TextAsset;
+            callback(textAsset ? textAsset.text : string.Empty);
         }
     }
 }
