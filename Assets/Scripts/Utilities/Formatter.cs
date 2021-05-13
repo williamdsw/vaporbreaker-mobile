@@ -19,9 +19,6 @@ namespace Utilities
             return newName;
         }
 
-        public static string FormatToCurrency(int value)
-        {
-            return value.ToString("#,###,###,###");
-        }
+        public static string FormatToCurrency(int value) => value.ToString("#,###,###,###");
     }
 }

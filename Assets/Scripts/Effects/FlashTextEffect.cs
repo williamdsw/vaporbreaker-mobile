@@ -15,10 +15,7 @@ namespace Effects
         private TextMeshPro textMeshPro;
         private TextMeshProUGUI textMeshProUGUI;
 
-        public void SetTimeToFlick(float timeToFlick)
-        {
-            this.timeToFlick = timeToFlick;
-        }
+        public void SetTimeToFlick(float timeToFlick) => this.timeToFlick = timeToFlick;
 
         private void Awake()
         {
@@ -34,10 +31,7 @@ namespace Effects
             }
         }
 
-        private void Start()
-        {
-            StartCoroutine(Flash());
-        }
+        private void Start() => StartCoroutine(Flash());
 
         // Flashes the alpha of text color
         private IEnumerator Flash()

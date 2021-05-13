@@ -4,32 +4,27 @@ using Utilities;
 
 namespace Effects
 {
-
     public class PrefabSpawner : MonoBehaviour
     {
-        // Config
+        [Header("Required Configuration")]
         [SerializeField] private GameObject[] prefabs;
-        private bool hasLimitedNumberOfSpawns = false;
         [SerializeField] private int numberOfSpawns = 0;
-        private int currentNumberOfSpawns = 0;
+
+        // || Config
+        private readonly float startTimeToSpawn = 5f;
 
         // State
-        private float startTimeToSpawn = 5f;
+        private bool hasLimitedNumberOfSpawns = false;
+        private int currentNumberOfSpawns = 0;
         private float timeToSpawn = 5f;
 
-        private void Start()
-        {
-            hasLimitedNumberOfSpawns = (numberOfSpawns != 0);
-        }
+        private void Start() => hasLimitedNumberOfSpawns = (numberOfSpawns != 0);
 
-        private void Update()
-        {
-            SpawnPrefab();
-        }
+        private void Update() => SpawnPrefab();
 
         private void SpawnPrefab()
         {
-            if (!GameSession.Instance || prefabs.Length == 0) return;
+            if (prefabs.Length == 0) return;
 
             if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
             {
@@ -49,7 +44,7 @@ namespace Effects
                             currentNumberOfSpawns++;
                             if (currentNumberOfSpawns >= numberOfSpawns)
                             {
-                                Destroy(this.gameObject);
+                                Destroy(gameObject);
                             }
                         }
                     }

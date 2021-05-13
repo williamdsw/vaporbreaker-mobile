@@ -1,7 +1,6 @@
 ﻿
 namespace Utilities
 {
-
     public class Enumerators
     {
         public enum BlockColors

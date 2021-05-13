@@ -2309,7 +2309,7 @@ PrefabInstance:
     - target: {fileID: 2338841498084866778, guid: c65cbe7967064284c8e6e1297508ce03,
         type: 3}
       propertyPath: m_Name
-      value: Line_Between_Ball_Pointer
+      value: LineBetweenBallPointer
       objectReference: {fileID: 0}
     - target: {fileID: 2338841498084866779, guid: c65cbe7967064284c8e6e1297508ce03,
         type: 3}
@@ -6244,7 +6244,7 @@ PrefabInstance:
     - target: {fileID: 5636047706121354620, guid: 6bf78243a37f17f41b76b872b94111d6,
         type: 3}
       propertyPath: m_Name
-      value: Persistent_Data
+      value: PersistentData
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6bf78243a37f17f41b76b872b94111d6, type: 3}

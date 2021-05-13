@@ -16,26 +16,19 @@ namespace Effects
 
         private void Awake()
         {
-            image = this.GetComponent<Image>();
+            image = GetComponent<Image>();
             if (!image)
             {
-                spriteRenderer = this.GetComponent<SpriteRenderer>();
+                spriteRenderer = GetComponent<SpriteRenderer>();
             }
         }
 
-        private void Start()
-        {
-            framesPerSecond = (randomFPS ? Random.Range(5, 30) : framesPerSecond);
-        }
+        private void Start() => framesPerSecond = (randomFPS ? Random.Range(5, 30) : framesPerSecond);
 
-        private void FixedUpdate()
-        {
-            AnimateImage();
-        }
+        private void FixedUpdate() => AnimateImage();
 
         private void AnimateImage()
         {
-            //Cancel
             if (spritesToAnimateList.Length == 0) return;
 
             int index = (int)(Time.fixedTime * framesPerSecond) % spritesToAnimateList.Length;

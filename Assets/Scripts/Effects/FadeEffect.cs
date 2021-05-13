@@ -7,6 +7,13 @@ namespace Effects
     [RequireComponent(typeof(Animator))]
     public class FadeEffect : MonoBehaviour
     {
+        private class FunctionNames
+        {
+            public static string CallLevelMenu => "CallLevelMenu";
+            public static string CallResetLevel => "CallResetLevel";
+            public static string DefineGameState => "DefineGameState";
+        }
+
         // Config
         private int minimumSceneIndexToEvents = 3;
 
@@ -40,7 +47,7 @@ namespace Effects
             AnimationEvent firstFrameEvent = new AnimationEvent();
             firstFrameEvent.intParameter = 2;
             firstFrameEvent.time = 0f;
-            firstFrameEvent.functionName = "DefineGameState";
+            firstFrameEvent.functionName = FunctionNames.DefineGameState;
             fadeInClip.AddEvent(firstFrameEvent);
 
             fadeInClip = animator.runtimeAnimatorController.animationClips[0];
@@ -49,7 +56,7 @@ namespace Effects
             AnimationEvent lastFrameEvent = new AnimationEvent();
             lastFrameEvent.intParameter = 0;
             lastFrameEvent.time = 1f;
-            lastFrameEvent.functionName = "DefineGameState";
+            firstFrameEvent.functionName = FunctionNames.DefineGameState;
             fadeInClip.AddEvent(lastFrameEvent);
         }
 
@@ -62,13 +69,13 @@ namespace Effects
             AnimationEvent firstFrameEvent = new AnimationEvent();
             firstFrameEvent.intParameter = 2;
             firstFrameEvent.time = 0f;
-            firstFrameEvent.functionName = "DefineGameState";
+            firstFrameEvent.functionName = FunctionNames.DefineGameState;
             fadeOutClip.AddEvent(firstFrameEvent);
 
             // Last frame event
             AnimationEvent lastFrameEvent = new AnimationEvent();
             lastFrameEvent.time = 1f;
-            lastFrameEvent.functionName = "CallResetLevel";
+            firstFrameEvent.functionName = FunctionNames.CallResetLevel;
             fadeOutClip.AddEvent(lastFrameEvent);
         }
 
@@ -80,7 +87,7 @@ namespace Effects
             // Last frame event
             AnimationEvent lastFrameEvent = new AnimationEvent();
             lastFrameEvent.time = 1f;
-            lastFrameEvent.functionName = "CallLevelMenu";
+            lastFrameEvent.functionName = FunctionNames.CallLevelMenu;
             fadeOutClip.AddEvent(lastFrameEvent);
         }
 
@@ -88,7 +95,7 @@ namespace Effects
         {
             if (!animator)
             {
-                animator = this.GetComponent<Animator>();
+                animator = GetComponent<Animator>();
             }
 
             AnimationClip[] animationClips = animator.runtimeAnimatorController.animationClips;

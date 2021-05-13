@@ -24,10 +24,7 @@ namespace Effects
         private Renderer myRenderer;
         private Vector2 offset;
 
-        private void Awake()
-        {
-            myRenderer = this.GetComponent<Renderer>();
-        }
+        private void Awake() => myRenderer = GetComponent<Renderer>();
 
         private void Start()
         {
@@ -53,9 +50,7 @@ namespace Effects
 
         private void FixedUpdate()
         {
-            if (!GameSession.Instance) return;
             if (GameSession.Instance.GetActualGameState() != Enumerators.GameStates.GAMEPLAY) return;
-
             if (canOffsetTexture)
             {
                 material.mainTextureOffset += (offset * Time.fixedDeltaTime);

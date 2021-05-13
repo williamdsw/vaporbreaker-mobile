@@ -17,32 +17,22 @@ namespace Effects
         private Ball ball;
         private Paddle paddle;
 
-        public void SetTimeToSelfDestruct(float time)
-        {
-            this.timeToSelfDestruct = time;
-        }
+        private void Start() => DefineReferences();
 
-        private void Start()
-        {
-            DefineReferences();
-        }
+        private void Update() => SpawnEchoEffect();
 
-        private void Update()
-        {
-            SpawnEchoEffect();
-        }
+        public void SetTimeToSelfDestruct(float time) => timeToSelfDestruct = time;
 
         private void DefineReferences()
         {
-            if (tag == NamesTags.BallEchoTag)
+            if (tag.Equals(NamesTags.BallEchoTag))
             {
-                ball = this.transform.parent.GetComponent<Ball>();
+                ball = transform.parent.GetComponent<Ball>();
             }
         }
 
         private void SpawnEchoEffect()
         {
-            if (!GameSession.Instance) return;
             if (GameSession.Instance.GetActualGameState() != Enumerators.GameStates.GAMEPLAY) return;
 
             if (timeBetweenSpawns <= 0)
