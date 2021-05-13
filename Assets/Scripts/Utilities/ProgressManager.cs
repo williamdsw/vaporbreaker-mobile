@@ -9,10 +9,7 @@ namespace Utilities
         private static string fileName = "/SaveProgress.dat";
         private static string filePath = string.Concat(Application.persistentDataPath, fileName);
 
-        public static bool HasProgress()
-        {
-            return File.Exists(filePath);
-        }
+        public static bool HasProgress() => File.Exists(filePath);
 
         public static PlayerProgress LoadProgress()
         {
@@ -36,14 +33,6 @@ namespace Utilities
             {
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
                 binaryFormatter.Serialize(fileStream, progress);
-            }
-        }
-
-        public static void DeleteProgress()
-        {
-            if (HasProgress())
-            {
-                File.Delete(filePath);
             }
         }
     }

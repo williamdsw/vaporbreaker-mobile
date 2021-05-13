@@ -9,32 +9,14 @@ namespace Controllers.Core
 
         public static string SelectLevelsSceneName => "SelectLevels";
 
-        public static void CallScene(string sceneName)
-        {
-            if (string.IsNullOrEmpty(sceneName) || string.IsNullOrWhiteSpace(sceneName)) return;
-            SceneManager.LoadScene(sceneName);
-        }
+        public static void CallScene(string sceneName) => SceneManager.LoadScene(sceneName);
 
-        public static AsyncOperation CallSceneAsync(string sceneName)
-        {
-            if (string.IsNullOrEmpty(sceneName) || string.IsNullOrWhiteSpace(sceneName)) return null;
-            return SceneManager.LoadSceneAsync(sceneName);
-        }
+        public static AsyncOperation CallSceneAsync(string sceneName) => SceneManager.LoadSceneAsync(sceneName);
 
-        public static int GetActiveSceneIndex()
-        {
-            return SceneManager.GetActiveScene().buildIndex;
-        }
+        public static int GetActiveSceneIndex() => SceneManager.GetActiveScene().buildIndex;
 
-        public static void QuitGame()
-        {
-            Application.Quit();
-        }
+        public static void QuitGame() => Application.Quit();
 
-        public static void ReloadScene()
-        {
-            int sceneIndex = SceneManager.GetActiveScene().buildIndex;
-            SceneManager.LoadSceneAsync(sceneIndex);
-        }
+        public static void ReloadScene() => SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
     }
 }

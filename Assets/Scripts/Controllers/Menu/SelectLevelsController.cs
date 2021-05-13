@@ -126,7 +126,7 @@ namespace Controllers.Menu
 
         private void LoadLevelButtons()
         {
-            for (int index = 0; index < progress.GetTotalNumberOfLevels(); index++)
+            for (int index = 0; index < progress.TotalNumberOfLevels; index++)
             {
                 // GameObject
                 GameObject levelButton = Instantiate(levelButtonPrefab) as GameObject;
@@ -194,13 +194,13 @@ namespace Controllers.Menu
             progress = ProgressManager.LoadProgress();
 
             // Getting values
-            currentLevelIndex = progress.GetCurrentLevelIndex();
-            hasPlayerFinishedGame = progress.GetHasPlayerFinishedGame();
-            levelsNamesList = progress.GetLevelNamesList();
-            isLevelUnlockedList = progress.GetIsLevelUnlockedList();
-            isLevelCompletedList = progress.GetIsLevelCompletedList();
-            highScoresList = progress.GetHighScoresList();
-            highTimeScoresList = progress.GetHighTimeScoresList();
+            currentLevelIndex = progress.CurrentLevelIndex;
+            hasPlayerFinishedGame = progress.HasPlayerFinishedGame;
+            levelsNamesList = progress.LevelNamesList;
+            isLevelUnlockedList = progress.IsLevelUnlockedList;
+            isLevelCompletedList = progress.IsLevelCompletedList;
+            highScoresList = progress.HighScoresList;
+            highTimeScoresList = progress.HighTimeScoresList;
         }
 
         private void VerifyIfCameFromLevel()
@@ -254,7 +254,7 @@ namespace Controllers.Menu
                 // Checks if has finished the game
                 if (!hasPlayerFinishedGame)
                 {
-                    int lastIndex = (progress.GetTotalNumberOfLevels() - 1);
+                    int lastIndex = (progress.TotalNumberOfLevels - 1);
                     hasPlayerFinishedGame = isLevelCompletedList[lastIndex];
                 }
 
@@ -305,7 +305,7 @@ namespace Controllers.Menu
             highTimeScoresList.Clear();
 
             // Default values
-            for (int index = 0; index < progress.GetTotalNumberOfLevels(); index++)
+            for (int index = 0; index < progress.TotalNumberOfLevels; index++)
             {
                 isLevelUnlockedList.Add((index == 0 ? true : false));
                 isLevelCompletedList.Add(false);
@@ -337,12 +337,12 @@ namespace Controllers.Menu
             savingElement.SetActive(true);
 
             // Passing values
-            progress.SetCurrentLevelIndex(currentLevelIndex);
-            progress.SetHasPlayerFinishedGame(hasPlayerFinishedGame);
-            progress.SetIsLevelUnlockedList(isLevelUnlockedList);
-            progress.SetIsLevelCompletedList(isLevelCompletedList);
-            progress.SetHighScoresList(highScoresList);
-            progress.SetHighTimeScoresList(highTimeScoresList);
+            progress.CurrentLevelIndex = currentLevelIndex;
+            progress.HasPlayerFinishedGame = hasPlayerFinishedGame;
+            progress.IsLevelUnlockedList = isLevelUnlockedList;
+            progress.IsLevelCompletedList = isLevelCompletedList;
+            progress.HighScoresList = highScoresList;
+            progress.HighTimeScoresList = highTimeScoresList;
 
             // Saves
             ProgressManager.SaveProgress(progress);
