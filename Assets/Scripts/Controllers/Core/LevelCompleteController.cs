@@ -33,6 +33,10 @@ namespace Controllers.Core
         private Ball[] balls;
         private List<string> cachedTexts = new List<string>();
 
+        public static LevelCompleteController Instance { get; private set; }
+
+        private void Awake() => Instance = this;
+
         private void Start()
         {
             levelCompletedPanel.SetActive(false);

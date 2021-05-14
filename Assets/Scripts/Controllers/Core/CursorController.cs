@@ -26,7 +26,7 @@ namespace Controllers.Core
 
         private void Update()
         {
-            if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
+            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
                 DefineBounds();
                 MoveOnTouch();

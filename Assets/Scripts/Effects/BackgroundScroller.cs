@@ -50,7 +50,7 @@ namespace Effects
 
         private void FixedUpdate()
         {
-            if (GameSession.Instance.GetActualGameState() != Enumerators.GameStates.GAMEPLAY) return;
+            if (GameSession.Instance.ActualGameState != Enumerators.GameStates.GAMEPLAY) return;
             if (canOffsetTexture)
             {
                 material.mainTextureOffset += (offset * Time.fixedDeltaTime);

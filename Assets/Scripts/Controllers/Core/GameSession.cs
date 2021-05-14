@@ -7,188 +7,104 @@ namespace Controllers.Core
 {
     public class GameSession : MonoBehaviour
     {
-        [Header("UI Texts")]
+        [Header("Required Elements")]
         [SerializeField] private Canvas gameCanvas;
+
+        [Header("Required UI Texts")]
         [SerializeField] private TextMeshProUGUI ellapsedTimeText;
         [SerializeField] private TextMeshProUGUI currentScoreText;
         [SerializeField] private TextMeshProUGUI comboMultiplierText;
         [SerializeField] private TextMeshProUGUI ballCountdownText;
 
-        // State
+        // || State
         private int bestCombo = 0;
-        private int comboMultiplier = 0;
         private int currentNumberOfBlocks = 0;
-        private int currentNumberOfBalls = 1;
         private int currentScore = 0;
         private int numberOfBlocksDestroyed = 0;
         private int totalNumberOfBlocks = 0;
         private float ellapsedTime = 0f;
-        private bool hasStarted = false;
         [SerializeField] private Enumerators.GameStates actualGameState = Enumerators.GameStates.GAMEPLAY;
-        private static GameSession instance;
 
-        // CONS
+        // || Config
         private const int MAX_NUMBER_OF_BALLS = 10;
 
         // Random blocks to spawn another power up block
+        [Header("Additional Blocks Configuration")]
         [SerializeField] private bool chooseRandomBlocks = false;
-        private int minNumberOfRandomBlocks = 0;
-        private int maxNumberOfRandomBlocks = 0;
+        private Vector2Int minMaxNumberOfRandomBlocks = Vector2Int.zero;
         private int numberOfRandomBlocks = 0;
-
-        // Blocks movement
-        private bool canMoveBlocks = false;
-        private string blockDirection = string.Empty;
 
         // Fire balls
         private bool areBallOnFire = false;
         private float timeToPutOutBallFire = 5f;
 
         // Spawns another ball configuration
+
+        [Header("Required Ball Config")]
         [SerializeField] private GameObject ballPrefab;
-        private bool canSpawnAnotherBall = false;
-        private float startTimeToSpawnAnotherBall = 0f;
-        private float timeToSpawnAnotherBall = 0f;
-        private float timeToWaitToSpawnAnotherBall = -5f;
 
         // Change music in game
         private int songIndex = 0;
 
-        // Cached 
+        // || Cached 
         private Ball[] balls;
         private CanvasGroup canvasGroup;
-        private CursorController cursorController;
-        private LevelCompleteController levelCompleteController;
-        private Paddle paddle;
-        private PauseController pauseController;
 
-        public Enumerators.GameStates GetActualGameState()
+        // || Properties
+
+        public static GameSession Instance { get; private set; }
+        public Enumerators.GameStates ActualGameState
         {
-            return actualGameState;
-        }
-
-        public bool GetAreBallOnFire()
-        {
-            return this.areBallOnFire;
-        }
-
-        public string GetBlockDirection()
-        {
-            return this.blockDirection;
-        }
-
-        public bool GetCanMoveBlocks()
-        {
-            return this.canMoveBlocks;
-        }
-
-        public int GetComboMultiplier()
-        {
-            return comboMultiplier;
-        }
-
-        public bool GetHasStarted()
-        {
-            return hasStarted;
-        }
-
-        public int GetMaxNumberOfBalls()
-        {
-            return MAX_NUMBER_OF_BALLS;
-        }
-
-        public float GetTimeToWaitToSpawnAnotherBall()
-        {
-            return this.timeToWaitToSpawnAnotherBall;
-        }
-
-
-        public void SetAreBallOnFire(bool areBallOnFire)
-        {
-            this.areBallOnFire = areBallOnFire;
-        }
-
-        public void SetBlockDirection(string blocksDirection)
-        {
-            this.blockDirection = blocksDirection;
-        }
-
-        public void SetCanMoveBlocks(bool canMoveBlocks)
-        {
-            this.canMoveBlocks = canMoveBlocks;
-        }
-
-        public void SetCanSpawnAnotherBall(bool canSpawnAnotherBall)
-        {
-            this.canSpawnAnotherBall = canSpawnAnotherBall;
-        }
-
-        public void SetHasStarted(bool hasStarted)
-        {
-            this.hasStarted = hasStarted;
-        }
-
-        public void SetStartTimeToSpawnAnotherBall(float startTimeToSpawnAnotherBall)
-        {
-            this.startTimeToSpawnAnotherBall = startTimeToSpawnAnotherBall;
-        }
-
-        public void SetTimeToSpawnAnotherBall(float timeToSpawnAnotherBall)
-        {
-            this.timeToSpawnAnotherBall = timeToSpawnAnotherBall;
-        }
-
-
-        public void SetActualGameState(Enumerators.GameStates gameState)
-        {
-            this.actualGameState = gameState;
-
-            switch (actualGameState)
+            get => actualGameState;
+            set
             {
-                case Enumerators.GameStates.LEVEL_COMPLETE:
-                    {
-                        pauseController.CanPause = false;
-                        canvasGroup.interactable = true;
-                        break;
-                    }
+                actualGameState = value;
+                switch (ActualGameState)
+                {
+                    case Enumerators.GameStates.LEVEL_COMPLETE:
+                        {
+                            PauseController.Instance.CanPause = false;
+                            canvasGroup.interactable = true;
+                            break;
+                        }
 
-                case Enumerators.GameStates.GAMEPLAY:
-                    {
-                        Time.timeScale = 1f;
-                        pauseController.CanPause = true;
-                        canvasGroup.interactable = true;
-                        break;
-                    }
+                    case Enumerators.GameStates.GAMEPLAY:
+                        {
+                            Time.timeScale = 1f;
+                            PauseController.Instance.CanPause = true;
+                            canvasGroup.interactable = true;
+                            break;
+                        }
 
-                case Enumerators.GameStates.PAUSE:
-                    {
-                        Time.timeScale = 0f;
-                        pauseController.CanPause = true;
-                        canvasGroup.interactable = true;
-                        break;
-                    }
+                    case Enumerators.GameStates.PAUSE:
+                        {
+                            Time.timeScale = 0f;
+                            PauseController.Instance.CanPause = true;
+                            canvasGroup.interactable = true;
+                            break;
+                        }
 
-                case Enumerators.GameStates.TRANSITION:
-                    {
-                        pauseController.CanPause = false;
-                        canvasGroup.interactable = false;
-                        break;
-                    }
+                    case Enumerators.GameStates.TRANSITION:
+                        {
+                            PauseController.Instance.CanPause = false;
+                            canvasGroup.interactable = false;
+                            break;
+                        }
+                }
             }
         }
 
-        public int CurrentNumberOfBalls
-        {
-            get => this.currentNumberOfBalls;
-            set { currentNumberOfBalls = value; }
-        }
+        public int CurrentNumberOfBalls { get; set; } = 1;
+        public Enumerators.Directions BlockDirection { get; set; } = Enumerators.Directions.None;
+        public bool CanMoveBlocks { get; set; } = false;
+        public int ComboMultiplier { get; private set; } = 0;
+        public bool HasStarted { get; set; } = false;
+        public float TimeToWaitToSpawnAnotherBall => -5f;
+        public bool CanSpawnAnotherBall { private get; set; } = false;
+        public float StartTimeToSpawnAnotherBall { private get; set; } = 0f;
+        public float TimeToSpawnAnotherBall { private get; set; } = 0f;
 
-        public static GameSession Instance { get => instance; }
-
-        private void Awake()
-        {
-            SetupSingleton();
-        }
+        private void Awake() => SetupSingleton();
 
         private void Start()
         {
@@ -197,9 +113,6 @@ namespace Controllers.Core
             // Find other objects
             balls = FindObjectsOfType<Ball>();
             canvasGroup = FindObjectOfType<CanvasGroup>();
-            cursorController = FindObjectOfType<CursorController>();
-            levelCompleteController = FindObjectOfType<LevelCompleteController>();
-            pauseController = FindObjectOfType<PauseController>();
 
             // Audio Controller
             songIndex = Random.Range(0, AudioController.Instance.AllNotLoopedSongs.Length);
@@ -220,9 +133,9 @@ namespace Controllers.Core
         {
             FindCamera();
 
-            if (actualGameState == Enumerators.GameStates.GAMEPLAY)
+            if (ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
-                if (hasStarted)
+                if (HasStarted)
                 {
                     ShowEllapsedTime();
                     CheckSpawnAnotherBall();
@@ -236,12 +149,12 @@ namespace Controllers.Core
             if (numberOfInstances > 1)
             {
                 gameObject.SetActive(false);
-                DestroyImmediate(this.gameObject);
+                DestroyImmediate(gameObject);
             }
             else
             {
-                instance = this;
-                DontDestroyOnLoad(this.gameObject);
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
             }
         }
 
@@ -251,10 +164,10 @@ namespace Controllers.Core
             ellapsedTimeText.SetText(Formatter.FormatEllapsedTime((int)ellapsedTime));
 
             // Combo text
-            if (comboMultiplier > 1)
+            if (ComboMultiplier > 1)
             {
-                bestCombo = (comboMultiplier >= bestCombo ? comboMultiplier : bestCombo);
-                comboMultiplierText.SetText(string.Concat("x", comboMultiplier));
+                bestCombo = (ComboMultiplier >= bestCombo ? ComboMultiplier : bestCombo);
+                comboMultiplierText.SetText(string.Concat("x", ComboMultiplier));
             }
             else
             {
@@ -262,9 +175,9 @@ namespace Controllers.Core
             }
 
             // Ball Countdown
-            if (canSpawnAnotherBall && timeToSpawnAnotherBall >= 0)
+            if (CanSpawnAnotherBall && TimeToSpawnAnotherBall >= 0)
             {
-                int ballCountdown = (int)(startTimeToSpawnAnotherBall - timeToSpawnAnotherBall);
+                int ballCountdown = (int)(StartTimeToSpawnAnotherBall - TimeToSpawnAnotherBall);
                 ballCountdownText.SetText((ballCountdown > 0 ? ballCountdown.ToString("00") : string.Empty));
             }
             else
@@ -300,19 +213,19 @@ namespace Controllers.Core
 
         public void CallLevelComplete()
         {
-            SetActualGameState(Enumerators.GameStates.LEVEL_COMPLETE);
-            levelCompleteController.CallLevelComplete(ellapsedTime, bestCombo, currentScore);
+            ActualGameState = Enumerators.GameStates.LEVEL_COMPLETE;
+            LevelCompleteController.Instance.CallLevelComplete(ellapsedTime, bestCombo, currentScore);
         }
 
         public void AddToComboMultiplier()
         {
-            comboMultiplier++;
+            ComboMultiplier++;
             UpdateUI();
         }
 
         public void ResetCombo()
         {
-            comboMultiplier = 0;
+            ComboMultiplier = 0;
             UpdateUI();
         }
 
@@ -323,9 +236,9 @@ namespace Controllers.Core
             if (blocks.Length == 0) return;
 
             // Calculates
-            minNumberOfRandomBlocks = Mathf.FloorToInt((blocks.Length * (10f / 100f)));
-            maxNumberOfRandomBlocks = Mathf.FloorToInt((blocks.Length * (20f / 100f)));
-            numberOfRandomBlocks = Random.Range(minNumberOfRandomBlocks, maxNumberOfRandomBlocks + 1);
+            minMaxNumberOfRandomBlocks.x = Mathf.FloorToInt((blocks.Length * (10f / 100f)));
+            minMaxNumberOfRandomBlocks.y = Mathf.FloorToInt((blocks.Length * (20f / 100f)));
+            numberOfRandomBlocks = Random.Range(minMaxNumberOfRandomBlocks.x, minMaxNumberOfRandomBlocks.y + 1);
 
             for (int i = 1; i <= numberOfRandomBlocks; i++)
             {
@@ -335,100 +248,55 @@ namespace Controllers.Core
         }
 
         // Moves all blocks in some sirection
-        public void MoveBlocks(string direction)
+        public void MoveBlocks(Enumerators.Directions direction)
         {
-            if (actualGameState == Enumerators.GameStates.GAMEPLAY)
+            if (ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
-                if (canMoveBlocks)
+                if (CanMoveBlocks)
                 {
                     Block[] blocks = FindObjectsOfType<Block>();
                     int numberOfOcorrences = 0;
                     foreach (Block block in blocks)
                     {
-                        // Cancels
                         if (block.CompareTag(NamesTags.UnbreakableBlockTag)) return;
 
                         switch (direction)
                         {
-                            case "Right":
-                                {
-                                    Vector3 rightPosition = new Vector3(block.transform.position.x + 1f, block.transform.position.y, 0f);
-                                    if (rightPosition.x <= BlockGrid.MaxXYCoordinates.x)
-                                    {
-                                        if (!BlockGrid.CheckPosition(rightPosition)) return;
-                                        if (!BlockGrid.GetBlock(rightPosition))
-                                        {
-                                            BlockGrid.RedefineBlock(block.transform.position, null);
-                                            BlockGrid.RedefineBlock(rightPosition, block);
-                                            block.transform.position = rightPosition;
-                                            numberOfOcorrences++;
-                                        }
-                                    }
+                            case Enumerators.Directions.Right:
+                            {
+                                Vector3 right = new Vector3(block.transform.position.x + 1f, block.transform.position.y, 0f);
+                                MoveBlockAtPosition(block, right, (right.x <= BlockGrid.MaxXYCoordinates.x), ref numberOfOcorrences);
+                                break;
+                            }
 
-                                    break;
-                                }
+                            case Enumerators.Directions.Left:
+                            {
+                                Vector3 left = new Vector3(block.transform.position.x - 1f, block.transform.position.y, 0f);
+                                MoveBlockAtPosition(block, left, (left.x >= BlockGrid.MinXYCoordinates.x), ref numberOfOcorrences);
+                                break;
+                            }
 
-                            case "Left":
-                                {
-                                    Vector3 leftPosition = new Vector3(block.transform.position.x - 1f, block.transform.position.y, 0f);
-                                    if (leftPosition.x >= BlockGrid.MinXYCoordinates.x)
-                                    {
-                                        if (!BlockGrid.CheckPosition(leftPosition)) return;
-                                        if (!BlockGrid.GetBlock(leftPosition))
-                                        {
-                                            BlockGrid.RedefineBlock(block.transform.position, null);
-                                            BlockGrid.RedefineBlock(leftPosition, block);
-                                            block.transform.position = leftPosition;
-                                            numberOfOcorrences++;
-                                        }
-                                    }
+                            case Enumerators.Directions.Down:
+                            {
+                                Vector3 down = new Vector3(block.transform.position.x, block.transform.position.y - 0.5f, 0f);
+                                MoveBlockAtPosition(block, down, (down.y >= BlockGrid.MinXYCoordinates.y), ref numberOfOcorrences);
+                                break;
+                            }
 
-                                    break;
-                                }
-
-                            case "Down":
-                                {
-                                    Vector3 downPosition = new Vector3(block.transform.position.x, block.transform.position.y - 0.5f, 0f);
-                                    if (downPosition.y >= BlockGrid.MinXYCoordinates.y)
-                                    {
-                                        if (!BlockGrid.CheckPosition(downPosition)) return;
-                                        if (!BlockGrid.GetBlock(downPosition))
-                                        {
-                                            BlockGrid.RedefineBlock(block.transform.position, null);
-                                            BlockGrid.RedefineBlock(downPosition, block);
-                                            block.transform.position = downPosition;
-                                            numberOfOcorrences++;
-                                        }
-                                    }
-
-                                    break;
-                                }
-
-                            case "Up":
-                                {
-                                    Vector3 upPosition = new Vector3(block.transform.position.x, block.transform.position.y + 0.5f, 0f);
-                                    if (upPosition.y <= BlockGrid.MaxXYCoordinates.y)
-                                    {
-                                        if (!BlockGrid.CheckPosition(upPosition)) return;
-                                        if (!BlockGrid.GetBlock(upPosition))
-                                        {
-                                            BlockGrid.RedefineBlock(block.transform.position, null);
-                                            BlockGrid.RedefineBlock(upPosition, block);
-                                            block.transform.position = upPosition;
-                                            numberOfOcorrences++;
-                                        }
-                                    }
-
-                                    break;
-                                }
+                            case Enumerators.Directions.Up:
+                            {
+                                Vector3 up = new Vector3(block.transform.position.x, block.transform.position.y + 0.5f, 0f);
+                                MoveBlockAtPosition(block, up, (up.y <= BlockGrid.MaxXYCoordinates.y), ref numberOfOcorrences);
+                                break;
+                            }
 
                             default: break;
                         }
                     }
 
                     // Checks and play SFX
-                    canMoveBlocks = (numberOfOcorrences >= 1);
-                    if (canMoveBlocks)
+                    CanMoveBlocks = (numberOfOcorrences >= 1);
+                    if (CanMoveBlocks)
                     {
                         AudioController.Instance.PlaySFX(AudioController.Instance.HittingWall, AudioController.Instance.MaxSFXVolume);
                     }
@@ -436,13 +304,22 @@ namespace Controllers.Core
             }
         }
 
+        private void MoveBlockAtPosition(Block block, Vector3 position, bool expression, ref int numberOfOcorrences)
+        {
+            if (expression)
+            {
+                BlockGrid.RedefineBlock(block.transform.position, null);
+                BlockGrid.RedefineBlock(position, block);
+                block.transform.position = position;
+                numberOfOcorrences++;
+            }
+        }
+
         // Fills the grid with block or null
         private void FillBlockGrid()
         {
-            // Clears the grid
             BlockGrid.Grid.Clear();
 
-            // Finds and populate the grid
             Block[] blocks = FindObjectsOfType<Block>();
             for (float y = BlockGrid.MinXYCoordinates.y; y <= BlockGrid.MaxXYCoordinates.y; y += 0.5f)
             {
@@ -450,7 +327,6 @@ namespace Controllers.Core
                 {
                     Vector3 position = new Vector3(x, y, 0f);
 
-                    // Iterates and check positions
                     foreach (Block block in blocks)
                     {
                         if (block.transform.position == position)
@@ -460,7 +336,6 @@ namespace Controllers.Core
                         }
                     }
 
-                    // Otherwise put null at position
                     if (!BlockGrid.CheckPosition(position))
                     {
                         BlockGrid.PutBlock(position, null);
@@ -471,11 +346,8 @@ namespace Controllers.Core
 
         public void MakeFireBalls()
         {
-            if (actualGameState == Enumerators.GameStates.GAMEPLAY)
+            if (ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
-                // Cancels
-                if (!AudioController.Instance) return;
-
                 // Checks
                 if (areBallOnFire)
                 {
@@ -514,9 +386,6 @@ namespace Controllers.Core
 
         private void UndoFireBalls()
         {
-            // Cancels
-            if (!AudioController.Instance) return;
-
             areBallOnFire = false;
 
             // Check Blocks
@@ -568,13 +437,13 @@ namespace Controllers.Core
         // Checks if can spawn another ball 
         private void CheckSpawnAnotherBall()
         {
-            if (currentNumberOfBalls < MAX_NUMBER_OF_BALLS)
+            if (CurrentNumberOfBalls < MAX_NUMBER_OF_BALLS)
             {
-                if (canSpawnAnotherBall)
+                if (CanSpawnAnotherBall)
                 {
-                    timeToSpawnAnotherBall += Time.deltaTime;
+                    TimeToSpawnAnotherBall += Time.deltaTime;
 
-                    if (timeToSpawnAnotherBall >= startTimeToSpawnAnotherBall)
+                    if (TimeToSpawnAnotherBall >= StartTimeToSpawnAnotherBall)
                     {
                         if (ballPrefab)
                         {
@@ -589,12 +458,12 @@ namespace Controllers.Core
                                 newBall.MoveSpeed = firstBall.DefaultSpeed;
                                 newBall.IsBallOnFire = firstBall.IsBallOnFire;
                                 newBall.ChangeBallSprite(newBall.IsBallOnFire);
-                                currentNumberOfBalls++;
+                                CurrentNumberOfBalls++;
                             }
                         }
 
-                        timeToSpawnAnotherBall = timeToWaitToSpawnAnotherBall;
-                        startTimeToSpawnAnotherBall = 5f;
+                        TimeToSpawnAnotherBall = TimeToWaitToSpawnAnotherBall;
+                        StartTimeToSpawnAnotherBall = 5f;
                     }
                 }
             }
@@ -629,7 +498,7 @@ namespace Controllers.Core
             }
 
             Paddle paddle = FindObjectOfType<Paddle>();
-            if (paddle)
+            if (paddle != null)
             {
                 paddle.ResetPaddle();
             }
@@ -638,14 +507,14 @@ namespace Controllers.Core
         // Resets level if ball touches 'death zone'
         public void ResetLevel()
         {
-            timeToSpawnAnotherBall = timeToWaitToSpawnAnotherBall;
-            startTimeToSpawnAnotherBall = 5f;
-            currentNumberOfBalls = 0;
+            TimeToSpawnAnotherBall = TimeToWaitToSpawnAnotherBall;
+            StartTimeToSpawnAnotherBall = 5f;
+            CurrentNumberOfBalls = 0;
             currentScore = 0;
-            canSpawnAnotherBall = false;
-            hasStarted = false;
-            canMoveBlocks = false;
-            blockDirection = string.Empty;
+            CanSpawnAnotherBall = false;
+            HasStarted = false;
+            CanMoveBlocks = false;
+            BlockDirection = Enumerators.Directions.None;
             ResetCombo();
             UpdateUI();
 
@@ -658,20 +527,14 @@ namespace Controllers.Core
         // Destroys this
         public void ResetGame(string sceneName)
         {
-            // Checks and cancels
-            if (!AudioController.Instance || !GameStatusController.Instance) return;
-
             AudioController.Instance.StopMusic();
             GameStatusController.Instance.NextSceneName = sceneName;
             GameStatusController.Instance.HasStartedSong = false;
             GameStatusController.Instance.CameFromLevel = true;
             SceneManagerController.CallScene(SceneManagerController.LoadingSceneName);
-            Destroy(this.gameObject);
+            DestroyInstance();
         }
 
-        public void DestroyInstance()
-        {
-            Destroy(this.gameObject);
-        }
+        public void DestroyInstance() => Destroy(gameObject);
     }
 }

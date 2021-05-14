@@ -33,7 +33,7 @@ namespace Effects
 
         private void SpawnEchoEffect()
         {
-            if (GameSession.Instance.GetActualGameState() != Enumerators.GameStates.GAMEPLAY) return;
+            if (GameSession.Instance.ActualGameState != Enumerators.GameStates.GAMEPLAY) return;
 
             if (timeBetweenSpawns <= 0)
             {

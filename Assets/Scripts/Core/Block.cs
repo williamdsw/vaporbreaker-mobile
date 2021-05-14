@@ -58,7 +58,7 @@ namespace Core
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
+            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
                 if (!lastCollision)
                 {
@@ -74,7 +74,7 @@ namespace Core
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
+            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
                 if (!lastCollision)
                 {
@@ -130,7 +130,7 @@ namespace Core
                 GameSession.Instance.AddToComboMultiplier();
             }
 
-            int comboMultiplier = GameSession.Instance.GetComboMultiplier();
+            int comboMultiplier = GameSession.Instance.ComboMultiplier;
             int score = (int)Random.Range(minMaxPointsScore.x, minMaxPointsScore.y);
             score *= MaxHits;
 

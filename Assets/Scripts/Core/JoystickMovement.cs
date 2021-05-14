@@ -19,7 +19,7 @@ namespace Core
 
         private void Update()
         {
-            if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.TRANSITION)
+            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.TRANSITION)
             {
                 InputDirection = Vector2.zero;
             }

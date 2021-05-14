@@ -28,7 +28,13 @@ namespace Controllers.Core
 
         public bool CanPause { private get; set; } = true;
 
-        private void Awake() => pauseMenu.SetActive(false);
+        public static PauseController Instance { get; private set; }
+
+        private void Awake()
+        {
+            Instance = this;
+            pauseMenu.SetActive(false);
+        }
 
         private void Start()
         {
@@ -65,13 +71,13 @@ namespace Controllers.Core
             // State
             pauseState = !pauseState;
             pauseMenu.SetActive(pauseState);
-            GameSession.Instance.SetActualGameState(pauseState ? Enumerators.GameStates.PAUSE : Enumerators.GameStates.GAMEPLAY);
+            GameSession.Instance.ActualGameState = (pauseState ? Enumerators.GameStates.PAUSE : Enumerators.GameStates.GAMEPLAY);
         }
 
         // Reset actual level
         private IEnumerator ResetLevelCoroutine()
         {
-            GameSession.Instance.SetActualGameState(Enumerators.GameStates.TRANSITION);
+            GameSession.Instance.ActualGameState = Enumerators.GameStates.TRANSITION;
             FadeEffect.Instance.ResetAnimationFunctions();
             float fadeOutLength = FadeEffect.Instance.GetFadeOutLength();
             FadeEffect.Instance.FadeToLevel();
@@ -86,7 +92,7 @@ namespace Controllers.Core
         // Reset to Select Levels
         private IEnumerator ResetGameCoroutine(string sceneName)
         {
-            GameSession.Instance.SetActualGameState(Enumerators.GameStates.TRANSITION);
+            GameSession.Instance.ActualGameState = Enumerators.GameStates.TRANSITION;
             FadeEffect.Instance.ResetAnimationFunctions();
             float fadeOutLength = FadeEffect.Instance.GetFadeOutLength();
             FadeEffect.Instance.FadeToLevel();

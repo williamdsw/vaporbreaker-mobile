@@ -1,25 +1,26 @@
 using Controllers.Core;
 using UnityEngine;
+using Utilities;
 
 namespace Core.PowerUps
 {
     public class MoveBlocks : PowerUp
     {
         [Header("Additional Required Configuration")]
-        [SerializeField] private string direction = string.Empty;
+        [SerializeField] private Enumerators.Directions direction = Enumerators.Directions.None;
 
         protected override void Apply() => Move(direction);
 
-        private void Move(string direction)
+        private void Move(Enumerators.Directions direction)
         {
-            if (GameSession.Instance.GetCanMoveBlocks())
+            if (GameSession.Instance.CanMoveBlocks)
             {
-                GameSession.Instance.SetCanMoveBlocks(false);
-                GameSession.Instance.SetBlockDirection(string.Empty);
+                GameSession.Instance.CanMoveBlocks = false;
+                GameSession.Instance.BlockDirection = Enumerators.Directions.None;
             }
 
-            GameSession.Instance.SetCanMoveBlocks(true);
-            GameSession.Instance.SetBlockDirection(direction);
+            GameSession.Instance.CanMoveBlocks = true;
+            GameSession.Instance.BlockDirection = direction;
             GameSession.Instance.AddToStore(Random.Range(0, 1000));
         }
     }

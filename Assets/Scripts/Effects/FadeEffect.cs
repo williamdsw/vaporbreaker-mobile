@@ -135,7 +135,7 @@ namespace Effects
                 default: break;
             }
 
-            GameSession.Instance.SetActualGameState(newGameState);
+            GameSession.Instance.ActualGameState = newGameState;
         }
     }
 }

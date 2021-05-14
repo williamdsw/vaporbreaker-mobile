@@ -92,9 +92,9 @@ namespace Core
 
         private void Update()
         {
-            if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
+            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
-                if (!GameSession.Instance.GetHasStarted())
+                if (!GameSession.Instance.HasStarted)
                 {
                     LockBallToPaddle();
                     CalculateDistanceToMouse();
@@ -113,9 +113,9 @@ namespace Core
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
+            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
-                if (GameSession.Instance.GetHasStarted())
+                if (GameSession.Instance.HasStarted)
                 {
                     // Combo manipulator
                     if (other.gameObject.CompareTag(NamesTags.PaddleTag) || other.gameObject.CompareTag(NamesTags.WallTag))
@@ -144,9 +144,9 @@ namespace Core
                             }
 
                             // Case "Move Blocks" power-up is activated
-                            if (GameSession.Instance.GetCanMoveBlocks())
+                            if (GameSession.Instance.CanMoveBlocks)
                             {
-                                GameSession.Instance.MoveBlocks(GameSession.Instance.GetBlockDirection());
+                                GameSession.Instance.MoveBlocks(GameSession.Instance.BlockDirection);
                             }
 
                             break;
@@ -185,10 +185,10 @@ namespace Core
             if (remainingPosition.y >= 1f)
             {
                 // Game Session parameters
-                GameSession.Instance.SetHasStarted(true);
-                GameSession.Instance.SetTimeToSpawnAnotherBall(GameSession.Instance.GetTimeToWaitToSpawnAnotherBall());
-                GameSession.Instance.SetStartTimeToSpawnAnotherBall(5f);
-                GameSession.Instance.SetCanSpawnAnotherBall(true);
+                GameSession.Instance.HasStarted = true;
+                GameSession.Instance.TimeToSpawnAnotherBall = GameSession.Instance.TimeToWaitToSpawnAnotherBall;
+                GameSession.Instance.StartTimeToSpawnAnotherBall = 5f;
+                GameSession.Instance.CanSpawnAnotherBall = true;
                 GameSession.Instance.CurrentNumberOfBalls++;
 
                 // Other

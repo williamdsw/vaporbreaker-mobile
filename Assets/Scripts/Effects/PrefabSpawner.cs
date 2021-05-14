@@ -26,9 +26,9 @@ namespace Effects
         {
             if (prefabs.Length == 0) return;
 
-            if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
+            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
-                if (GameSession.Instance.GetHasStarted())
+                if (GameSession.Instance.HasStarted)
                 {
                     timeToSpawn -= Time.deltaTime;
                     if (timeToSpawn <= 0)

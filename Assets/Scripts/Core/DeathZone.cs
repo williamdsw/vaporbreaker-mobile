@@ -18,7 +18,7 @@ namespace Core
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
+            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
                 if (other.gameObject.CompareTag(NamesTags.BallTag))
                 {
@@ -64,7 +64,7 @@ namespace Core
         // Plays SFX and wait to call fade out
         private IEnumerator WaitToReset()
         {
-            GameSession.Instance.SetActualGameState(Enumerators.GameStates.TRANSITION);
+            GameSession.Instance.ActualGameState = Enumerators.GameStates.TRANSITION;
             float soundLength = AudioController.Instance.GetClipLength(AudioController.Instance.BoomSound);
             AudioController.Instance.PlaySFX(AudioController.Instance.BoomSound, 0.8f);
             yield return new WaitForSecondsRealtime(soundLength);
