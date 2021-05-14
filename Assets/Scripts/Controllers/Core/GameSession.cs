@@ -103,6 +103,7 @@ namespace Controllers.Core
         public bool CanSpawnAnotherBall { private get; set; } = false;
         public float StartTimeToSpawnAnotherBall { private get; set; } = 0f;
         public float TimeToSpawnAnotherBall { private get; set; } = 0f;
+        public int MaxNumberOfBalls => MAX_NUMBER_OF_BALLS;
 
         private void Awake() => SetupSingleton();
 
@@ -437,7 +438,7 @@ namespace Controllers.Core
         // Checks if can spawn another ball 
         private void CheckSpawnAnotherBall()
         {
-            if (CurrentNumberOfBalls < MAX_NUMBER_OF_BALLS)
+            if (CurrentNumberOfBalls < MaxNumberOfBalls)
             {
                 if (CanSpawnAnotherBall)
                 {
