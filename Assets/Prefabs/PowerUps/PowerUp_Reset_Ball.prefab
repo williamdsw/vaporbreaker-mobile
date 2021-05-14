@@ -45,6 +45,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -56,6 +58,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -91,7 +94,7 @@ GameObject:
   - component: {fileID: 8624560920167937619}
   - component: {fileID: 3373831898747269468}
   - component: {fileID: -8230203925290069996}
-  - component: {fileID: 8624560920167937617}
+  - component: {fileID: 8060230641769657910}
   m_Layer: 12
   m_Name: PowerUp_Reset_Ball
   m_TagString: PowerUp
@@ -128,6 +131,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -139,6 +144,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -209,7 +215,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &8624560920167937617
+--- !u!114 &8060230641769657910
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -218,8 +224,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8624560920167937620}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27f33ffff4247a14a9efe3d94c06b6c8, type: 3}
+  m_Script: {fileID: 11500000, guid: 7c86e85e2666a1c4796a9c8d4ebb9ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shooterPrefab: {fileID: 8899339502302114221, guid: 0c0483362b7fe28489694d03653ad73e,
-    type: 3}

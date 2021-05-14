@@ -47,6 +47,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -58,6 +60,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -130,23 +133,23 @@ MonoBehaviour:
   particlesPrefab: {fileID: 704464901149122646, guid: 5da83126db8ad0c4f8087a93cb08e756,
     type: 3}
   powerUpPrefabs:
-  - {fileID: 8624560920167937617, guid: 62af0701fb27dce44b3c8084d7a86df3, type: 3}
-  - {fileID: 8624560920167937617, guid: 3db3976a787e80c4297760a74ca04787, type: 3}
-  - {fileID: 8624560920167937617, guid: cc23f5870732cf5418f281395b52c751, type: 3}
-  - {fileID: 8624560920167937617, guid: 3fa8104b1e44bf546aacda5d0bd5657d, type: 3}
-  - {fileID: 8624560920167937617, guid: 530ffdf55851ee24fac6d8cd9a5e7a87, type: 3}
-  - {fileID: 8624560920167937617, guid: f6dffc273b9e49b46bfe7f99f5ab2418, type: 3}
-  - {fileID: 8624560920167937617, guid: 287a105ef46c4414cad5aa8aa1d74f94, type: 3}
-  - {fileID: 8624560920167937617, guid: 1270e3e92741e654bbe07eb4bdd35cf5, type: 3}
-  - {fileID: 8624560920167937617, guid: ce767020ae2274647b0019174bd0a97c, type: 3}
-  - {fileID: 8624560920167937617, guid: a846c2f60b778cf4bb2dacdb82932e08, type: 3}
-  - {fileID: 8624560920167937617, guid: 009270d0589894348a81f28c855060ab, type: 3}
-  - {fileID: 8624560920167937617, guid: 1844688078167044c9566af651634c99, type: 3}
-  - {fileID: 8624560920167937617, guid: 59f7b30cb2fed9d46b69f6b1eefa5b79, type: 3}
-  - {fileID: 8624560920167937617, guid: ca13e92fd511c834fba8ca4e5edfe9f5, type: 3}
-  - {fileID: 8624560920167937617, guid: 2bf2f3765af70104cb92a561d2fbf359, type: 3}
-  - {fileID: 8624560920167937617, guid: 4b8fa0cd7a9d7114aae2b56c50a5ebe9, type: 3}
-  - {fileID: 8624560920167937617, guid: 68a4ae4951b7a8545bc4133bbd8956e0, type: 3}
+  - {fileID: -7754417100698402476, guid: 62af0701fb27dce44b3c8084d7a86df3, type: 3}
+  - {fileID: 8128731949446312808, guid: 3db3976a787e80c4297760a74ca04787, type: 3}
+  - {fileID: 7063474740667014915, guid: cc23f5870732cf5418f281395b52c751, type: 3}
+  - {fileID: 4060619565743077177, guid: 3fa8104b1e44bf546aacda5d0bd5657d, type: 3}
+  - {fileID: 2914068292335401937, guid: 530ffdf55851ee24fac6d8cd9a5e7a87, type: 3}
+  - {fileID: 9170345093080585906, guid: f6dffc273b9e49b46bfe7f99f5ab2418, type: 3}
+  - {fileID: 9085722493298145646, guid: 287a105ef46c4414cad5aa8aa1d74f94, type: 3}
+  - {fileID: 4871702947250128068, guid: 1270e3e92741e654bbe07eb4bdd35cf5, type: 3}
+  - {fileID: 2143754820883845876, guid: ce767020ae2274647b0019174bd0a97c, type: 3}
+  - {fileID: 5721001697443058593, guid: a846c2f60b778cf4bb2dacdb82932e08, type: 3}
+  - {fileID: 6389549378389091237, guid: 009270d0589894348a81f28c855060ab, type: 3}
+  - {fileID: 5852926726373256065, guid: 1844688078167044c9566af651634c99, type: 3}
+  - {fileID: 6800351053660846828, guid: 59f7b30cb2fed9d46b69f6b1eefa5b79, type: 3}
+  - {fileID: 8060230641769657910, guid: ca13e92fd511c834fba8ca4e5edfe9f5, type: 3}
+  - {fileID: 5675949778667976185, guid: 2bf2f3765af70104cb92a561d2fbf359, type: 3}
+  - {fileID: 6882699621356149224, guid: 4b8fa0cd7a9d7114aae2b56c50a5ebe9, type: 3}
+  - {fileID: 5065395553490544822, guid: 68a4ae4951b7a8545bc4133bbd8956e0, type: 3}
   particlesColor:
     serializedVersion: 2
     rgba: 4291016949

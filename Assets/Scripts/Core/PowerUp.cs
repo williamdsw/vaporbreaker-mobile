@@ -4,80 +4,47 @@ using Utilities;
 
 namespace Core
 {
-
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(BoxCollider2D))]
-    public class PowerUp : MonoBehaviour
+    public abstract class PowerUp : MonoBehaviour
     {
-        // Config
-        [SerializeField] private Shooter shooterPrefab;
+        // || Config
 
-        // Rotation
+        private readonly Vector2 minMaxAngle = new Vector2(0f, 16f);
+        private readonly Vector2Int minMaxRotateChance = new Vector2Int(0, 100);
+        private readonly Vector2 minMaxMoveSpeed = new Vector2(10f, 30f);
+        private readonly Vector2 minForceXY = new Vector2(-1000f, 0f);
+        private readonly Vector2 maxForceXY = new Vector2(1000f, 1000f);
+
+        // || State
         private float angleToIncrement = 0f;
         private int canRotateChance;
 
         // Speed
         private float moveSpeed = 0f;
-        private float minMoveSpeed = 10f;
-        private float maxMoveSpeed = 30f;
-
-        //Force 
-        private float minForceX = -1000f;
-        private float maxForceX = 1000f;
-        private float minForceY = 0f;
-        private float maxForceY = 1000f;
 
         // State
         private int currentPowerUpIndex = 0;
-        private string[] powerUpNames =
-        {
-        Enumerators.PowerUpsNames.PowerUp_All_Blocks_1_Hit.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_Ball_Bigger.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_Ball_Faster.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_Ball_Slower.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_Ball_Smaller.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_Duplicate_Ball.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_FireBall.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_Move_Blocks_Right.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_Move_Blocks_Left.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_Move_Blocks_Up.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_Move_Blocks_Down.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_Paddle_Expand.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_Paddle_Shrink.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_Reset_Ball.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_Reset_Paddle.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_Shooter.ToString (),
-        Enumerators.PowerUpsNames.PowerUp_Unbreakables_To_Breakables.ToString (),
-    };
 
-        // Cached Components
+        // || Cached
         private Rigidbody2D rigidBody2D;
+        protected Paddle paddle;
 
-        // Cached Others
-        private Paddle paddle;
-
-        private void Awake()
-        {
-            rigidBody2D = this.GetComponent<Rigidbody2D>();
-        }
+        private void Awake() => rigidBody2D = GetComponent<Rigidbody2D>();
 
         private void Start()
         {
             paddle = FindObjectOfType<Paddle>();
 
             // Random values
-            angleToIncrement = Random.Range(0f, 16f);
-            canRotateChance = Random.Range(0, 100);
+            angleToIncrement = Random.Range(minMaxAngle.x, minMaxAngle.y);
+            canRotateChance = Random.Range(minMaxRotateChance.x, minMaxRotateChance.y);
 
             AddRandomForce();
         }
 
         private void Update()
         {
-            // Cancels
-            if (!GameSession.Instance) return;
-
-            // Rotates... or not
             if (GameSession.Instance.GetActualGameState() == Enumerators.GameStates.GAMEPLAY)
             {
                 if (canRotateChance >= 50)
@@ -104,11 +71,11 @@ namespace Core
 
         private void AddRandomForce()
         {
-            float randomX = Random.Range(minForceX, maxForceX);
-            float randomY = Random.Range(minForceY, maxForceY);
+            float randomX = Random.Range(minForceXY.x, maxForceXY.x);
+            float randomY = Random.Range(minForceXY.y, maxForceXY.y);
             Vector2 randomForce = new Vector2(randomX, randomY);
-            moveSpeed = Random.Range(minMoveSpeed, maxMoveSpeed + 1);
-            randomForce *= Time.deltaTime * moveSpeed;
+            moveSpeed = Random.Range(minMaxMoveSpeed.x, minMaxMoveSpeed.y + 1);
+            randomForce *= (Time.deltaTime * moveSpeed);
             rigidBody2D.AddForce(randomForce);
         }
 
@@ -124,17 +91,16 @@ namespace Core
 
         private void DealCollisionWithPaddle()
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.PowerUpSound, AudioController.Instance.MaxSFXVolume);
-            string name = this.gameObject.name;
-            name = name.Replace("(Clone)", "");
-            ApplyPowerUpEffect(name);
-            AddScoreToGameSession(name);
+            string name = gameObject.name.Replace("(Clone)", "");
+            Apply();
+            //ApplyPowerUpEffect(name);
+            //AddScoreToGameSession(name);
         }
 
         public void StopPowerUp()
         {
-            if (!rigidBody2D) return;
             rigidBody2D.velocity = Vector2.zero;
             rigidBody2D.gravityScale = 0;
             canRotateChance = 0;
@@ -277,6 +243,8 @@ namespace Core
                 default: break;
             }
         }
+
+        protected abstract void Apply();
 
         // Applies random score...
         private void AddScoreToGameSession(string powerUpName)
@@ -436,8 +404,6 @@ namespace Core
 
         public void DefineFireBalls()
         {
-            // Cancels
-            if (!GameSession.Instance) return;
             GameSession.Instance.MakeFireBalls();
         }
 
@@ -460,11 +426,11 @@ namespace Core
         private void CreateShooter()
         {
             // Finds and cancel case have one already
-            Shooter shooter = FindObjectOfType<Shooter>();
+            /*Shooter shooter = FindObjectOfType<Shooter>();
             if (shooter) return;
 
             shooter = Instantiate(shooterPrefab, paddle.transform.position, Quaternion.identity) as Shooter;
-            shooter.transform.parent = paddle.transform;
+            shooter.transform.parent = paddle.transform;*/
         }
 
         private void MakeUnbreakableToBreakable()

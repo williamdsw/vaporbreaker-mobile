@@ -56,7 +56,7 @@ namespace Effects
             AnimationEvent lastFrameEvent = new AnimationEvent();
             lastFrameEvent.intParameter = 0;
             lastFrameEvent.time = 1f;
-            firstFrameEvent.functionName = FunctionNames.DefineGameState;
+            lastFrameEvent.functionName = FunctionNames.DefineGameState;
             fadeInClip.AddEvent(lastFrameEvent);
         }
 
@@ -75,7 +75,7 @@ namespace Effects
             // Last frame event
             AnimationEvent lastFrameEvent = new AnimationEvent();
             lastFrameEvent.time = 1f;
-            firstFrameEvent.functionName = FunctionNames.CallResetLevel;
+            lastFrameEvent.functionName = FunctionNames.CallResetLevel;
             fadeOutClip.AddEvent(lastFrameEvent);
         }
 
