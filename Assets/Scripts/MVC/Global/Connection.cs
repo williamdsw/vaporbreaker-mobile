@@ -12,7 +12,7 @@ namespace MVC.Global
 
         public Connection()
         {
-            string path = string.Format("URI=file:{0}", Configuration.Properties.DatabaseName);
+            string path = string.Format("URI=file:{0}", Configuration.Properties.DatabasePath);
             connection = new SqliteConnection(path);
         }
 

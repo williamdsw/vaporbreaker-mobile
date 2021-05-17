@@ -10,8 +10,6 @@ namespace Utilities
     {
         public static string FilesFolderPath => "Files/";
 
-        public static string LevelsThumbnailsPath => "Levels_Thumbnails";
-
         public static string LocalizationEnglishFolderPath => "Localization/en/";
 
         public static string LocalizationPortugueseFolderPath => "Localization/pt-br/";

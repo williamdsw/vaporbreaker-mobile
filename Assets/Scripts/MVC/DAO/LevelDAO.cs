@@ -11,6 +11,23 @@ namespace MVC.DAO
     {
         public LevelDAO() : base() { }
 
+        public bool UpdateFieldById(long id, string subQuery)
+        {
+            try
+            {
+                return ExecuteNonQuery(string.Format(Configuration.Queries.Level.UpdateFieldById, subQuery, id)) == 1;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogErrorFormat("LevelDAO::UpdateFieldById -> {0}", ex.Message);
+                throw ex;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
         public List<Level> ListAll()
         {
             try
@@ -20,6 +37,41 @@ namespace MVC.DAO
             catch (Exception ex)
             {
                 Debug.LogErrorFormat("LevelDAO::ListAll -> {0}", ex.Message);
+                throw ex;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
+        public Level GetById(long id)
+        {
+            try
+            {
+                if (id <= 0) throw new Exception(string.Format("Invalid Level Id = {0}", id));
+                return Factory<Level>.CreateOne(ExecuteQuery(string.Format(Configuration.Queries.Level.GetById, id)));
+            }
+            catch (Exception ex)
+            {
+                Debug.LogErrorFormat("LevelDAO::GetById -> {0}", ex.Message);
+                throw ex;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
+        public Level GetLastLevel()
+        {
+            try
+            {
+                return Factory<Level>.CreateOne(ExecuteQuery(Configuration.Queries.Level.GetLastLevel));
+            }
+            catch (Exception ex)
+            {
+                Debug.LogErrorFormat("LevelDAO::GetById -> {0}", ex.Message);
                 throw ex;
             }
             finally

@@ -15,13 +15,13 @@ namespace MVC.Utils
             if (reader.FieldCount > 0)
             {
                 int index = 0;
-                foreach (PropertyInfo prop in instance.GetType().GetProperties())
+                foreach (FieldInfo prop in instance.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
                 {
                     try
                     {
                         if (index < reader.FieldCount)
                         {
-                            var value = (prop.Name != "Status") ? (reader[prop.Name] != DBNull.Value ? (prop.PropertyType == typeof(string) ? (string) reader[prop.Name] : reader[prop.Name]) : null) : ((long) reader[prop.Name] == 1);
+                            var value = (prop.Name != "Status") ? (reader[prop.Name] != DBNull.Value ? (prop.FieldType == typeof(string) ? (string) reader[prop.Name] : reader[prop.Name]) : null) : ((long) reader[prop.Name] == 1);
                             prop.SetValue(instance, value);
                         }
 

@@ -307,7 +307,7 @@ namespace Controllers.Core
 
         private void MoveBlockAtPosition(Block block, Vector3 position, bool expression, ref int numberOfOcorrences)
         {
-            if (expression)
+            if (expression && BlockGrid.GetBlock(position) == null)
             {
                 BlockGrid.RedefineBlock(block.transform.position, null);
                 BlockGrid.RedefineBlock(position, block);

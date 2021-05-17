@@ -8,15 +8,18 @@ namespace MVC.Global
         {
             public class Level
             {
-                public static string ListAll => " SELECT id, name FROM level; ";
+                public static string GetById => string.Concat(ListAll, " WHERE id = {0} ");
+                public static string GetLastLevel => string.Concat(ListAll, " WHERE id = (SELECT MAX(id) FROM level) ");
+                public static string ListAll => " SELECT id, name, is_unlocked, is_completed FROM level ";
+                public static string UpdateFieldById => " UPDATE level {0} WHERE id = {1}; ";
             }
 
             public class Scoreboard
             {
-                public static string DeleteAll => " DELETE FROM scoreboard;";
+                public static string DeleteAll => " DELETE FROM scoreboard; ";
+                public static string GetByMaxScoreByLevel => " SELECT id, level_id, MAX(score) as score, MIN(time_score) as time_score, moment FROM scoreboard WHERE level_id = {0}; ";
                 public static string Insert => " INSERT INTO scoreboard (level_id, score, time_score, moment) VALUES ({0}, {1}, {2}, {3}); ";
-                public static string ListByLevel => " SELECT id, score, timescore, moment FROM scoreboard WHERE level_id = {0} ORDER BY score DESC; ";
-                public static string GetByMaxScoreByLevel => " SELECT id, score, timescore, moment FROM scoreboard WHERE score = (SELECT MAX(score) FROM scoreboard) AND level_id = {0}; ";
+                public static string ListByLevel => " SELECT id, level_id, score, time_score, moment FROM scoreboard WHERE level_id = {0} ORDER BY score DESC; ";
             }
         }
 

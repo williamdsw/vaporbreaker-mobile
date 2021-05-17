@@ -1,5 +1,8 @@
 ﻿using Controllers.Core;
 using Effects;
+using MVC.BL;
+using MVC.Models;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -33,19 +36,18 @@ namespace Controllers.Menu
         // State
         [SerializeField] private int currentLevelIndex = 0;
         [SerializeField] private bool hasPlayerFinishedGame = false;
-        [SerializeField] private List<string> levelsNamesList;
-        [SerializeField] private List<bool> isLevelUnlockedList;
-        [SerializeField] private List<bool> isLevelCompletedList;
-        [SerializeField] private List<int> highScoresList;
-        [SerializeField] private List<int> highTimeScoresList;
         [SerializeField] private Sprite[] levelThumbnails;
-        private int defaultTime = 0;
-        private int defaultScore = 0;
         private float timeToWaitAfterSave = 2f;
         private Enumerators.GameStates actualGameState = Enumerators.GameStates.GAMEPLAY;
 
-        // Cached Others
+        // || Cached
+
         private PlayerProgress progress = new PlayerProgress();
+        private LevelBL levelBL;
+        private ScoreboardBL scoreboardBL;
+        private List<Level> levels;
+
+        // || Properties
 
         public static SelectLevelsController Instance { get; private set; }
         public Enumerators.GameStates ActualGameState
@@ -58,7 +60,13 @@ namespace Controllers.Menu
             }
         }
 
-        private void Awake() => Instance = this;
+        private void Awake()
+        {
+            Instance = this;
+            levelBL = new LevelBL();
+            scoreboardBL = new ScoreboardBL();
+            levels = new List<Level>();
+        }
 
         private void Start()
         {
@@ -77,7 +85,6 @@ namespace Controllers.Menu
             TranslateLabels();
             BindClickEvents();
             LoadLevelButtons();
-            LoadLevelThumbnails();
             UpdateUI();
         }
 
@@ -126,23 +133,27 @@ namespace Controllers.Menu
 
         private void LoadLevelButtons()
         {
-            for (int index = 0; index < progress.TotalNumberOfLevels; index++)
+            levels = levelBL.ListAll();
+            for (int index = 0; index < levels.Count; index++)
             {
+                Level level = levels[index];
+                int currentIndex = index;
+
                 // GameObject
                 GameObject levelButton = Instantiate(levelButtonPrefab) as GameObject;
+                levelButton.name = level.Name;
                 levelButton.transform.SetParent(levelButtonsContainer.transform, false);
-                string levelButtonName = levelButton.name;
-                levelButton.name = string.Concat("Level", "_", index.ToString("00"));
+                levelButton.transform.SetAsLastSibling();
 
                 // Effect
-                if (isLevelUnlockedList[index])
+                if (level.IsUnlocked)
                 {
                     // TV Animation
                     GameObject levelNumberObject = levelButton.transform.GetChild(2).gameObject;
                     if (levelNumberObject)
                     {
                         TextMeshProUGUI levelNumberText = levelNumberObject.GetComponent<TextMeshProUGUI>();
-                        levelNumberText.text = (index + 1).ToString("00");
+                        levelNumberText.text = (index + 1).ToString("000");
                         levelNumberObject.SetActive(true);
                     }
                 }
@@ -150,43 +161,38 @@ namespace Controllers.Menu
                 {
                     // Static Effect
                     GameObject staticEffect = levelButton.transform.GetChild(1).gameObject;
-                    if (staticEffect != null) { staticEffect.SetActive(true); }
+                    if (staticEffect != null)
+                    {
+                        staticEffect.SetActive(true);
+                    }
                 }
 
                 // Button
                 Button button = levelButton.GetComponent<Button>();
-                button.interactable = isLevelUnlockedList[index];
-                button.onClick.AddListener(() =>
-                {
-                    // Data
-                    string indexString = levelButton.name;
-                    indexString = indexString.Replace("Level_", "");
-                    int currentIndex = int.Parse(indexString);
-                    string levelName = Formatter.FormatLevelName(levelsNamesList[currentIndex]);
-                    levelName = levelName.Replace("Level ", "");
-                    string bestScore = Formatter.FormatToCurrency(highScoresList[currentIndex]);
-                    string bestTimeScore = (highTimeScoresList[currentIndex] == 0 ? string.Empty : Formatter.FormatEllapsedTime(highTimeScoresList[currentIndex]));
-                    LevelDetailsController.Instance.LevelSceneName = levelsNamesList[currentIndex];
-                    LevelDetailsController.Instance.UpdateUI(levelName, bestScore, bestTimeScore, levelThumbnails[currentIndex]);
-
-                    // Pass data
-                    GameStatusController.Instance.LevelIndex = currentIndex;
-                    GameStatusController.Instance.NewScore = 0;
-                    GameStatusController.Instance.NewTimeScore = 0;
-                    GameStatusController.Instance.OldScore = highScoresList[currentIndex];
-                    GameStatusController.Instance.OldTimeScore = highTimeScoresList[currentIndex];
-
-                    // Panels
-                    selectLevelsPanel.SetActive(false);
-                    levelDetailsPanel.SetActive(true);
-                });
+                button.interactable = level.IsUnlocked;
+                button.onClick.AddListener(() => OpenLevelDetails(level, currentIndex));
             }
         }
-
-        private void LoadLevelThumbnails()
+        private void OpenLevelDetails(Level level, int currentIndex)
         {
-            string path = string.Concat(FileManager.FilesFolderPath, FileManager.LevelsThumbnailsPath);
-            levelThumbnails = Resources.LoadAll<Sprite>(path);
+            Scoreboard scoreboard = scoreboardBL.GetByMaxScoreByLevel(level.Id);
+            string levelName = Formatter.FormatLevelName(level.Name);
+            string bestScore = Formatter.FormatToCurrency(scoreboard.Score);
+            string bestTimeScore = (scoreboard.TimeScore == 0 ? string.Empty : Formatter.FormatEllapsedTime(scoreboard.TimeScore));
+            LevelDetailsController.Instance.UpdateUI(levelName, bestScore, bestTimeScore, levelThumbnails[currentIndex]);
+
+            // Pass data
+            GameStatusController.Instance.LevelId = level.Id;
+            GameStatusController.Instance.LevelIndex = currentIndex;
+            GameStatusController.Instance.NewScore = 0;
+            GameStatusController.Instance.NewTimeScore = 0;
+            GameStatusController.Instance.OldScore = scoreboard.Score;
+            GameStatusController.Instance.OldTimeScore = scoreboard.TimeScore;
+            LevelDetailsController.Instance.LevelSceneName = level.Name;
+
+            // Panels
+            selectLevelsPanel.SetActive(false);
+            levelDetailsPanel.SetActive(true);
         }
 
         private void LoadProgress()
@@ -196,11 +202,6 @@ namespace Controllers.Menu
             // Getting values
             currentLevelIndex = progress.CurrentLevelIndex;
             hasPlayerFinishedGame = progress.HasPlayerFinishedGame;
-            levelsNamesList = progress.LevelNamesList;
-            isLevelUnlockedList = progress.IsLevelUnlockedList;
-            isLevelCompletedList = progress.IsLevelCompletedList;
-            highScoresList = progress.HighScoresList;
-            highTimeScoresList = progress.HighTimeScoresList;
         }
 
         private void VerifyIfCameFromLevel()
@@ -212,50 +213,30 @@ namespace Controllers.Menu
             // Status
             if (GameStatusController.Instance.IsLevelCompleted)
             {
-                if (GameStatusController.Instance.NewScore > GameStatusController.Instance.OldScore)
+                Level current = levelBL.GetById(GameStatusController.Instance.LevelId);
+                Level next = levelBL.GetById(GameStatusController.Instance.LevelId + 1);
+                Level last = levelBL.GetLastLevel();
+
+                if (current != null && !current.IsCompleted)
                 {
-                    highScoresList[currentLevelIndex] = GameStatusController.Instance.NewScore;
-                }
-                else
-                {
-                    highScoresList[currentLevelIndex] = GameStatusController.Instance.OldScore;
+                    levelBL.UpdateIsCompletedById(GameStatusController.Instance.LevelId, true);
                 }
 
-                if (GameStatusController.Instance.OldTimeScore == defaultTime)
+                Scoreboard scoreboard = new Scoreboard();
+                scoreboard.LevelId = GameStatusController.Instance.LevelId;
+                scoreboard.Score = GameStatusController.Instance.NewScore;
+                scoreboard.TimeScore = GameStatusController.Instance.NewTimeScore;
+                scoreboard.Moment = DateTimeOffset.Now.ToUnixTimeSeconds();
+                scoreboardBL.Insert(scoreboard);
+
+                if (next != null && !next.IsUnlocked && !next.IsCompleted)
                 {
-                    highTimeScoresList[currentLevelIndex] = GameStatusController.Instance.NewTimeScore;
-                }
-                else
-                {
-                    if (GameStatusController.Instance.NewTimeScore < GameStatusController.Instance.OldTimeScore)
-                    {
-                        highTimeScoresList[currentLevelIndex] = GameStatusController.Instance.NewTimeScore;
-                    }
-                    else
-                    {
-                        highTimeScoresList[currentLevelIndex] = GameStatusController.Instance.OldTimeScore;
-                    }
+                    levelBL.UpdateIsUnlockedById(next.Id, true);
                 }
 
-                if (!isLevelCompletedList[currentLevelIndex])
-                {
-                    isLevelCompletedList[currentLevelIndex] = true;
-                }
-
-                // Enable next stage
-                if ((currentLevelIndex + 1) < levelsNamesList.Count)
-                {
-                    if (!isLevelCompletedList[currentLevelIndex + 1])
-                    {
-                        isLevelUnlockedList[currentLevelIndex + 1] = true;
-                    }
-                }
-
-                // Checks if has finished the game
                 if (!hasPlayerFinishedGame)
                 {
-                    int lastIndex = (progress.TotalNumberOfLevels - 1);
-                    hasPlayerFinishedGame = isLevelCompletedList[lastIndex];
+                    hasPlayerFinishedGame = last.IsCompleted;
                 }
 
                 StartCoroutine(SaveProgress());
@@ -274,14 +255,13 @@ namespace Controllers.Menu
             if (nextCurrentLevelIndex >= 4 && nextCurrentLevelIndex <= 99)
             {
                 // Checks if next level was completed...
-                nextCurrentLevelIndex = (!isLevelCompletedList[nextCurrentLevelIndex] ? nextCurrentLevelIndex : currentLevelIndex);
+                nextCurrentLevelIndex = (!levels[nextCurrentLevelIndex].IsCompleted ? nextCurrentLevelIndex : currentLevelIndex);
 
                 // Needed to update the elements positions
                 Canvas.ForceUpdateCanvases();
 
                 // Finds next button and checks
-                string nextButtonName = string.Concat("Level", "_", nextCurrentLevelIndex.ToString("00"));
-                GameObject button = GameObject.Find(nextButtonName);
+                GameObject button = GameObject.Find(levels[nextCurrentLevelIndex].Name);
                 if (!button) return;
 
                 // Calculates new anchored position
@@ -296,23 +276,7 @@ namespace Controllers.Menu
             }
         }
 
-        public void ResetProgress()
-        {
-            // Clear all
-            isLevelUnlockedList.Clear();
-            isLevelCompletedList.Clear();
-            highScoresList.Clear();
-            highTimeScoresList.Clear();
-
-            // Default values
-            for (int index = 0; index < progress.TotalNumberOfLevels; index++)
-            {
-                isLevelUnlockedList.Add((index == 0 ? true : false));
-                isLevelCompletedList.Add(false);
-                highScoresList.Add(0);
-                highTimeScoresList.Add(0);
-            }
-        }
+        public void ResetProgress() => scoreboardBL.DeleteAll();
 
         // Wait fade out length to fade out to next scene
         private IEnumerator CallNextScene(string nextSceneName)
@@ -339,10 +303,6 @@ namespace Controllers.Menu
             // Passing values
             progress.CurrentLevelIndex = currentLevelIndex;
             progress.HasPlayerFinishedGame = hasPlayerFinishedGame;
-            progress.IsLevelUnlockedList = isLevelUnlockedList;
-            progress.IsLevelCompletedList = isLevelCompletedList;
-            progress.HighScoresList = highScoresList;
-            progress.HighTimeScoresList = highTimeScoresList;
 
             // Saves
             ProgressManager.SaveProgress(progress);

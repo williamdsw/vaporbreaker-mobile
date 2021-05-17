@@ -7,20 +7,22 @@ namespace Controllers.Core
         // Config
         [SerializeField] private string nextSceneName;
         [SerializeField] private int levelIndex = 0;
-        [SerializeField] private int newScore = 0;
-        [SerializeField] private int newTimeScore = 0;
-        [SerializeField] private int oldScore = 0;
-        [SerializeField] private int oldTimeScore = 0;
+        [SerializeField] private long levelId = 0;
+        [SerializeField] private long newScore = 0;
+        [SerializeField] private long newTimeScore = 0;
+        [SerializeField] private long oldScore = 0;
+        [SerializeField] private long oldTimeScore = 0;
         [SerializeField] private bool cameFromLevel = false;
         [SerializeField] private bool hasStartedSong = false;
         [SerializeField] private bool isLevelCompleted = false;
 
         public string NextSceneName { get => nextSceneName; set => nextSceneName = value; }
         public int LevelIndex { get => levelIndex; set => levelIndex = value; }
-        public int NewScore { get => newScore; set => newScore = value; }
-        public int NewTimeScore { get => newTimeScore; set => newTimeScore = value; }
-        public int OldScore { get => oldScore; set => oldScore = value; }
-        public int OldTimeScore { get => oldTimeScore; set => oldTimeScore = value; }
+        public long LevelId { get => levelId; set => levelId = value; }
+        public long NewScore { get => newScore; set => newScore = value; }
+        public long NewTimeScore { get => newTimeScore; set => newTimeScore = value; }
+        public long OldScore { get => oldScore; set => oldScore = value; }
+        public long OldTimeScore { get => oldTimeScore; set => oldTimeScore = value; }
         public bool CameFromLevel { get => cameFromLevel; set => cameFromLevel = value; }
         public bool HasStartedSong { get => hasStartedSong; set => hasStartedSong = value; }
         public bool IsLevelCompleted { get => isLevelCompleted; set => isLevelCompleted = value; }
