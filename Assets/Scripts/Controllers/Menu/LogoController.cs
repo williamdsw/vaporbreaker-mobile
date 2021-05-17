@@ -1,5 +1,6 @@
 ﻿using Controllers.Core;
 using Effects;
+using MVC.Global;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,10 +21,39 @@ namespace Controllers.Menu
         private const float TIME_TO_WAIT = 2f;
         private const float ALPHA_INCREMENT = 0.1f;
 
+        // || State
+
+        private bool isDatabaseOk = false;
+
+        private void Awake() => StartCoroutine(ExtractDatabase());
+
         private void Start()
         {
             UnityUtilities.DisableAnalytics();
             StartCoroutine(PlayAndShowLogo());
+        }
+
+        private IEnumerator ExtractDatabase()
+        {
+            if (!FileManager.Exists(Configuration.Properties.DatabasePath))
+            {
+                if (Application.isEditor)
+                {
+                    FileManager.Copy(Configuration.Properties.DatabaseStreamingAssetsPath, Configuration.Properties.DatabasePath);
+                }
+                else
+                {
+                    yield return CopyDatabase();
+                }
+            }
+
+            isDatabaseOk = true;
+            yield return null;
+        }
+
+        private IEnumerator CopyDatabase()
+        {
+            yield return StartCoroutine(API.API.Get(Configuration.Properties.MobileDatabasePath, (bytes) => FileManager.WriteAllBytes(Configuration.Properties.DatabasePath, bytes)));
         }
 
         private IEnumerator PlayAndShowLogo()
@@ -52,6 +82,7 @@ namespace Controllers.Menu
             }
 
             yield return new WaitForSecondsRealtime(TIME_TO_WAIT);
+            yield return new WaitUntil(() => isDatabaseOk);
             StartCoroutine(CallNextScene(SceneManagerController.SelectLevelsSceneName));
         }
 
