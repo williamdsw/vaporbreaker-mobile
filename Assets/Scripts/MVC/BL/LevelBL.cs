@@ -14,5 +14,6 @@ namespace MVC.BL
         public List<Level> ListAll() => levelDAO.ListAll();
         public Level GetById(long id) => levelDAO.GetById(id);
         public Level GetLastLevel() => levelDAO.GetLastLevel();
+        public void ResetLevels() => levelDAO.ResetLevels();
     }
 }

@@ -11,6 +11,7 @@ namespace MVC.Global
                 public static string GetById => string.Concat(ListAll, " WHERE id = {0} ");
                 public static string GetLastLevel => string.Concat(ListAll, " WHERE id = (SELECT MAX(id) FROM level) ");
                 public static string ListAll => " SELECT id, name, is_unlocked, is_completed FROM level ";
+                public static string ResetLevels => " UPDATE level SET is_unlocked = 0, is_completed = 0; UPDATE level SET is_unlocked = 1 WHERE id = (SELECT MIN(id) AS id FROM level); ";
                 public static string UpdateFieldById => " UPDATE level {0} WHERE id = {1}; ";
             }
 

@@ -79,5 +79,22 @@ namespace MVC.DAO
                 CloseConnection();
             }
         }
+
+        public void ResetLevels()
+        {
+            try
+            {
+                ExecuteNonQuery(Configuration.Queries.Level.ResetLevels);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogErrorFormat("LevelDAO::ResetLevels -> {0}", ex.Message);
+                throw ex;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
     }
 }

@@ -189,7 +189,6 @@ namespace Controllers.Menu
             GameStatusController.Instance.NewTimeScore = 0;
             GameStatusController.Instance.OldScore = scoreboard.Score;
             GameStatusController.Instance.OldTimeScore = scoreboard.TimeScore;
-            
 
             // Panels
             selectLevelsPanel.SetActive(false);
@@ -277,7 +276,13 @@ namespace Controllers.Menu
             }
         }
 
-        public void ResetProgress() => scoreboardBL.DeleteAll();
+        public void ResetProgress()
+        {
+            currentLevelIndex = 0;
+            hasPlayerFinishedGame = false;
+            scoreboardBL.DeleteAll();
+            levelBL.ResetLevels();
+        }
 
         // Wait fade out length to fade out to next scene
         private IEnumerator CallNextScene(string nextSceneName)
