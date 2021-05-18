@@ -179,7 +179,8 @@ namespace Controllers.Menu
             string levelName = Formatter.FormatLevelName(level.Name);
             string bestScore = Formatter.FormatToCurrency(scoreboard.Score);
             string bestTimeScore = (scoreboard.TimeScore == 0 ? string.Empty : Formatter.FormatEllapsedTime(scoreboard.TimeScore));
-            LevelDetailsController.Instance.UpdateUI(levelName, bestScore, bestTimeScore, levelThumbnails[currentIndex]);
+            LevelDetailsController.Instance.UpdateUI(levelName, bestScore, bestTimeScore, levelThumbnails[currentIndex], level.Id);
+            LevelDetailsController.Instance.LevelSceneName = level.Name;
 
             // Pass data
             GameStatusController.Instance.LevelId = level.Id;
@@ -188,7 +189,7 @@ namespace Controllers.Menu
             GameStatusController.Instance.NewTimeScore = 0;
             GameStatusController.Instance.OldScore = scoreboard.Score;
             GameStatusController.Instance.OldTimeScore = scoreboard.TimeScore;
-            LevelDetailsController.Instance.LevelSceneName = level.Name;
+            
 
             // Panels
             selectLevelsPanel.SetActive(false);

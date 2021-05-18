@@ -14,6 +14,7 @@ namespace Controllers.Menu
         [SerializeField] private GameObject levelDetailsPanel;
         [SerializeField] private Button playButton;
         [SerializeField] private Button quitButton;
+        [SerializeField] private Button scoreboardButton;
 
         [Header("Level Details Elements")]
         [SerializeField] private Image levelThumbnail;
@@ -26,6 +27,7 @@ namespace Controllers.Menu
 
         // || State
         private string levelTranslated;
+        private long levelId;
 
         // || Properties
 
@@ -36,6 +38,7 @@ namespace Controllers.Menu
 
         private void Start()
         {
+            scoreboardButton.gameObject.SetActive(false);
             TranslateLabels();
             BindClickEvents();
         }
@@ -64,14 +67,21 @@ namespace Controllers.Menu
                 levelDetailsPanel.SetActive(false);
                 selectLevelsPanel.SetActive(true);
             });
+            scoreboardButton.onClick.AddListener(() =>
+            {
+                levelDetailsPanel.SetActive(false);
+                ScoreboardController.Instance.RenderScoreboard(levelId);
+            });
         }
 
-        public void UpdateUI(string levelName, string bestScore, string bestTimeScore, Sprite levelThumbnailSprite)
+        public void UpdateUI(string levelName, string bestScore, string bestTimeScore, Sprite levelThumbnailSprite, long levelId)
         {
             levelNameText.SetText(string.Concat(levelTranslated, levelName));
             bestScoreText.SetText(bestScore);
             bestTimeScoreText.SetText(bestTimeScore);
             levelThumbnail.sprite = levelThumbnailSprite;
+            scoreboardButton.gameObject.SetActive(!string.IsNullOrEmpty(bestScore) && !string.IsNullOrEmpty(bestTimeScore));
+            this.levelId = levelId;
         }
     }
 }
