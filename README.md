@@ -18,6 +18,7 @@ Personally I think it's fits better the layout and design instead of the desktop
 * Adobe Photoshop CS6
 * GIMP
 * Audacity
+* SQLite
 
 ## Running the project locally
 
