@@ -22,6 +22,11 @@ namespace MVC.Global
                 public static string Insert => " INSERT INTO scoreboard (level_id, score, time_score, moment) VALUES ({0}, {1}, {2}, {3}); ";
                 public static string ListByLevel => " SELECT id, level_id, score, time_score, moment FROM scoreboard WHERE level_id = {0} ORDER BY score DESC; ";
             }
+
+            public class Localization
+            {
+                public static string GetByLanguage => " SELECT id, language, content FROM localization WHERE language = '{0}'; ";
+            }
         }
 
         public class Properties

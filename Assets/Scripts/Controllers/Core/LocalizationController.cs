@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using MVC.BL;
+using MVC.Enums;
+using MVC.Models;
+using Newtonsoft.Json;
 using UnityEngine;
 using Utilities;
 
@@ -69,12 +74,20 @@ namespace Controllers.Core
             return selectLevelsLabels;
         }
 
+        // || Cached
+
+        private Dictionary<string, Dictionary<string, string>> dictionary;
+
+        // || Properties
+
         public static LocalizationController Instance { get; private set; }
+
+        public int DictionaryCount => dictionary.Count;
 
         private void Awake()
         {
+            dictionary = new Dictionary<string, Dictionary<string, string>>();
             SetupSingleton();
-            DefineLocalization();
         }
 
         // Implements singleton
@@ -83,12 +96,12 @@ namespace Controllers.Core
             int numberOfInstances = FindObjectsOfType(GetType()).Length;
             if (numberOfInstances > 1)
             {
-                DestroyImmediate(this.gameObject);
+                DestroyImmediate(gameObject);
             }
             else
             {
                 Instance = this;
-                DontDestroyOnLoad(this.gameObject);
+                DontDestroyOnLoad(gameObject);
             }
         }
 
@@ -107,7 +120,7 @@ namespace Controllers.Core
             selectLevelsLabels.Clear();
         }
 
-        private void DefineLocalization()
+        public void DefineLocalization()
         {
             string language = PlayerPrefsController.Language;
             string folderPath = string.Empty;
@@ -130,7 +143,25 @@ namespace Controllers.Core
                 case "Portuguese": folderPath = FileManager.LocalizationPortugueseFolderPath; break;
             }
 
+            LocalizationBL localizationBL = new LocalizationBL();
+            Localization localization = localizationBL.GetByLanguage("en");
+            dictionary = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(localization.Content);
+
             LoadLocalization(folderPath);
+        }
+
+        public string GetWord(LocalizationFields field)
+        {
+            try
+            {
+                string[] keys = field.ToString().Split('_');
+                return dictionary[keys[0]][keys[1]];
+            }
+            catch (Exception ex)
+            {
+                Debug.LogFormat("{0}\n{1}", ex.Message, field);
+                return string.Empty;
+            }
         }
 
         public void LoadLocalization(string folderPath)

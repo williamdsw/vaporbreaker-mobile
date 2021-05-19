@@ -1,4 +1,5 @@
 ﻿using Controllers.Core;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
@@ -27,6 +28,7 @@ namespace Core
 
             CreateProjectilesPool();
             DefineCannonsPosition();
+            StartCoroutine(SelfDestruct());
         }
 
         private void CreateProjectilesPool()
@@ -73,6 +75,12 @@ namespace Core
 
             cannons[0].transform.position = new Vector3(leftCannonX, positionY, 1f);
             cannons[1].transform.position = new Vector3(rightCannonX, positionY, 1f);
+        }
+
+        private IEnumerator SelfDestruct()
+        {
+            yield return new WaitForSeconds(3f);
+            Destroy(gameObject);
         }
     }
 }

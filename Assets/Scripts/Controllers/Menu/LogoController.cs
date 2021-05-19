@@ -59,6 +59,7 @@ namespace Controllers.Menu
         private IEnumerator PlayAndShowLogo()
         {
             // Plays Logo Sound
+            yield return new WaitUntil(() => isDatabaseOk);
             yield return new WaitForSecondsRealtime(TIME_TO_CALL_ANIMATION);
 
             float alpha = iconImage.color.a;
@@ -82,7 +83,9 @@ namespace Controllers.Menu
             }
 
             yield return new WaitForSecondsRealtime(TIME_TO_WAIT);
-            yield return new WaitUntil(() => isDatabaseOk);
+            yield return new WaitUntil(() => LocalizationController.Instance != null);
+            LocalizationController.Instance.DefineLocalization();
+            yield return new WaitUntil(() => LocalizationController.Instance.DictionaryCount > 0);
             StartCoroutine(CallNextScene(SceneManagerController.SelectLevelsSceneName));
         }
 
