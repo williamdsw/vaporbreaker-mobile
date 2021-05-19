@@ -1,5 +1,5 @@
 ﻿using Controllers.Core;
-using System.Collections.Generic;
+using MVC.Enums;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +16,19 @@ namespace Controllers.Menu
         [SerializeField] private Button yesButton;
 
         [Header("Labels to Translate")]
-        [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI>();
+        [SerializeField] private TextMeshProUGUI titleLabel;
+        [SerializeField] private TextMeshProUGUI messageText;
+
+        // || Cached
+
+        private TextMeshProUGUI noButtonText;
+        private TextMeshProUGUI yesButtonText;
+
+        private void Awake()
+        {
+            noButtonText = noButton.GetComponentInChildren<TextMeshProUGUI>();
+            yesButtonText = yesButton.GetComponentInChildren<TextMeshProUGUI>();
+        }
 
         private void Start()
         {
@@ -26,16 +38,10 @@ namespace Controllers.Menu
 
         private void TranslateLabels()
         {
-            List<string> labels = new List<string>();
-            foreach (string label in LocalizationController.Instance.GetConfirmBoxLabels())
-            {
-                labels.Add(label);
-            }
-
-            for (int index = 0; index < labels.Count; index++)
-            {
-                uiLabels[index].SetText(labels[index]);
-            }
+            titleLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.resetprogress_areyousure);
+            messageText.text = LocalizationController.Instance.GetWord(LocalizationFields.resetprogress_warning);
+            noButtonText.text = LocalizationController.Instance.GetWord(LocalizationFields.general_no);
+            yesButtonText.text = LocalizationController.Instance.GetWord(LocalizationFields.general_yes);
         }
 
         private void BindClickEvents()

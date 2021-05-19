@@ -1,4 +1,5 @@
 ﻿using Controllers.Core;
+using MVC.Enums;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -17,12 +18,19 @@ namespace Controllers.Menu
         [SerializeField] private Button[] volumeButtons;
         [SerializeField] private Button aboutButton;
         [SerializeField] private Button resetProgressButton;
-        [SerializeField] private Button quitButton;
+        [SerializeField] private Button backButton;
         [SerializeField] private Sprite soundOnSprite;
         [SerializeField] private Sprite soundOffSprite;
 
         [Header("Labels to Translate")]
-        [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI>();
+        [SerializeField] private TextMeshProUGUI titleLabel;
+
+        // || Cached
+
+        private List<TextMeshProUGUI> volumeButtonsTexts;
+        private TextMeshProUGUI aboutButtonText;
+        private TextMeshProUGUI resetProgressButtonText;
+        private TextMeshProUGUI backButtonText;
 
         // State
         private bool[] muteFlags = { false, false, false };
@@ -45,6 +53,16 @@ namespace Controllers.Menu
                 PlayerPrefsController.IsMusicEffectsMute.ToString(),
                 PlayerPrefsController.IsSoundEffectsMute.ToString(),
             };
+
+            volumeButtonsTexts = new List<TextMeshProUGUI>();
+            for (int index = 0; index < volumeButtons.Length; index++)
+            {
+                volumeButtonsTexts.Add(volumeButtons[index].GetComponentInChildren<TextMeshProUGUI>());
+            }
+
+            aboutButtonText = aboutButton.GetComponentInChildren<TextMeshProUGUI>();
+            resetProgressButtonText = resetProgressButton.GetComponentInChildren<TextMeshProUGUI>();
+            backButtonText = backButton.GetComponentInChildren<TextMeshProUGUI>();
         }
 
         private void Start()
@@ -66,15 +84,20 @@ namespace Controllers.Menu
 
         private void TranslateLabels()
         {
-            List<string> labels = new List<string>();
-            foreach (string label in LocalizationController.Instance.GetConfigurationsLabels())
-            {
-                labels.Add(label);
-            }
+            aboutButtonText.text = LocalizationController.Instance.GetWord(LocalizationFields.general_about);
+            resetProgressButtonText.text = LocalizationController.Instance.GetWord(LocalizationFields.configurations_resetprogress);
+            backButtonText.text = LocalizationController.Instance.GetWord(LocalizationFields.general_back);
 
-            for (int index = 0; index < labels.Count; index++)
+            string[] words = 
             {
-                uiLabels[index].SetText(labels[index]);
+                LocalizationController.Instance.GetWord(LocalizationFields.configurations_backgroundmusic),
+                LocalizationController.Instance.GetWord(LocalizationFields.configurations_musiceffects),
+                LocalizationController.Instance.GetWord(LocalizationFields.configurations_soundeffects),
+            };
+
+            for (int index = 0; index < words.Length ; index++)
+            {
+                volumeButtonsTexts[index].text = words[index];
             }
         }
 
@@ -98,7 +121,7 @@ namespace Controllers.Menu
                 confirmBox.SetActive(true);
             });
 
-            quitButton.onClick.AddListener(() =>
+            backButton.onClick.AddListener(() =>
             {
                 configurationPanel.SetActive(false);
                 selectLevelsPanel.SetActive(true);

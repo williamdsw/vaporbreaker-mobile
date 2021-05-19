@@ -1,5 +1,5 @@
 ﻿using Controllers.Core;
-using System.Collections.Generic;
+using MVC.Enums;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +13,7 @@ namespace Controllers.Menu
         [SerializeField] private GameObject selectLevelsPanel;
         [SerializeField] private GameObject levelDetailsPanel;
         [SerializeField] private Button playButton;
-        [SerializeField] private Button quitButton;
+        [SerializeField] private Button backButton;
         [SerializeField] private Button scoreboardButton;
 
         [Header("Level Details Elements")]
@@ -23,11 +23,17 @@ namespace Controllers.Menu
         [SerializeField] private TextMeshProUGUI bestTimeScoreText;
 
         [Header("Labels to Translate")]
-        [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI>();
+        [SerializeField] private TextMeshProUGUI levelNameLabel;
+        [SerializeField] private TextMeshProUGUI bestScoreLabel;
+        [SerializeField] private TextMeshProUGUI bestTimeLabel;
 
         // || State
         private string levelTranslated;
         private long levelId;
+
+        // || Cached
+
+        private TextMeshProUGUI playButtonLabel;
 
         // || Properties
 
@@ -39,30 +45,23 @@ namespace Controllers.Menu
         private void Start()
         {
             scoreboardButton.gameObject.SetActive(false);
+            playButtonLabel = playButton.GetComponentInChildren<TextMeshProUGUI>();
             TranslateLabels();
             BindClickEvents();
         }
 
         private void TranslateLabels()
         {
-            List<string> labels = new List<string>();
-            foreach (string label in LocalizationController.Instance.GetLevelDetailsLabels())
-            {
-                labels.Add(label);
-            }
-
-            for (int index = 0; index < labels.Count; index++)
-            {
-                uiLabels[index].SetText(labels[index]);
-            }
-
-            levelTranslated = labels[0];
+            levelTranslated = levelNameLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.leveldetails_level);
+            bestScoreLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.leveldetails_bestscore);
+            bestTimeLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.leveldetails_besttime);
+            playButtonLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.leveldetails_play);
         }
 
         private void BindClickEvents()
         {
             playButton.onClick.AddListener(() => SelectLevelsController.Instance.StartCallNextScene(LevelSceneName));
-            quitButton.onClick.AddListener(() =>
+            backButton.onClick.AddListener(() =>
             {
                 levelDetailsPanel.SetActive(false);
                 selectLevelsPanel.SetActive(true);
@@ -76,7 +75,7 @@ namespace Controllers.Menu
 
         public void UpdateUI(string levelName, string bestScore, string bestTimeScore, Sprite levelThumbnailSprite, long levelId)
         {
-            levelNameText.SetText(string.Concat(levelTranslated, levelName));
+            levelNameText.SetText(string.Concat(levelTranslated, " ", levelName));
             bestScoreText.SetText(bestScore);
             bestTimeScoreText.SetText(bestTimeScore);
             levelThumbnail.sprite = levelThumbnailSprite;

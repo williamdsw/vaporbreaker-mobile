@@ -1,5 +1,6 @@
 ﻿using Core;
 using Effects;
+using MVC.Enums;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,14 +11,18 @@ namespace Controllers.Core
 {
     public class LevelCompleteController : MonoBehaviour
     {
-        [Header("UI Objects")]
+        [Header("Required Elements References")]
         [SerializeField] private GameObject levelCompletedPanel;
-        [SerializeField] private List<TextMeshProUGUI> labelsText;
-        [SerializeField] private TextMeshProUGUI newScoreText;
         [SerializeField] private Button continueButton;
 
         [Header("Labels to Translate")]
-        [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI>();
+        [SerializeField] private TextMeshProUGUI headerLabel;
+        [SerializeField] private TextMeshProUGUI scoreText;
+        [SerializeField] private TextMeshProUGUI timeScoreText;
+        [SerializeField] private TextMeshProUGUI bestComboText;
+        [SerializeField] private TextMeshProUGUI numberOfBallsText;
+        [SerializeField] private TextMeshProUGUI totalText;
+        [SerializeField] private TextMeshProUGUI newScoreLabel;
 
         // Config
         [SerializeField] private float defaultSecondsValue = 1f;
@@ -30,12 +35,22 @@ namespace Controllers.Core
         private int totalScore = 0;
         private float countdownTimer = 3f;
 
+        // || Cached
+
         private Ball[] balls;
         private List<string> cachedTexts = new List<string>();
+        private TextMeshProUGUI continueButtonText;
+        private GameObject[] parents;
+
+        // || Properties
 
         public static LevelCompleteController Instance { get; private set; }
 
-        private void Awake() => Instance = this;
+        private void Awake()
+        {
+            Instance = this;
+            continueButtonText = continueButton.GetComponentInChildren<TextMeshProUGUI>();
+        }
 
         private void Start()
         {
@@ -45,32 +60,35 @@ namespace Controllers.Core
             BindClickEvents();
         }
 
-        // Translate labels based on choosed language
         private void TranslateLabels()
         {
-            List<string> labels = new List<string>();
-            foreach (string label in LocalizationController.Instance.GetLevelCompleteLabels())
-            {
-                labels.Add(label);
-            }
-
-            for (int index = 0; index < labels.Count; index++)
-            {
-                uiLabels[index].SetText(labels[index]);
-            }
-
-            cachedTexts = labels;
+            headerLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_levelcompleted);
+            scoreText.text = LocalizationController.Instance.GetWord(LocalizationFields.general_score);
+            timeScoreText.text = LocalizationController.Instance.GetWord(LocalizationFields.general_timescore);
+            bestComboText.text = LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_bestcombo);
+            numberOfBallsText.text = LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_currentballs);
+            totalText.text = LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_total);
+            newScoreLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_newscore);
+            continueButtonText.text = LocalizationController.Instance.GetWord(LocalizationFields.general_continue);
         }
 
         private void DefaultUIValues()
         {
-            foreach (TextMeshProUGUI labelText in labelsText)
+            parents = new GameObject[]
             {
-                GameObject parent = labelText.gameObject.transform.parent.gameObject;
+                scoreText.gameObject.transform.parent.gameObject,
+                timeScoreText.gameObject.transform.parent.gameObject,
+                bestComboText.gameObject.transform.parent.gameObject,
+                numberOfBallsText.gameObject.transform.parent.gameObject,
+                totalText.gameObject.transform.parent.gameObject,
+            };
+
+            foreach (GameObject parent in parents)
+            {
                 parent.SetActive(false);
             }
 
-            newScoreText.enabled = false;
+            newScoreLabel.enabled = false;
             continueButton.gameObject.SetActive(false);
         }
 
@@ -85,7 +103,6 @@ namespace Controllers.Core
 
         public void CallLevelComplete(float timeScore, int bestCombo, int currentScore)
         {
-            // Finds the balls
             balls = FindObjectsOfType<Ball>();
 
             // Passing values
@@ -123,17 +140,15 @@ namespace Controllers.Core
             totalScore += (bestCombo > 1 ? bestCombo * 50000 : 0);
 
             // Update UI
-            int[] values = { currentScore, totalTimeScore, bestCombo, numberOfBalls, totalScore };
-            for (int index = 0; index < values.Length; index++)
-            {
-                TextMeshProUGUI label = labelsText[index];
-                label.SetText(string.Concat(cachedTexts[index], values[index]));
-            }
+            scoreText.text = string.Concat(scoreText.text, " : ", currentScore);
+            timeScoreText.text = string.Concat(timeScoreText.text, " : ", totalTimeScore);
+            bestComboText.text = string.Concat(bestComboText.text, " : ", bestCombo);
+            numberOfBallsText.text = string.Concat(numberOfBallsText.text, " : ", numberOfBalls);
+            totalText.text = string.Concat(totalText.text, " : ", totalScore);
         }
 
         private IEnumerator LevelComplete()
         {
-            // Destroy current objects
             foreach (Ball ball in balls)
             {
                 ball.StopBall();
@@ -164,20 +179,19 @@ namespace Controllers.Core
 
             // Shows each text
             yield return new WaitForSecondsRealtime(defaultSecondsValue);
-            for (int index = 0; index < labelsText.Count; index++)
+            foreach (GameObject parent in parents)
             {
                 AudioController.Instance.PlaySFX(AudioController.Instance.HittingFace, AudioController.Instance.MaxSFXVolume);
-                GameObject labelParent = labelsText[index].gameObject.transform.parent.gameObject;
-                labelParent.SetActive(true);
-                yield return new WaitForSecondsRealtime(defaultSecondsValue / 2);
+                parent.SetActive(true);
+                yield return new WaitForSecondsRealtime(defaultSecondsValue / 2f);
             }
 
             // Case have a new score
             if (totalScore > GameStatusController.Instance.OldScore)
             {
                 AudioController.Instance.PlaySFX(AudioController.Instance.NewScoreEffect, AudioController.Instance.MaxSFXVolume);
-                newScoreText.enabled = true;
-                newScoreText.GetComponent<FlashTextEffect>().enabled = true;
+                newScoreLabel.enabled = true;
+                newScoreLabel.GetComponent<FlashTextEffect>().enabled = true;
                 yield return new WaitForSecondsRealtime(defaultSecondsValue * 2);
             }
 

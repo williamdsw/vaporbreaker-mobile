@@ -1,5 +1,6 @@
 ﻿using Core;
 using Effects;
+using MVC.Enums;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -19,10 +20,12 @@ namespace Controllers.Core
         [SerializeField] private Button[] allPauseMenuButtons;
 
         [Header("Labels to Translate")]
-        [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI>();
+        [SerializeField] private TextMeshProUGUI headerLabel;
 
         // || State
+
         private bool pauseState = false;
+        private List<TextMeshProUGUI> allPauseMenuButtonsTexts;
 
         // || Properties
 
@@ -34,6 +37,11 @@ namespace Controllers.Core
         {
             Instance = this;
             pauseMenu.SetActive(false);
+            allPauseMenuButtonsTexts = new List<TextMeshProUGUI>();
+            foreach (Button item in allPauseMenuButtons)
+            {
+                allPauseMenuButtonsTexts.Add(item.GetComponentInChildren<TextMeshProUGUI>());
+            }
         }
 
         private void Start()
@@ -42,18 +50,19 @@ namespace Controllers.Core
             BindButtonClickEvents();
         }
 
-        // Translate labels based on choosed language
         private void TranslateLabels()
         {
-            List<string> labels = new List<string>();
-            foreach (string label in LocalizationController.Instance.GetPauseLabels())
+            headerLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.pause_paused);
+            string[] words = 
             {
-                labels.Add(label);
-            }
+                LocalizationController.Instance.GetWord(LocalizationFields.pause_resume),
+                LocalizationController.Instance.GetWord(LocalizationFields.pause_restart),
+                LocalizationController.Instance.GetWord(LocalizationFields.pause_levels),
+            };
 
-            for (int index = 0; index < labels.Count; index++)
+            for (int index = 0; index < words.Length; index++)
             {
-                uiLabels[index].SetText(labels[index]);
+                allPauseMenuButtonsTexts[index].text = words[index];
             }
         }
 

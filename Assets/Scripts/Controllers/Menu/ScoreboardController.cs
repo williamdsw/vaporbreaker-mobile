@@ -1,5 +1,6 @@
 using Controllers.Core;
 using MVC.BL;
+using MVC.Enums;
 using MVC.Models;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,9 +24,15 @@ namespace Controllers.Menu
         [SerializeField] private GameObject rowPrefab;
         [SerializeField] private GameObject columnPrefab;
 
+        [Header("Labels to Translate")]
+        [SerializeField] private TextMeshProUGUI titleLabel;
+        [SerializeField] private TextMeshProUGUI scoreColumnLabel;
+        [SerializeField] private TextMeshProUGUI timeScoreColumnLabel;
+
         // || Cached
 
         private ScoreboardBL scoreboardBL;
+        private TextMeshProUGUI backButtonText;
 
         // || Properties
 
@@ -34,9 +41,22 @@ namespace Controllers.Menu
         {
             Instance = this;
             scoreboardBL = new ScoreboardBL();
+            backButtonText = backButton.GetComponentInChildren<TextMeshProUGUI>();
         }
 
-        private void Start() => BindClickEvents();
+        private void Start()
+        {
+            TranslateLabels();
+            BindClickEvents();
+        }
+
+        private void TranslateLabels()
+        {
+            titleLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.general_scoreboard);
+            scoreColumnLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.general_score);
+            timeScoreColumnLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.general_time);
+            backButtonText.text = LocalizationController.Instance.GetWord(LocalizationFields.general_back);
+        }
 
         private void BindClickEvents()
         {

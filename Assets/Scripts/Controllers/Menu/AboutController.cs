@@ -1,5 +1,5 @@
 ﻿using Controllers.Core;
-using System.Collections.Generic;
+using MVC.Enums;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,54 +12,35 @@ namespace Controllers.Menu
         [Header("Main Elements")]
         [SerializeField] private GameObject configurationPanel;
         [SerializeField] private GameObject aboutPanel;
-        [SerializeField] private Button quitButton;
+        [SerializeField] private Button backButton;
         [SerializeField] private TextMeshProUGUI creditsText;
 
         [Header("Labels to Translate")]
-        [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI>();
+        [SerializeField] private TextMeshProUGUI titleLabel;
+        [SerializeField] private TextMeshProUGUI copyrightLabel;
 
         private void Start()
         {
             TranslateLabels();
             BindClickEvents();
-            LoadCredits();
         }
 
-        // Translate labels based on choosed language
         private void TranslateLabels()
         {
-            List<string> labels = new List<string>();
-            foreach (string label in LocalizationController.Instance.GetAboutLabels())
-            {
-                labels.Add(label);
-            }
-
-            if (labels.Count == 0 || uiLabels.Count == 0) return;
-            for (int index = 0; index < labels.Count; index++)
-            {
-                uiLabels[index].SetText(labels[index]);
-            }
+            titleLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.general_about);
+            copyrightLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.about_rights);
+            creditsText.text = LocalizationController.Instance.GetWord(LocalizationFields.messages_credits);
         }
 
         private void BindClickEvents()
         {
-            quitButton.onClick.AddListener(() =>
+            backButton.onClick.AddListener(() =>
             {
                 if (SelectLevelsController.Instance.ActualGameState != Enumerators.GameStates.GAMEPLAY) return;
 
                 aboutPanel.SetActive(false);
                 configurationPanel.SetActive(true);
             });
-        }
-
-        private void LoadCredits()
-        {
-            StartCoroutine(FileManager.LoadAssetAsync(FileManager.OtherFolderPath, FileManager.CreditsPath,
-            content =>
-            {
-                if (string.IsNullOrEmpty(content) || string.IsNullOrWhiteSpace(content)) return;
-                creditsText.SetText(content);
-            }));
         }
     }
 }

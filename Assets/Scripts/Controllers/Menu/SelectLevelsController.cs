@@ -1,6 +1,7 @@
 ﻿using Controllers.Core;
 using Effects;
 using MVC.BL;
+using MVC.Enums;
 using MVC.Models;
 using System;
 using System.Collections;
@@ -31,7 +32,8 @@ namespace Controllers.Menu
         [SerializeField] private GameObject levelButtonPrefab;
 
         [Header("Labels to Translate")]
-        [SerializeField] private List<TextMeshProUGUI> uiLabels = new List<TextMeshProUGUI>();
+        [SerializeField] private TextMeshProUGUI titleLabel;
+        [SerializeField] private TextMeshProUGUI savingText;
 
         // State
         [SerializeField] private int currentLevelIndex = 0;
@@ -90,16 +92,8 @@ namespace Controllers.Menu
 
         private void TranslateLabels()
         {
-            List<string> labels = new List<string>();
-            foreach (string label in LocalizationController.Instance.GetSelectLevelsLabels())
-            {
-                labels.Add(label);
-            }
-
-            for (int index = 0; index < labels.Count; index++)
-            {
-                uiLabels[index].SetText(labels[index]);
-            }
+            titleLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.selectlevels_chooseanlevel);
+            savingText.text = LocalizationController.Instance.GetWord(LocalizationFields.selectlevels_saving);
         }
 
         private void BindClickEvents()

@@ -840,7 +840,7 @@ GameObject:
   - component: {fileID: 235567078}
   - component: {fileID: 235567077}
   m_Layer: 14
-  m_Name: ScoreboardTitle
+  m_Name: TitleLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1523,11 +1523,8 @@ MonoBehaviour:
   confirmBox: {fileID: 177703885}
   noButton: {fileID: 1551861201}
   yesButton: {fileID: 2019714544}
-  uiLabels:
-  - {fileID: 497816740}
-  - {fileID: 487149990}
-  - {fileID: 2066612651}
-  - {fileID: 1565792343}
+  titleLabel: {fileID: 497816740}
+  messageText: {fileID: 487149990}
 --- !u!1 &456374653
 GameObject:
   m_ObjectHideFlags: 0
@@ -1892,7 +1889,7 @@ GameObject:
   - component: {fileID: 487149991}
   - component: {fileID: 487149990}
   m_Layer: 14
-  m_Name: Message
+  m_Name: MessageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2028,7 +2025,7 @@ GameObject:
   - component: {fileID: 497816741}
   - component: {fileID: 497816740}
   m_Layer: 14
-  m_Name: HeaderLabel
+  m_Name: TitleLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2688,7 +2685,7 @@ GameObject:
   - component: {fileID: 774936194}
   - component: {fileID: 774936193}
   m_Layer: 14
-  m_Name: Text
+  m_Name: ScoreColumnLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2764,9 +2761,9 @@ MonoBehaviour:
   m_fontSize: 64
   m_fontSizeBase: 64
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 64
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -3034,7 +3031,7 @@ GameObject:
   - component: {fileID: 883444979}
   - component: {fileID: 883444978}
   m_Layer: 5
-  m_Name: CopyrightText
+  m_Name: CopyrightLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3711,7 +3708,7 @@ GameObject:
   - component: {fileID: 1022333236}
   - component: {fileID: 1022333235}
   m_Layer: 5
-  m_Name: Text
+  m_Name: SavingText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4039,19 +4036,12 @@ MonoBehaviour:
   - {fileID: 710473536}
   aboutButton: {fileID: 2112480602}
   resetProgressButton: {fileID: 1951641562}
-  quitButton: {fileID: 2004257942}
+  backButton: {fileID: 2004257942}
   soundOnSprite: {fileID: 3111307083283611356, guid: db7f1e9a0f1ab7848a9d38246c73d165,
     type: 3}
   soundOffSprite: {fileID: -7474635856940394777, guid: db7f1e9a0f1ab7848a9d38246c73d165,
     type: 3}
-  uiLabels:
-  - {fileID: 1082320911}
-  - {fileID: 1605037826}
-  - {fileID: 1477950721}
-  - {fileID: 119183945}
-  - {fileID: 1422453953}
-  - {fileID: 1288937050}
-  - {fileID: 566603255}
+  titleLabel: {fileID: 1082320911}
 --- !u!1 &1059510627
 GameObject:
   m_ObjectHideFlags: 0
@@ -4247,7 +4237,7 @@ GameObject:
   - component: {fileID: 1082320912}
   - component: {fileID: 1082320911}
   m_Layer: 14
-  m_Name: HeaderLabel
+  m_Name: TitleLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4567,17 +4557,15 @@ MonoBehaviour:
   selectLevelsPanel: {fileID: 1893924860}
   levelDetailsPanel: {fileID: 130727085}
   playButton: {fileID: 347913752}
-  quitButton: {fileID: 828025781}
+  backButton: {fileID: 828025781}
   scoreboardButton: {fileID: 959766216}
   levelThumbnail: {fileID: 1059510629}
   levelNameText: {fileID: 1588874213}
   bestScoreText: {fileID: 333756288}
   bestTimeScoreText: {fileID: 1338836276}
-  uiLabels:
-  - {fileID: 1588874213}
-  - {fileID: 912887622}
-  - {fileID: 1750402513}
-  - {fileID: 1788868341}
+  levelNameLabel: {fileID: 1588874213}
+  bestScoreLabel: {fileID: 912887622}
+  bestTimeLabel: {fileID: 1750402513}
 --- !u!1 &1128160115
 GameObject:
   m_ObjectHideFlags: 0
@@ -4590,7 +4578,7 @@ GameObject:
   - component: {fileID: 1128160118}
   - component: {fileID: 1128160117}
   m_Layer: 14
-  m_Name: HeaderLabel
+  m_Name: TitleLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5133,6 +5121,9 @@ MonoBehaviour:
     type: 3}
   columnPrefab: {fileID: 3801860082389494671, guid: 252b3fcc8a5eaa946bb7d16e7f8be7e1,
     type: 3}
+  titleLabel: {fileID: 235567077}
+  scoreColumnLabel: {fileID: 774936193}
+  timeScoreColumnLabel: {fileID: 2008456183}
 --- !u!1 &1338836274
 GameObject:
   m_ObjectHideFlags: 0
@@ -7493,11 +7484,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   configurationPanel: {fileID: 1765075200}
   aboutPanel: {fileID: 1289264636}
-  quitButton: {fileID: 1605896620}
+  backButton: {fileID: 1605896620}
   creditsText: {fileID: 2227200045218970130}
-  uiLabels:
-  - {fileID: 1128160117}
-  - {fileID: 883444978}
+  titleLabel: {fileID: 1128160117}
+  copyrightLabel: {fileID: 883444978}
 --- !u!1 &1788868339
 GameObject:
   m_ObjectHideFlags: 0
@@ -7645,7 +7635,7 @@ GameObject:
   - component: {fileID: 1797729949}
   - component: {fileID: 1797729948}
   m_Layer: 5
-  m_Name: SelectLevelsTitleLabel
+  m_Name: TitleLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7856,7 +7846,7 @@ GameObject:
   - component: {fileID: 1832455448}
   - component: {fileID: 1832455447}
   m_Layer: 5
-  m_Name: QuitButton
+  m_Name: QuitApplicationButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8683,9 +8673,8 @@ MonoBehaviour:
   levelButtonsContainer: {fileID: 1419424656}
   levelButtonPrefab: {fileID: 4244115316750447460, guid: 235fe229841949340a3592cf7bde5f09,
     type: 3}
-  uiLabels:
-  - {fileID: 1797729948}
-  - {fileID: 1022333235}
+  titleLabel: {fileID: 1797729948}
+  savingText: {fileID: 1022333235}
   currentLevelIndex: 0
   hasPlayerFinishedGame: 0
   levelThumbnails:
@@ -8929,7 +8918,7 @@ GameObject:
   - component: {fileID: 2008456184}
   - component: {fileID: 2008456183}
   m_Layer: 14
-  m_Name: Text
+  m_Name: TimeScoreColumnLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9005,9 +8994,9 @@ MonoBehaviour:
   m_fontSize: 64
   m_fontSizeBase: 64
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 64
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -9954,7 +9943,7 @@ GameObject:
   - component: {fileID: 2227200045218970131}
   - component: {fileID: 2227200045218970130}
   m_Layer: 14
-  m_Name: CreditText
+  m_Name: CreditsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10035,7 +10024,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 15
   m_wordSpacing: 0
@@ -10193,6 +10182,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HashColumn
+      objectReference: {fileID: 0}
+    - target: {fileID: 3801860082458063922, guid: 252b3fcc8a5eaa946bb7d16e7f8be7e1,
+        type: 3}
+      propertyPath: m_fontSizeMax
+      value: 64
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 252b3fcc8a5eaa946bb7d16e7f8be7e1, type: 3}
