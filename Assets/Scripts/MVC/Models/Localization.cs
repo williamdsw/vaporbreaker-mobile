@@ -1,17 +1,28 @@
 
 namespace MVC.Models
 {
+    /// <summary>
+    /// Localization data
+    /// </summary>
     public class Localization
     {
         private long ID;
         private string LANGUAGE;
         private string CONTENT;
 
+        /// <summary>
+        /// Database generated id
+        /// </summary>
         public long Id { get => ID; set => ID = value; }
-        public string Language { get => LANGUAGE; set => LANGUAGE = value; }
-        public string Content { get => CONTENT; set => CONTENT = value; }
 
-        public override string ToString() => string.Format("Id: {0}; Language: {1}; Content: {2}", Id, Language, Content);
-        
+        /// <summary>
+        /// Current Language: "English", "Portuguese", etc.
+        /// </summary>
+        public string Language { get => LANGUAGE; set => LANGUAGE = value; }
+
+        /// <summary>
+        /// JSON content
+        /// </summary>
+        public string Content { get => CONTENT; set => CONTENT = value; }
     }
 }

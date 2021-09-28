@@ -1,6 +1,9 @@
 
 namespace MVC.Enums
 {
+    /// <summary>
+    /// All fields for localization
+    /// </summary>
     public enum LocalizationFields
     {
         about_rights,

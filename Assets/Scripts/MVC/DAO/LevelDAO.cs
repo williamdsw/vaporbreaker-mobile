@@ -7,10 +7,19 @@ using UnityEngine;
 
 namespace MVC.DAO
 {
+    /// <summary>
+    /// Level related queries
+    /// </summary>
     public class LevelDAO : Connection
     {
         public LevelDAO() : base() { }
 
+        /// <summary>
+        /// Update a field by Id
+        /// </summary>
+        /// <param name="id"> Level Id </param>
+        /// <param name="subQuery"> SubQuery with field </param>
+        /// <returns> Query was updated ? </returns>
         public bool UpdateFieldById(long id, string subQuery)
         {
             try
@@ -19,7 +28,6 @@ namespace MVC.DAO
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("LevelDAO::UpdateFieldById -> {0}", ex.Message);
                 throw ex;
             }
             finally
@@ -28,6 +36,10 @@ namespace MVC.DAO
             }
         }
 
+        /// <summary>
+        /// List all levels
+        /// </summary>
+        /// <returns> List of Level instances </returns>
         public List<Level> ListAll()
         {
             try
@@ -36,7 +48,6 @@ namespace MVC.DAO
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("LevelDAO::ListAll -> {0}", ex.Message);
                 throw ex;
             }
             finally
@@ -45,6 +56,11 @@ namespace MVC.DAO
             }
         }
 
+        /// <summary>
+        /// Get a level by Id
+        /// </summary>
+        /// <param name="id"> Level Id </param>
+        /// <returns> Level instance </returns>
         public Level GetById(long id)
         {
             try
@@ -54,7 +70,6 @@ namespace MVC.DAO
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("LevelDAO::GetById -> {0}", ex.Message);
                 throw ex;
             }
             finally
@@ -63,6 +78,10 @@ namespace MVC.DAO
             }
         }
 
+        /// <summary>
+        /// Get Last Level
+        /// </summary>
+        /// <returns> Level instance </returns>
         public Level GetLastLevel()
         {
             try
@@ -71,7 +90,6 @@ namespace MVC.DAO
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("LevelDAO::GetById -> {0}", ex.Message);
                 throw ex;
             }
             finally
@@ -80,6 +98,9 @@ namespace MVC.DAO
             }
         }
 
+        /// <summary>
+        /// Reset all Levels data
+        /// </summary>
         public void ResetLevels()
         {
             try
@@ -88,7 +109,6 @@ namespace MVC.DAO
             }
             catch (Exception ex)
             {
-                Debug.LogErrorFormat("LevelDAO::ResetLevels -> {0}", ex.Message);
                 throw ex;
             }
             finally

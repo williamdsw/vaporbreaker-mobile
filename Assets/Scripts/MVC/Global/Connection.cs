@@ -3,6 +3,9 @@ using System.Data;
 
 namespace MVC.Global
 {
+    /// <summary>
+    /// Connection with database
+    /// </summary>
     public class Connection
     {
         private IDbConnection connection;
@@ -12,10 +15,14 @@ namespace MVC.Global
 
         public Connection()
         {
-            string path = string.Format("URI=file:{0}", Configuration.Properties.DatabasePath);
-            connection = new SqliteConnection(path);
+            connection = new SqliteConnection(string.Format("URI=file:{0}", Configuration.Properties.DatabasePath));
         }
 
+        /// <summary>
+        /// Execute desired query
+        /// </summary>
+        /// <param name="query"> Desired query </param>
+        /// <returns> Instance of IDataReader </returns>
         protected IDataReader ExecuteQuery(string query)
         {
             connection.Open();
@@ -25,14 +32,11 @@ namespace MVC.Global
             return reader;
         }
 
-        protected long ExecuteScalar(string query)
-        {
-            connection.Open();
-            command = connection.CreateCommand();
-            command.CommandText = query;
-            return (long) command.ExecuteScalar();
-        }
-
+        /// <summary>
+        /// Execute a INSERT | UPDATE | DELETE query
+        /// </summary>
+        /// <param name="query"> Desired query </param>
+        /// <returns> Number of affected rows </returns>
         protected int ExecuteNonQuery(string query)
         {
             connection.Open();
@@ -41,6 +45,9 @@ namespace MVC.Global
             return command.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// Close all related objects
+        /// </summary>
         protected void CloseConnection()
         {
             if (reader != null)
