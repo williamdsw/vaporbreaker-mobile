@@ -3,21 +3,47 @@ namespace Utilities
 {
     public class NamesTags
     {
-        public static string BlocksParentName => "Blocks";
-        public static string BlockScoreTextParentName => "Block_Score_Text_Container";
-        public static string DebrisParentName => "Debris_Container";
-        public static string EchosParentName => "Echos_Container";
-        public static string ExplosionsParentName => "Explosions_Container";
-        public static string ProjectilesParentName => "Power_Ups_Container";
-        public static string PowerUpsParentName => "Projectiles_Container";
-        public static string TouchPadName => "Touchpad";
-        public static string BallTag => "Ball";
-        public static string BallEchoTag => "Ball_Echo";
-        public static string BreakableBlockTag => "Breakable";
-        public static string LineBetweenBallPointerTag => "Line_Between_Ball_Pointer";
-        public static string PaddleTag => "Paddle";
-        public static string PowerUpTag => "PowerUp";
-        public static string WallTag => "Wall";
-        public static string UnbreakableBlockTag => "Unbreakable";
+        public class AnimatorTriggers
+        {
+            public static string FadeOut => "FadeOut";
+        }
+
+        public class Blocks
+        {
+            public static string PowerUpBlock => "PowerUpBlock";
+        }
+
+        public class Functions
+        {
+            public static string UndoFireBalls => "UndoFireBalls";
+        }
+
+        public class Names
+        {
+            public static string TouchPad => "Touchpad";
+        }
+
+        public class Parents
+        {
+            public static string Blocks => "Blocks";
+            public static string BlockScoreText => "BlockScoreText";
+            public static string Debris => "Debris";
+            public static string Echos => "Echos";
+            public static string Explosions => "Explosions";
+            public static string PowerUps => "PowerUps";
+            public static string Projectiles => "Projectiles";
+        }
+
+        public class Tags
+        {
+            public static string Ball => "Ball";
+            public static string BallEcho => "Ball_Echo";
+            public static string Breakable => "Breakable";
+            public static string LineBetweenBallPointer => "Line_Between_Ball_Pointer";
+            public static string Paddle => "Paddle";
+            public static string PowerUp => "PowerUp";
+            public static string Wall => "Wall";
+            public static string Unbreakable => "Unbreakable";
+        }
     }
 }

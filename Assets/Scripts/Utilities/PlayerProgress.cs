@@ -1,17 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Utilities
 {
     [Serializable]
     public class PlayerProgress
     {
-        // Data
+        // || State
+
         private int currentLevelIndex;
         private bool hasPlayerFinishedGame = false;
 
+        // || Properties
+
+        /// <summary>
+        /// Current level index
+        /// </summary>
         public int CurrentLevelIndex { get => currentLevelIndex; set => currentLevelIndex = value; }
-        public int TotalNumberOfLevels => 100;
+
+        /// <summary>
+        /// Has player finished the game?
+        /// </summary>
         public bool HasPlayerFinishedGame { get => hasPlayerFinishedGame; set => hasPlayerFinishedGame = value; }
 
         public PlayerProgress()

@@ -25,7 +25,7 @@ namespace Effects
 
         private void DefineReferences()
         {
-            if (tag.Equals(NamesTags.BallEchoTag))
+            if (tag.Equals(NamesTags.Tags.BallEcho))
             {
                 ball = transform.parent.GetComponent<Ball>();
             }
@@ -38,8 +38,8 @@ namespace Effects
             if (timeBetweenSpawns <= 0)
             {
                 GameObject echo = Instantiate(echoPrefab, transform.position, Quaternion.identity) as GameObject;
-                echo.transform.parent = GameSession.Instance.FindOrCreateObjectParent(NamesTags.EchosParentName).transform;
-                if (tag == NamesTags.BallEchoTag && ball)
+                echo.transform.parent = GameSession.Instance.FindOrCreateObjectParent(NamesTags.Parents.Echos).transform;
+                if (tag == NamesTags.Tags.BallEcho && ball)
                 {
                     echo.transform.localScale = ball.transform.localScale;
                     echo.transform.rotation = ball.transform.rotation;

@@ -43,7 +43,7 @@ namespace Core
             mainCamera = Camera.main;
             if (!joystickMovement)
             {
-                GameObject touchpad = GameObject.Find(NamesTags.TouchPadName);
+                GameObject touchpad = GameObject.Find(NamesTags.Names.TouchPad);
                 joystickMovement = touchpad.GetComponent<JoystickMovement>();
             }
 

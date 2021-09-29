@@ -170,9 +170,10 @@ namespace Controllers.Menu
         private void OpenLevelDetails(Level level, int currentIndex)
         {
             Scoreboard scoreboard = scoreboardBL.GetByMaxScoreByLevel(level.Id);
-            string levelName = Formatter.FormatLevelName(level.Name);
+            //string levelName = Formatter.FormatLevelName(level.Name);
+            string levelName = "Placeholder";
             string bestScore = Formatter.FormatToCurrency(scoreboard.Score);
-            string bestTimeScore = (scoreboard.TimeScore == 0 ? string.Empty : Formatter.FormatEllapsedTime(scoreboard.TimeScore));
+            string bestTimeScore = (scoreboard.TimeScore == 0 ? string.Empty : Formatter.GetEllapsedTimeInHours(scoreboard.TimeScore));
             LevelDetailsController.Instance.UpdateUI(levelName, bestScore, bestTimeScore, levelThumbnails[currentIndex], level.Id);
             LevelDetailsController.Instance.LevelSceneName = level.Name;
 

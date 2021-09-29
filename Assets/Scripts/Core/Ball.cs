@@ -59,7 +59,7 @@ namespace Core
             // Default values
             mainCamera = Camera.main;
             DefaultSpeed = MoveSpeed;
-            echoEffectSpawnerPrefab.tag = NamesTags.BallEchoTag;
+            echoEffectSpawnerPrefab.tag = NamesTags.Tags.BallEcho;
 
             // Locks only if it's the first ball
             int ballCount = FindObjectsOfType(GetType()).Length;
@@ -70,7 +70,7 @@ namespace Core
                 // Line between ball / pointer
                 if (!initialLinePrefab)
                 {
-                    initialLinePrefab = GameObject.FindGameObjectWithTag(NamesTags.LineBetweenBallPointerTag);
+                    initialLinePrefab = GameObject.FindGameObjectWithTag(NamesTags.Tags.LineBetweenBallPointer);
                 }
 
                 initialLineRenderer = initialLinePrefab.GetComponent<LineRenderer>();
@@ -118,7 +118,7 @@ namespace Core
                 if (GameSession.Instance.HasStarted)
                 {
                     // Combo manipulator
-                    if (other.gameObject.CompareTag(NamesTags.PaddleTag) || other.gameObject.CompareTag(NamesTags.WallTag))
+                    if (other.gameObject.CompareTag(NamesTags.Tags.Paddle) || other.gameObject.CompareTag(NamesTags.Tags.Wall))
                     {
                         GameSession.Instance.ResetCombo();
                     }
@@ -245,7 +245,7 @@ namespace Core
         {
             // Instantiate and Destroy
             GameObject particles = Instantiate(paddleParticlesPrefab, contactPoint, paddleParticlesPrefab.transform.rotation) as GameObject;
-            particles.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.DebrisParentName).transform);
+            particles.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.Parents.Debris).transform);
             ParticleSystem debrisParticleSystem = paddleParticlesPrefab.GetComponent<ParticleSystem>();
             float durationLength = (debrisParticleSystem.main.duration + debrisParticleSystem.main.startLifetime.constant);
             Destroy(particles, durationLength);

@@ -8,14 +8,14 @@ namespace Core.PowerUps
     {
         protected override void Apply()
         {
-            if (GameObject.FindGameObjectsWithTag(NamesTags.UnbreakableBlockTag).Length != 0)
+            if (GameObject.FindGameObjectsWithTag(NamesTags.Tags.Unbreakable).Length != 0)
             {
-                GameObject[] unbreakables = GameObject.FindGameObjectsWithTag(NamesTags.UnbreakableBlockTag);
+                GameObject[] unbreakables = GameObject.FindGameObjectsWithTag(NamesTags.Tags.Unbreakable);
                 if (unbreakables.Length != 0)
                 {
                     foreach (GameObject unbreakable in unbreakables)
                     {
-                        unbreakable.tag = NamesTags.BreakableBlockTag;
+                        unbreakable.tag = NamesTags.Tags.Breakable;
                         GameSession.Instance.CountBlocks();
                         unbreakable.GetComponent<Animator>().enabled = false;
 

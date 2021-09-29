@@ -20,11 +20,11 @@ namespace Core
         {
             if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
-                if (other.gameObject.CompareTag(NamesTags.BallTag))
+                if (other.gameObject.CompareTag(NamesTags.Tags.Ball))
                 {
                     DealWithBallCollision(other.gameObject);
                 }
-                else if (other.gameObject.CompareTag(NamesTags.PowerUpTag))
+                else if (other.gameObject.CompareTag(NamesTags.Tags.PowerUp))
                 {
                     Destroy(other.gameObject);
                 }

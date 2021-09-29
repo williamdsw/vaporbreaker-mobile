@@ -1,15 +1,19 @@
-﻿
+﻿using UnityEngine.Analytics;
+
 namespace Utilities
 {
     public class UnityUtilities
     {
+        /// <summary>
+        /// Disable analytics properties
+        /// </summary>
         public static void DisableAnalytics()
         {
-            UnityEngine.Analytics.Analytics.enabled = false;
-            UnityEngine.Analytics.Analytics.deviceStatsEnabled = false;
-            UnityEngine.Analytics.Analytics.initializeOnStartup = false;
-            UnityEngine.Analytics.Analytics.limitUserTracking = false;
-            UnityEngine.Analytics.PerformanceReporting.enabled = false;
+            Analytics.enabled = false;
+            Analytics.deviceStatsEnabled = false;
+            Analytics.initializeOnStartup = false;
+            Analytics.limitUserTracking = false;
+            PerformanceReporting.enabled = false;
         }
     }
 }

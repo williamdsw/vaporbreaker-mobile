@@ -23,8 +23,8 @@ namespace Core
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (other.gameObject.CompareTag(NamesTags.BreakableBlockTag) ||
-                other.gameObject.CompareTag(NamesTags.UnbreakableBlockTag))
+            if (other.gameObject.CompareTag(NamesTags.Tags.Breakable) ||
+                other.gameObject.CompareTag(NamesTags.Tags.Unbreakable))
             {
                 HideObject();
             }
@@ -32,8 +32,8 @@ namespace Core
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.gameObject.CompareTag(NamesTags.BreakableBlockTag) ||
-                other.gameObject.CompareTag(NamesTags.UnbreakableBlockTag))
+            if (other.gameObject.CompareTag(NamesTags.Tags.Breakable) ||
+                other.gameObject.CompareTag(NamesTags.Tags.Unbreakable))
             {
                 HideObject();
             }

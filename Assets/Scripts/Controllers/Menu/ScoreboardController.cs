@@ -100,7 +100,7 @@ namespace Controllers.Menu
 
                 CreateColumn(row.transform, ranking.ToString(), 200);
                 CreateColumn(row.transform, Formatter.FormatToCurrency(item.Score), 400);
-                CreateColumn(row.transform, Formatter.FormatEllapsedTime(item.TimeScore), 500);
+                CreateColumn(row.transform, Formatter.GetEllapsedTimeInHours(item.TimeScore), 500);
 
                 ranking++;
             }

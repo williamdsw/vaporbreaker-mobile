@@ -38,7 +38,7 @@ namespace Core
                 int index = Random.Range(0, projectiles.Length);
                 Projectile projectile = Instantiate(projectiles[index]);
                 projectile.gameObject.SetActive(false);
-                projectile.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.ProjectilesParentName).transform);
+                projectile.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.Parents.Projectiles).transform);
                 projectilesList.Add(projectile.gameObject);
             }
         }

@@ -162,7 +162,7 @@ namespace Controllers.Core
         public void UpdateUI()
         {
             currentScoreText.SetText(currentScore.ToString());
-            ellapsedTimeText.SetText(Formatter.FormatEllapsedTime((int)ellapsedTime));
+            ellapsedTimeText.SetText(Formatter.GetEllapsedTimeInHours((int)ellapsedTime));
 
             // Combo text
             if (ComboMultiplier > 1)
@@ -233,7 +233,7 @@ namespace Controllers.Core
         private void ChooseBlocks()
         {
             // Finds
-            GameObject[] blocks = GameObject.FindGameObjectsWithTag(NamesTags.BreakableBlockTag);
+            GameObject[] blocks = GameObject.FindGameObjectsWithTag(NamesTags.Tags.Breakable);
             if (blocks.Length == 0) return;
 
             // Calculates
@@ -259,7 +259,7 @@ namespace Controllers.Core
                     int numberOfOcorrences = 0;
                     foreach (Block block in blocks)
                     {
-                        if (block.CompareTag(NamesTags.UnbreakableBlockTag)) return;
+                        if (block.CompareTag(NamesTags.Tags.Unbreakable)) return;
 
                         switch (direction)
                         {
@@ -360,7 +360,7 @@ namespace Controllers.Core
                     areBallOnFire = true;
 
                     // Check Blocks
-                    GameObject[] blocks = GameObject.FindGameObjectsWithTag(NamesTags.BreakableBlockTag);
+                    GameObject[] blocks = GameObject.FindGameObjectsWithTag(NamesTags.Tags.Breakable);
                     foreach (GameObject blockObject in blocks)
                     {
                         BoxCollider2D blockCollider = blockObject.GetComponent<BoxCollider2D>();
@@ -390,7 +390,7 @@ namespace Controllers.Core
             areBallOnFire = false;
 
             // Check Blocks
-            GameObject[] blocks = GameObject.FindGameObjectsWithTag(NamesTags.BreakableBlockTag);
+            GameObject[] blocks = GameObject.FindGameObjectsWithTag(NamesTags.Tags.Breakable);
             foreach (GameObject blockObject in blocks)
             {
                 BoxCollider2D blockCollider = blockObject.GetComponent<BoxCollider2D>();
