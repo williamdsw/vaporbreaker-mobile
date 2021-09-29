@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Utilities;
 
 namespace Core
@@ -7,19 +8,19 @@ namespace Core
     public class Projectile : MonoBehaviour
     {
         // || Config
-        private readonly float yForce = 750f;
+
+        private readonly float forceInY = 750f;
         private readonly float timeToSelfDestruct = 2f;
 
         // || Cached
+
         private Rigidbody2D rigidBody2D;
 
-        private void Awake() => rigidBody2D = GetComponent<Rigidbody2D>();
+        private void Awake() => GetRequiredComponents();
 
         private void OnEnable() => Invoke("HideObject", 2f);
 
         private void OnDisable() => CancelInvoke();
-
-        private void HideObject() => gameObject.SetActive(false);
 
         private void OnCollisionEnter2D(Collision2D other)
         {
@@ -39,15 +40,37 @@ namespace Core
             }
         }
 
-        public void MoveProjectile()
+        /// <summary>
+        /// Get required components
+        /// </summary>
+        public void GetRequiredComponents()
         {
-            Vector2 newForce = new Vector2(0, yForce);
-            if (!rigidBody2D)
+            try
             {
                 rigidBody2D = GetComponent<Rigidbody2D>();
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
-            rigidBody2D.AddForce(newForce);
+        /// <summary>
+        /// Hides this object
+        /// </summary>
+        private void HideObject() => gameObject.SetActive(false);
+
+        /// <summary>
+        /// Move projectile in Y
+        /// </summary>
+        public void Move()
+        {
+            if (!rigidBody2D)
+            {
+                GetRequiredComponents();
+            }
+
+            rigidBody2D.AddForce(new Vector2(0, forceInY));
         }
     }
 }

@@ -19,34 +19,34 @@ namespace Core.PowerUps
                 {
                     Rigidbody2D ballRB = ball.GetComponent<Rigidbody2D>();
                     float moveSpeed = ball.MoveSpeed;
-                    float ballRotationDegree = ball.BallRotationDegree;
+                    float ballRotationDegree = ball.RotationDegree;
                     if (moveFaster)
                     {
-                        if (moveSpeed < ball.MaxMoveSpeed)
+                        if (moveSpeed < ball.MinMaxMoveSpeed.y)
                         {
                             moveSpeed += 100f;
                         }
 
-                        if (ballRotationDegree < ball.MaxBallRotationDegree)
+                        if (ballRotationDegree < ball.MinMaxRotationDegree.y)
                         {
                             ballRotationDegree *= 2;
                         }
                     }
                     else
                     {
-                        if (moveSpeed > ball.MinMoveSpeed)
+                        if (moveSpeed > ball.MinMaxMoveSpeed.x)
                         {
                             moveSpeed -= 100f;
                         }
 
-                        if (ballRotationDegree > ball.MinBallRotationDegree)
+                        if (ballRotationDegree > ball.MinMaxRotationDegree.x)
                         {
                             ballRotationDegree /= 2;
                         }
                     }
 
                     ball.MoveSpeed = moveSpeed;
-                    ball.BallRotationDegree = ballRotationDegree;
+                    ball.RotationDegree = ballRotationDegree;
                     ballRB.velocity = (ballRB.velocity.normalized * Time.deltaTime * moveSpeed);
                 }
 

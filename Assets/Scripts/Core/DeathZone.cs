@@ -1,18 +1,20 @@
 ﻿using Controllers.Core;
 using Effects;
+using System;
 using System.Collections;
 using UnityEngine;
 using Utilities;
 
 namespace Core
 {
+    [RequireComponent(typeof(EdgeCollider2D))]
     public class DeathZone : MonoBehaviour
     {
-        // || Cached References
-        private EdgeCollider2D edgeCollider;
-        private Ball[] balls;
+        // || Cached
 
-        private void Awake() => edgeCollider = GetComponent<EdgeCollider2D>();
+        private EdgeCollider2D edgeCollider;
+
+        private void Awake() => GetRequiredComponents();
 
         private void Start() => DefineColliderPoints();
 
@@ -31,43 +33,89 @@ namespace Core
             }
         }
 
+        /// <summary>
+        /// Get required components
+        /// </summary>
+        public void GetRequiredComponents()
+        {
+            try
+            {
+                edgeCollider = GetComponent<EdgeCollider2D>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
-        // Defines the collider points based on size of screen
+        /// <summary>
+        /// Set collider points with Screen size
+        /// </summary>
         private void DefineColliderPoints()
         {
-            Camera mainCamera = Camera.main;
-            Vector2 lowerLeftCorner = mainCamera.ScreenToWorldPoint(new Vector3(0, 0, 0));
-            Vector2 lowerRightCorner = mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0));
-            lowerLeftCorner.x = Mathf.FloorToInt(lowerLeftCorner.x) * 2;
-            lowerRightCorner.x = Mathf.CeilToInt(lowerRightCorner.x) * 2;
-            edgeCollider.points = new Vector2[] { lowerLeftCorner, lowerRightCorner };
+            try
+            {
+                // Size Vectors
+                Vector2 screenHeight = new Vector2(0, Screen.height);
+                Vector2 screenSize = new Vector2(Screen.width, Screen.height);
+                Vector2 screenWidth = new Vector2(Screen.width, 0);
+
+                // Converts
+                Vector2 lowerLeftCorner = Camera.main.ScreenToWorldPoint(Vector2.zero);
+                Vector2 upperLeftCorner = Camera.main.ScreenToWorldPoint(screenHeight);
+                Vector2 upperRightCorner = Camera.main.ScreenToWorldPoint(screenSize);
+                Vector2 lowerRightCorner = Camera.main.ScreenToWorldPoint(screenWidth);
+                Vector2 padding = new Vector2(2, 2);
+
+                edgeCollider.points = new Vector2[]
+                {
+                    lowerLeftCorner - padding,
+                    new Vector2(upperLeftCorner.x - padding.x, upperLeftCorner.y + padding.y),
+                    upperRightCorner + padding,
+                    new Vector2(lowerRightCorner.x + padding.x, lowerRightCorner.y - padding.y),
+                    lowerLeftCorner - padding,
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        // Deals with collision with ball depending on how much balls are on screen
+        /// <summary>
+        /// Deal with ball collision
+        /// </summary>
+        /// <param name="otherBall"> Other ball to compare </param>
         private void DealWithBallCollision(GameObject otherBall)
         {
-            balls = FindObjectsOfType<Ball>();
-
-            if (balls.Length == 1)
+            try
             {
-                StartCoroutine(WaitToReset());
-            }
-            else
-            {
-                AudioController.Instance.PlaySFX(AudioController.Instance.BoomSound, 0.3f);
-                GameSession.Instance.CurrentNumberOfBalls--;
-            }
+                if (FindObjectsOfType<Ball>().Length == 1)
+                {
+                    StartCoroutine(WaitToReset());
+                }
+                else
+                {
+                    AudioController.Instance.PlaySFX(AudioController.Instance.BoomSound, AudioController.Instance.MaxSFXVolume / 2);
+                    GameSession.Instance.CurrentNumberOfBalls--;
+                }
 
-            Destroy(otherBall);
+                Destroy(otherBall);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        // Plays SFX and wait to call fade out
+        /// <summary>
+        /// Wait to reset the game
+        /// </summary>
         private IEnumerator WaitToReset()
         {
             GameSession.Instance.ActualGameState = Enumerators.GameStates.TRANSITION;
-            float soundLength = AudioController.Instance.GetClipLength(AudioController.Instance.BoomSound);
-            AudioController.Instance.PlaySFX(AudioController.Instance.BoomSound, 0.8f);
-            yield return new WaitForSecondsRealtime(soundLength);
+            AudioController.Instance.PlaySFX(AudioController.Instance.BoomSound, AudioController.Instance.MaxSFXVolume);
+            yield return new WaitForSecondsRealtime(AudioController.Instance.GetClipLength(AudioController.Instance.BoomSound));
             FadeEffect.Instance.FadeToLevel();
         }
     }

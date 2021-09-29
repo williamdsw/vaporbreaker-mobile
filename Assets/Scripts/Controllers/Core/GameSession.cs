@@ -373,8 +373,8 @@ namespace Controllers.Core
                     Ball[] balls = FindObjectsOfType<Ball>();
                     foreach (Ball ball in balls)
                     {
-                        ball.IsBallOnFire = true;
-                        ball.ChangeBallSprite(true);
+                        ball.IsOnFire = true;
+                        ball.ChangeSprite(true);
                     }
 
                     AudioController.Instance.PlayME(AudioController.Instance.FireEffect, AudioController.Instance.MaxMEVolume / 2f, true);
@@ -403,8 +403,8 @@ namespace Controllers.Core
             Ball[] balls = FindObjectsOfType<Ball>();
             foreach (Ball ball in balls)
             {
-                ball.IsBallOnFire = false;
-                ball.ChangeBallSprite(false);
+                ball.IsOnFire = false;
+                ball.ChangeSprite(false);
             }
 
             AudioController.Instance.StopME();
@@ -457,8 +457,8 @@ namespace Controllers.Core
                                 Rigidbody2D newBallRB = newBall.GetComponent<Rigidbody2D>();
                                 newBallRB.velocity = (ballRB.velocity.normalized * -1 * Time.deltaTime * firstBall.MoveSpeed);
                                 newBall.MoveSpeed = firstBall.DefaultSpeed;
-                                newBall.IsBallOnFire = firstBall.IsBallOnFire;
-                                newBall.ChangeBallSprite(newBall.IsBallOnFire);
+                                newBall.IsOnFire = firstBall.IsOnFire;
+                                newBall.ChangeSprite(newBall.IsOnFire);
                                 CurrentNumberOfBalls++;
                             }
                         }

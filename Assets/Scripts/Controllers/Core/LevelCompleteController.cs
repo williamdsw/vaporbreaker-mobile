@@ -151,13 +151,13 @@ namespace Controllers.Core
         {
             foreach (Ball ball in balls)
             {
-                ball.StopBall();
+                Destroy(ball.gameObject);
             }
 
             PowerUp[] powerUps = FindObjectsOfType<PowerUp>();
             foreach (PowerUp powerUp in powerUps)
             {
-                powerUp.StopPowerUp();
+                Destroy(powerUp.gameObject);
             }
 
             AudioController.Instance.StopME();

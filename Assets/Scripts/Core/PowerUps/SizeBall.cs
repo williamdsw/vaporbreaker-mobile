@@ -20,14 +20,14 @@ namespace Core.PowerUps
                     Vector3 newLocalScale = ball.transform.localScale;
                     if (makeBigger)
                     {
-                        if (newLocalScale.x < ball.MaxBallLocalScale)
+                        if (newLocalScale.x < ball.MinMaxLocalScale.y)
                         {
                             newLocalScale *= 2f;
                         }
                     }
                     else
                     {
-                        if (newLocalScale.x > ball.MinBallLocalScale)
+                        if (newLocalScale.x > ball.MinMaxLocalScale.x)
                         {
                             newLocalScale /= 2f;
                         }

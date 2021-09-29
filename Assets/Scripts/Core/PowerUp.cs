@@ -1,4 +1,5 @@
 ﻿using Controllers.Core;
+using System;
 using UnityEngine;
 using Utilities;
 
@@ -14,34 +15,30 @@ namespace Core
         private readonly Vector2Int minMaxRotateChance = new Vector2Int(0, 100);
         private readonly Vector2 minMaxMoveSpeed = new Vector2(10f, 30f);
         private readonly Vector2 minForceXY = new Vector2(-1000f, 0f);
-        private readonly Vector2 maxForceXY = new Vector2(1000f, 1000f);
+        private readonly float maxForceXY = 1000f;
 
         // || State
+
         private float angleToIncrement = 0f;
         private int canRotateChance;
-
-        // Speed
         private float moveSpeed = 0f;
 
-        // State
-        private int currentPowerUpIndex = 0;
-
         // || Cached
+
         private Rigidbody2D rigidBody2D;
         protected Paddle paddle;
 
-        private void Awake() => rigidBody2D = GetComponent<Rigidbody2D>();
-
-        private void Start()
+        private void Awake()
         {
-            paddle = FindObjectOfType<Paddle>();
+            GetRequiredComponents();
 
-            // Random values
-            angleToIncrement = Random.Range(minMaxAngle.x, minMaxAngle.y);
-            canRotateChance = Random.Range(minMaxRotateChance.x, minMaxRotateChance.y);
+            angleToIncrement = UnityEngine.Random.Range(minMaxAngle.x, minMaxAngle.y);
+            canRotateChance = UnityEngine.Random.Range(minMaxRotateChance.x, minMaxRotateChance.y);
 
             AddRandomForce();
         }
+
+        private void Start() => paddle = FindObjectOfType<Paddle>();
 
         private void Update()
         {
@@ -54,14 +51,11 @@ namespace Core
             }
         }
 
-        // Collision with paddle
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (!GameSession.Instance || !AudioController.Instance) return;
-
             if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
-                Paddle paddle = other.collider.GetComponent<Paddle>();
+                paddle = other.collider.GetComponent<Paddle>();
                 if (paddle)
                 {
                     DealCollisionWithPaddle();
@@ -69,16 +63,37 @@ namespace Core
             }
         }
 
+        /// <summary>
+        /// Get required components
+        /// </summary>
+        public void GetRequiredComponents()
+        {
+            try
+            {
+                rigidBody2D = GetComponent<Rigidbody2D>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Add random force to this object
+        /// </summary>
         private void AddRandomForce()
         {
-            float randomX = Random.Range(minForceXY.x, maxForceXY.x);
-            float randomY = Random.Range(minForceXY.y, maxForceXY.y);
+            float randomX = UnityEngine.Random.Range(minForceXY.x, maxForceXY);
+            float randomY = UnityEngine.Random.Range(minForceXY.y, maxForceXY);
             Vector2 randomForce = new Vector2(randomX, randomY);
-            moveSpeed = Random.Range(minMaxMoveSpeed.x, minMaxMoveSpeed.y + 1);
-            randomForce *= (Time.deltaTime * moveSpeed);
+            moveSpeed = UnityEngine.Random.Range(minMaxMoveSpeed.x, minMaxMoveSpeed.y + 1);
+            randomForce *= (Time.fixedDeltaTime * moveSpeed);
             rigidBody2D.AddForce(randomForce);
         }
 
+        /// <summary>
+        /// Rotate this object
+        /// </summary>
         private void RotateObject()
         {
             if (angleToIncrement != 0)
@@ -89,6 +104,9 @@ namespace Core
             }
         }
 
+        /// <summary>
+        /// Deals collisiton with paddle
+        /// </summary>
         private void DealCollisionWithPaddle()
         {
             Destroy(gameObject);
@@ -96,15 +114,9 @@ namespace Core
             Apply();
         }
 
-        public void StopPowerUp()
-        {
-            rigidBody2D.velocity = Vector2.zero;
-            rigidBody2D.gravityScale = 0;
-            canRotateChance = 0;
-            angleToIncrement = 0;
-        }
-
+        /// <summary>
+        /// Applies power up effect
+        /// </summary>
         protected abstract void Apply();
-
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Controllers.Core;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Utilities;
 
@@ -16,47 +18,51 @@ namespace Core
         [SerializeField] private Sprite[] hitSprites;
         [SerializeField] private GameObject[] explosionPrefabs;
         [SerializeField] private GameObject particlesPrefab;
+        [SerializeField] private GameObject blockScoreTextPrefab;
         [SerializeField] private PowerUp[] powerUpPrefabs;
         [SerializeField] private Color32 particlesColor;
 
-        // || Const
+        // || Config
 
         private readonly Vector2 minMaxPointsScore = new Vector2(1f, 1000f);
 
-        // State variables
+        // || State
+
         private int timesHit = 0;
         private bool collidedWithBall = false;
         private bool lastCollision = false;
-        [SerializeField] private bool canSpawnPowerUp = false;
         public Dictionary<string, int> listPowerUpIndexes = new Dictionary<string, int>();
 
-        // Cached Components
+        // || Cached
+
         private SpriteRenderer spriteRenderer;
 
-        public int MaxHits { private get; set; } = 0;
-        public int StartMaxHits { get; set; } = 0;
-        public bool CanSpawnPowerUp { private get; set; } = false;
+        // || Properties
 
-        private void Awake() => spriteRenderer = GetComponent<SpriteRenderer>();
+        public BoxCollider2D BoxCollider2D { get; private set; }
+        public Color32 ParticlesColor { get; set; }
+        public bool CanSpawnPowerUp { private get; set; } = false;
+        public int MaxHits { get; set; } = 0;
+        public int StartMaxHits { get; set; } = 0;
+
+        private void Awake() => GetRequiredComponents();
 
         private void Start()
         {
             CountBreakableBlocks();
             MaxHits = (hitSprites.Length + 1);
             StartMaxHits = MaxHits;
-
-            if (powerUpPrefabs.Length != 0)
-            {
-                int index = 0;
-                foreach (PowerUp powerUp in powerUpPrefabs)
-                {
-                    listPowerUpIndexes.Add(powerUp.name, index);
-                    index++;
-                }
-            }
         }
 
-        private void OnCollisionEnter2D(Collision2D other)
+        private void OnCollisionEnter2D(Collision2D other) => DoCheckingBeforeAct(other.gameObject);
+
+        private void OnTriggerEnter2D(Collider2D other) => DoCheckingBeforeAct(other.gameObject);
+
+        /// <summary>
+        /// Do some checking before acting collisons
+        /// </summary>
+        /// <param name="other"> Other object collided or triggered </param>
+        private void DoCheckingBeforeAct(GameObject other)
         {
             if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
@@ -72,22 +78,31 @@ namespace Core
             }
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+        /// <summary>
+        /// Get required components
+        /// </summary>
+        public void GetRequiredComponents()
         {
-            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
+            try
             {
-                if (!lastCollision)
-                {
-                    collidedWithBall = (other.gameObject.GetComponent<Ball>() != null);
-
-                    if (CompareTag(NamesTags.Tags.Breakable))
-                    {
-                        HandleHit();
-                    }
-                }
+                spriteRenderer = GetComponent<SpriteRenderer>();
+                BoxCollider2D = GetComponent<BoxCollider2D>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
+        /// <summary>
+        /// Define color for block and particles
+        /// </summary>
+        /// <param name="color"> Desired Color </param>
+        public void SetColor(Color32 color) => spriteRenderer.color = ParticlesColor = color;
+
+        /// <summary>
+        /// Count number of breakable blocks
+        /// </summary>
         private void CountBreakableBlocks()
         {
             if (CompareTag(NamesTags.Tags.Breakable))
@@ -96,14 +111,17 @@ namespace Core
             }
         }
 
+        /// <summary>
+        /// Handle collision with ball
+        /// </summary>
         private void HandleHit()
         {
             timesHit++;
 
             if (timesHit >= MaxHits)
             {
-                DestroyBlock();
                 lastCollision = true;
+                DestroyBlock();
             }
             else
             {
@@ -111,10 +129,13 @@ namespace Core
             }
         }
 
+        /// <summary>
+        /// Show block next sprite
+        /// </summary>
         private void ShowNextSprite()
         {
             int spriteIndex = timesHit - 1;
-            if (hitSprites[spriteIndex] != null)
+            if (spriteIndex >= 0 && hitSprites[spriteIndex] != null)
             {
                 spriteRenderer.sprite = hitSprites[spriteIndex];
             }
@@ -123,6 +144,9 @@ namespace Core
             SpawnDebris();
         }
 
+        /// <summary>
+        /// Destroy this block
+        /// </summary>
         private void DestroyBlock()
         {
             if (collidedWithBall)
@@ -131,7 +155,7 @@ namespace Core
             }
 
             int comboMultiplier = GameSession.Instance.ComboMultiplier;
-            int score = (int)Random.Range(minMaxPointsScore.x, minMaxPointsScore.y);
+            int score = (int)UnityEngine.Random.Range(minMaxPointsScore.x, minMaxPointsScore.y);
             score *= MaxHits;
 
             if (collidedWithBall)
@@ -144,6 +168,7 @@ namespace Core
 
             TriggerExplosion();
             SpawnDebris();
+            ShowScoreText(score);
             GameSession.Instance.AddToStore(score);
 
             if (CanSpawnPowerUp)
@@ -154,6 +179,9 @@ namespace Core
             StartCoroutine(DestroyCoroutine());
         }
 
+        /// <summary>
+        /// Applies delay before Block destruction
+        /// </summary>
         private IEnumerator DestroyCoroutine()
         {
             yield return new WaitForSeconds(0.1f);
@@ -166,23 +194,58 @@ namespace Core
             }
         }
 
+        /// <summary>
+        /// Trigger explosion animation
+        /// </summary>
         private void TriggerExplosion()
         {
-            if (explosionPrefabs.Length >= 1)
+            try
             {
-                AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.ExplosionSound, AudioController.Instance.MaxSFXVolume / 2f);
-                int randomIndex = Random.Range(0, explosionPrefabs.Length);
-                GameObject explosion = Instantiate(explosionPrefabs[randomIndex], transform.position, Quaternion.identity) as GameObject;
-                explosion.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.Parents.Explosions).transform);
-                Animator animator = explosion.GetComponent<Animator>();
-                float animationLength = animator.GetCurrentAnimatorStateInfo(0).length;
-                Destroy(explosion, animationLength);
+                if (explosionPrefabs.Length >= 1)
+                {
+                    AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.ExplosionSound, AudioController.Instance.MaxSFXVolume / 2);
+                    int randomIndex = UnityEngine.Random.Range(0, explosionPrefabs.Length);
+                    GameObject explosion = Instantiate(explosionPrefabs[randomIndex], transform.position, Quaternion.identity) as GameObject;
+                    explosion.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.Parents.Explosions).transform);
+                    Animator animator = explosion.GetComponent<Animator>();
+                    float animationLength = animator.GetCurrentAnimatorStateInfo(0).length;
+                    Destroy(explosion, animationLength);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
+        /// <summary>
+        /// Show score text
+        /// </summary>
+        /// <param name="score"> Score value </param>
+        private void ShowScoreText(int score)
+        {
+            try
+            {
+                TextMeshPro textMeshPro = blockScoreTextPrefab.GetComponentInChildren<TextMeshPro>();
+                textMeshPro.text = Formatter.FormatToCurrency(score);
+                GameObject scoreText = Instantiate(blockScoreTextPrefab, transform.position, Quaternion.identity) as GameObject;
+                scoreText.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.Parents.BlockScoreText).transform);
+                Animator animator = scoreText.GetComponent<Animator>();
+                float durationLength = animator.GetCurrentAnimatorStateInfo(0).length;
+                Destroy(scoreText, durationLength);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Spawn collision debris
+        /// </summary>
         private void SpawnDebris()
         {
-            if (particlesPrefab)
+            try
             {
                 // Instantiate and Destroy
                 GameObject debris = Instantiate(particlesPrefab, transform.position, particlesPrefab.transform.rotation) as GameObject;
@@ -191,72 +254,35 @@ namespace Core
                 // Color
                 ParticleSystem debrisParticleSystem = debris.GetComponent<ParticleSystem>();
                 var mainModule = debrisParticleSystem.main;
-                mainModule.startColor = new ParticleSystem.MinMaxGradient(particlesColor);
+                mainModule.startColor = new ParticleSystem.MinMaxGradient(ParticlesColor);
 
                 // Time to destroy
                 ParticleSystem prefabParticleSystem = particlesPrefab.GetComponent<ParticleSystem>();
                 float durationLength = (prefabParticleSystem.main.duration + prefabParticleSystem.main.startLifetime.constant);
                 Destroy(debris, durationLength);
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
+        /// <summary>
+        /// Instantiates random power up
+        /// </summary>
         private void SpawnPowerUp()
         {
-            int randomIndex = CalculateIndexChance();
-            GameObject powerUp = Instantiate(powerUpPrefabs[randomIndex].gameObject, this.transform.position, Quaternion.identity) as GameObject;
-            powerUp.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.Parents.PowerUps).transform);
-            AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.ShowUpSound, AudioController.Instance.MaxSFXVolume);
-        }
-
-        private int CalculateIndexChance()
-        {
-            int index = 0;
-            int chance = Random.Range(0, 100);
-            if (chance >= 80)
+            try
             {
-                string[] powerUps =
-                {
-                    Enumerators.PowerUpsNames.PowerUp_FireBall.ToString (),
-                    Enumerators.PowerUpsNames.PowerUp_Shooter.ToString ()
-                };
-
-                index = listPowerUpIndexes[powerUps[Random.Range(0, powerUps.Length)]];
+                int randomIndex = UnityEngine.Random.Range(0, powerUpPrefabs.Length);
+                GameObject powerUp = Instantiate(powerUpPrefabs[randomIndex].gameObject, transform.position, Quaternion.identity) as GameObject;
+                powerUp.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.Parents.PowerUps).transform);
+                AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.ShowUpSound, AudioController.Instance.MaxSFXVolume);
             }
-            else if (chance >= 60 && chance < 80)
+            catch (Exception ex)
             {
-                string[] powerUps =
-                {
-                    Enumerators.PowerUpsNames.PowerUp_All_Blocks_1_Hit.ToString (),
-                    Enumerators.PowerUpsNames.PowerUp_Move_Blocks_Right.ToString (),
-                    Enumerators.PowerUpsNames.PowerUp_Move_Blocks_Left.ToString (),
-                    Enumerators.PowerUpsNames.PowerUp_Move_Blocks_Up.ToString (),
-                    Enumerators.PowerUpsNames.PowerUp_Move_Blocks_Down.ToString (),
-                };
-
-                index = listPowerUpIndexes[powerUps[Random.Range(0, powerUps.Length)]];
+                throw ex;
             }
-            else if (chance >= 50 && chance < 60)
-            {
-                index = listPowerUpIndexes[Enumerators.PowerUpsNames.PowerUp_Unbreakables_To_Breakables.ToString()];
-            }
-            else if (chance >= 0 && chance < 50)
-            {
-                string[] powerUps =
-                {
-                    Enumerators.PowerUpsNames.PowerUp_Ball_Bigger.ToString (),
-                    Enumerators.PowerUpsNames.PowerUp_Ball_Faster.ToString (),
-                    Enumerators.PowerUpsNames.PowerUp_Ball_Slower.ToString (),
-                    Enumerators.PowerUpsNames.PowerUp_Ball_Smaller.ToString (),
-                    Enumerators.PowerUpsNames.PowerUp_Duplicate_Ball.ToString (),
-                    Enumerators.PowerUpsNames.PowerUp_Paddle_Expand.ToString (),
-                    Enumerators.PowerUpsNames.PowerUp_Paddle_Shrink.ToString (),
-                    Enumerators.PowerUpsNames.PowerUp_Reset_Ball.ToString (),
-                    Enumerators.PowerUpsNames.PowerUp_Reset_Paddle.ToString ()
-                };
-                index = listPowerUpIndexes[powerUps[Random.Range(0, powerUps.Length)]];
-            }
-
-            return index;
         }
     }
 }

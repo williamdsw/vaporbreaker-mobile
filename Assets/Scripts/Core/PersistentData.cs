@@ -5,8 +5,7 @@ namespace Core
 {
     public class PersistentData : MonoBehaviour
     {
-        // || State
-
+        // || State 
         private int startingSceneIndex;
 
         // || Properties
@@ -22,14 +21,16 @@ namespace Core
             int currentSceneIndex = SceneManagerController.GetActiveSceneIndex();
             if (currentSceneIndex != startingSceneIndex)
             {
-                Destroy(gameObject);
+                DestroyInstance();
             }
         }
 
+        /// <summary>
+        /// Setup singleton instance
+        /// </summary>
         private void SetupSingleton()
         {
-            int numberOfInstances = FindObjectsOfType(GetType()).Length;
-            if (numberOfInstances > 1)
+            if (FindObjectsOfType(GetType()).Length > 1)
             {
                 DestroyInstance();
             }
@@ -40,9 +41,9 @@ namespace Core
             }
         }
 
-        public void DestroyInstance()
-        {
-            DestroyImmediate(gameObject);
-        }
+        /// <summary>
+        /// Destroy current instance
+        /// </summary>
+        public void DestroyInstance() => Destroy(gameObject);
     }
 }

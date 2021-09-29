@@ -19,10 +19,10 @@ namespace Core.PowerUps
                     Rigidbody2D newBallRB = newBall.GetComponent<Rigidbody2D>();
                     newBallRB.velocity = (ballRB.velocity.normalized * -1 * Time.deltaTime * ball.MoveSpeed);
                     newBall.MoveSpeed = ball.MoveSpeed;
-                    if (ball.IsBallOnFire)
+                    if (ball.IsOnFire)
                     {
-                        newBall.IsBallOnFire = true;
-                        newBall.ChangeBallSprite(newBall.IsBallOnFire);
+                        newBall.IsOnFire = true;
+                        newBall.ChangeSprite(newBall.IsOnFire);
                     }
                 }
 

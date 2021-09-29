@@ -69,8 +69,8 @@ namespace Effects
                         echo.transform.localScale = ball.transform.localScale;
                         echo.transform.rotation = ball.transform.rotation;
                         SpriteRenderer spriteRenderer = echo.GetComponent<SpriteRenderer>();
-                        spriteRenderer.color = ball.GetBallColor();
-                        spriteRenderer.sprite = ball.GetSprite();
+                        spriteRenderer.color = ball.CurrentColor;
+                        spriteRenderer.sprite = ball.Sprite;
                     }
 
                     Destroy(echo, TimeToSelfDestruct);
