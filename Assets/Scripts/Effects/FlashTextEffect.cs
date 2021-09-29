@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using TMPro;
 
@@ -6,39 +7,56 @@ namespace Effects
 {
     public class FlashTextEffect : MonoBehaviour
     {
-        // Config params
+        // || Inspector References
+
+        [Header("Required Configuration")]
         [SerializeField] private float timeToFlick = 0.01f;
         [SerializeField] private bool isLooping = true;
 
-        // Cached
-        private Color color;
+        // || Cached
+
         private TextMeshPro textMeshPro;
         private TextMeshProUGUI textMeshProUGUI;
 
-        public void SetTimeToFlick(float timeToFlick) => this.timeToFlick = timeToFlick;
+        // || Properties
 
-        private void Awake()
-        {
-            textMeshPro = this.GetComponent<TextMeshPro>();
-            if (!textMeshPro)
-            {
-                textMeshPro = this.GetComponentInChildren<TextMeshPro>();
-            }
+        public float TimeToFlick { get => timeToFlick; set => timeToFlick = value; }
 
-            if (!textMeshPro)
-            {
-                textMeshProUGUI = this.GetComponent<TextMeshProUGUI>();
-            }
-        }
+        private void Awake() => GetRequiredComponents();
 
         private void Start() => StartCoroutine(Flash());
 
-        // Flashes the alpha of text color
+        /// <summary>
+        /// Get required components
+        /// </summary>
+        private void GetRequiredComponents()
+        {
+            try
+            {
+                textMeshPro = GetComponent<TextMeshPro>();
+                if (!textMeshPro)
+                {
+                    textMeshPro = GetComponentInChildren<TextMeshPro>();
+                }
+
+                if (!textMeshPro)
+                {
+                    textMeshProUGUI = GetComponent<TextMeshProUGUI>();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Flashes current text
+        /// </summary>
         private IEnumerator Flash()
         {
             while (isLooping)
             {
-                // Cancels
                 if (textMeshPro)
                 {
                     string text = textMeshPro.text;
@@ -64,12 +82,12 @@ namespace Effects
                 {
                     textMeshPro.color = color;
                 }
-                else
+                else if (textMeshProUGUI)
                 {
                     textMeshProUGUI.color = color;
                 }
 
-                yield return new WaitForSeconds(timeToFlick);
+                yield return new WaitForSeconds(TimeToFlick);
                 yield return null;
             }
         }

@@ -1,4 +1,5 @@
 ﻿using Controllers.Core;
+using System;
 using UnityEngine;
 using Utilities;
 
@@ -14,128 +15,193 @@ namespace Effects
             public static string DefineGameState => "DefineGameState";
         }
 
-        // Config
-        private int minimumSceneIndexToEvents = 3;
+        // || Config
+        private readonly int SCENE_TO_APPLY_EVENTS = 3;
 
-        // Cached
+        // || Cached
+
         private Animator animator;
-        private Enumerators.GameStates newGameState;
+
+        // || Properties
 
         public static FadeEffect Instance { get; private set; }
 
         private void Awake()
         {
             Instance = this;
-            animator = GetComponent<Animator>();
+            GetRequiredComponents();
         }
 
         private void Start()
         {
-            if (SceneManagerController.GetActiveSceneIndex() >= minimumSceneIndexToEvents)
+            if (SceneManagerController.GetActiveSceneIndex() >= SCENE_TO_APPLY_EVENTS)
+            //if (SceneManagerController.GetActiveSceneIndex() == SCENE_TO_APPLY_EVENTS)
             {
                 CreateFadeInEvents();
                 CreateFadeOutEvents();
             }
         }
 
+        /// <summary>
+        /// Get required components
+        /// </summary>
+        public void GetRequiredComponents()
+        {
+            try
+            {
+                animator = GetComponent<Animator>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Create events to be called on Fade In
+        /// </summary>
         private void CreateFadeInEvents()
         {
-            AnimationClip fadeInClip = animator.runtimeAnimatorController.animationClips[0];
-            fadeInClip.events = null;
+            try
+            {
+                AnimationClip fadeInClip = animator.runtimeAnimatorController.animationClips[0];
+                fadeInClip.events = null;
 
-            // First frame event
-            AnimationEvent firstFrameEvent = new AnimationEvent();
-            firstFrameEvent.intParameter = 2;
-            firstFrameEvent.time = 0f;
-            firstFrameEvent.functionName = FunctionNames.DefineGameState;
-            fadeInClip.AddEvent(firstFrameEvent);
+                // First frame event
+                AnimationEvent firstFrameEvent = new AnimationEvent();
+                firstFrameEvent.intParameter = 2;
+                firstFrameEvent.time = 0f;
+                firstFrameEvent.functionName = FunctionNames.DefineGameState;
+                fadeInClip.AddEvent(firstFrameEvent);
 
-            fadeInClip = animator.runtimeAnimatorController.animationClips[0];
+                fadeInClip = animator.runtimeAnimatorController.animationClips[0];
 
-            // Last frame event
-            AnimationEvent lastFrameEvent = new AnimationEvent();
-            lastFrameEvent.intParameter = 0;
-            lastFrameEvent.time = 1f;
-            lastFrameEvent.functionName = FunctionNames.DefineGameState;
-            fadeInClip.AddEvent(lastFrameEvent);
+                // Last frame event
+                AnimationEvent lastFrameEvent = new AnimationEvent();
+                lastFrameEvent.intParameter = 0;
+                lastFrameEvent.time = 1f;
+                lastFrameEvent.functionName = FunctionNames.DefineGameState;
+                fadeInClip.AddEvent(lastFrameEvent);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
+        /// <summary>
+        /// Create events to be called on Fade Out
+        /// </summary>
         private void CreateFadeOutEvents()
         {
-            AnimationClip fadeOutClip = animator.runtimeAnimatorController.animationClips[1];
-            fadeOutClip.events = null;
+            try
+            {
+                AnimationClip fadeOutClip = animator.runtimeAnimatorController.animationClips[1];
+                fadeOutClip.events = null;
 
-            // First frame event
-            AnimationEvent firstFrameEvent = new AnimationEvent();
-            firstFrameEvent.intParameter = 2;
-            firstFrameEvent.time = 0f;
-            firstFrameEvent.functionName = FunctionNames.DefineGameState;
-            fadeOutClip.AddEvent(firstFrameEvent);
+                // First frame event
+                AnimationEvent firstFrameEvent = new AnimationEvent();
+                firstFrameEvent.intParameter = 2;
+                firstFrameEvent.time = 0f;
+                firstFrameEvent.functionName = FunctionNames.DefineGameState;
+                fadeOutClip.AddEvent(firstFrameEvent);
 
-            // Last frame event
-            AnimationEvent lastFrameEvent = new AnimationEvent();
-            lastFrameEvent.time = 1f;
-            lastFrameEvent.functionName = FunctionNames.CallResetLevel;
-            fadeOutClip.AddEvent(lastFrameEvent);
+                // Last frame event
+                AnimationEvent lastFrameEvent = new AnimationEvent();
+                lastFrameEvent.time = 1f;
+                lastFrameEvent.functionName = FunctionNames.CallResetLevel;
+                fadeOutClip.AddEvent(lastFrameEvent);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
+        /// <summary>
+        /// Reset fade out events to level menu
+        /// </summary>
         public void ResetFadeOutEventsToLevelMenu()
         {
-            AnimationClip fadeOutClip = animator.runtimeAnimatorController.animationClips[1];
-            fadeOutClip.events = null;
+            try
+            {
+                AnimationClip fadeOutClip = animator.runtimeAnimatorController.animationClips[1];
+                fadeOutClip.events = null;
 
-            // Last frame event
-            AnimationEvent lastFrameEvent = new AnimationEvent();
-            lastFrameEvent.time = 1f;
-            lastFrameEvent.functionName = FunctionNames.CallLevelMenu;
-            fadeOutClip.AddEvent(lastFrameEvent);
+                // Last frame event
+                AnimationEvent lastFrameEvent = new AnimationEvent();
+                lastFrameEvent.time = 1f;
+                lastFrameEvent.functionName = FunctionNames.CallLevelMenu;
+                fadeOutClip.AddEvent(lastFrameEvent);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
+        /// <summary>
+        /// Reset all animation functions
+        /// </summary>
         public void ResetAnimationFunctions()
         {
             if (!animator)
             {
-                animator = GetComponent<Animator>();
+                GetRequiredComponents();
             }
 
-            AnimationClip[] animationClips = animator.runtimeAnimatorController.animationClips;
-            foreach (AnimationClip clip in animationClips)
+            foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips)
             {
                 clip.events = null;
             }
         }
 
-        public float GetFadeOutLength() => (animator ? animator.runtimeAnimatorController.animationClips[1].length : 0);
+        /// <summary>
+        /// Get fade out animation length
+        /// </summary>
+        /// <returns> Fade Out animation length </returns>
+        public float GetFadeOutLength() => (animator ? animator.runtimeAnimatorController.animationClips[1].length : 0f);
 
+        /// <summary>
+        /// Fade in / out to level
+        /// </summary>
         public void FadeToLevel()
         {
             animator.Rebind();
-            animator.SetTrigger("FadeOut");
+            animator.SetTrigger(NamesTags.AnimatorTriggers.FadeOut);
         }
 
+        /// <summary>
+        /// Call animation to reset level
+        /// </summary>
         public void CallResetLevel()
         {
             animator.Rebind();
             GameSession.Instance.ResetLevel();
         }
 
+        /// <summary>
+        /// Call animation to level menu
+        /// </summary>
         public void CallLevelMenu()
         {
             animator.Rebind();
             GameSession.Instance.ResetGame(SceneManagerController.SelectLevelsSceneName);
         }
 
+        /// <summary>
+        /// Define new game state on fade in / fade out
+        /// </summary>
+        /// <param name="gameStateInt"> Next game state </param>
         public void DefineGameState(int gameStateInt)
         {
             switch (gameStateInt)
             {
-                case 0: newGameState = Enumerators.GameStates.GAMEPLAY; break;
-                case 1: newGameState = Enumerators.GameStates.PAUSE; break;
-                case 2: newGameState = Enumerators.GameStates.TRANSITION; break;
+                case 0: GameSession.Instance.ActualGameState = Enumerators.GameStates.GAMEPLAY; break;
+                case 1: GameSession.Instance.ActualGameState = Enumerators.GameStates.PAUSE; break;
+                case 2: GameSession.Instance.ActualGameState = Enumerators.GameStates.TRANSITION; break;
                 default: break;
             }
-
-            GameSession.Instance.ActualGameState = newGameState;
         }
     }
 }

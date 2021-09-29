@@ -1,32 +1,58 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Effects
 {
     public class AnimationEffect : MonoBehaviour
     {
-        // Config
+        // || Inspector References
+
+        [Header("Required Configuration")]
         [SerializeField] private Sprite[] spritesToAnimateList;
         [SerializeField] private bool randomFPS = false;
         [SerializeField] private float framesPerSecond = 10;
 
-        // Cached Components
+        // || Cached
+
         private Image image;
         private SpriteRenderer spriteRenderer;
 
-        private void Awake()
-        {
-            image = GetComponent<Image>();
-            if (!image)
-            {
-                spriteRenderer = GetComponent<SpriteRenderer>();
-            }
-        }
+        // || Config
 
-        private void Start() => framesPerSecond = (randomFPS ? Random.Range(5, 30) : framesPerSecond);
+        private readonly Vector2Int MIN_MAX_FPS = new Vector2Int(5, 30);
+
+        private void Awake() => GetRequiredComponents();
+
+        private void Start()
+        {
+            framesPerSecond = (randomFPS ? UnityEngine.Random.Range(MIN_MAX_FPS.x, MIN_MAX_FPS.y) : framesPerSecond);
+        }
 
         private void FixedUpdate() => AnimateImage();
 
+        /// <summary>
+        /// Get required components
+        /// </summary>
+        private void GetRequiredComponents()
+        {
+            try
+            {
+                image = GetComponent<Image>();
+                if (!image)
+                {
+                    spriteRenderer = GetComponent<SpriteRenderer>();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Animates image or sprite rendered based on frames
+        /// </summary>
         private void AnimateImage()
         {
             if (spritesToAnimateList.Length == 0) return;
@@ -37,7 +63,7 @@ namespace Effects
             {
                 image.sprite = spritesToAnimateList[index];
             }
-            else if (spriteRenderer)
+            else
             {
                 spriteRenderer.sprite = spritesToAnimateList[index];
             }

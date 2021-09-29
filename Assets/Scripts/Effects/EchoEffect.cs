@@ -1,5 +1,6 @@
 ﻿using Controllers.Core;
 using Core;
+using System;
 using UnityEngine;
 using Utilities;
 
@@ -7,53 +8,82 @@ namespace Effects
 {
     public class EchoEffect : MonoBehaviour
     {
-        // Params Config
+        // || Inspector References
+
+        [Header("Required Configuration")]
         [SerializeField] private GameObject echoPrefab;
-        private float startTimeBetweenSpanws = 0.05f;
+
+        // || Config
+
+        private readonly float startTimeBetweenSpanws = 0.05f;
+
+        // || State
+
         private float timeBetweenSpawns = 0;
-        private float timeToSelfDestruct = 1f;
 
-        // Cached
+        // || Cached
+
         private Ball ball;
-        private Paddle paddle;
 
-        private void Start() => DefineReferences();
+        // || Properties
+
+        public float TimeToSelfDestruct { get; set; } = 1f;
+
+        private void Awake() => FindNeededReferences();
 
         private void Update() => SpawnEchoEffect();
 
-        public void SetTimeToSelfDestruct(float time) => timeToSelfDestruct = time;
-
-        private void DefineReferences()
+        /// <summary>
+        /// Find needed references
+        /// </summary>
+        private void FindNeededReferences()
         {
-            if (tag.Equals(NamesTags.Tags.BallEcho))
+            try
             {
-                ball = transform.parent.GetComponent<Ball>();
+                if (tag.Equals(NamesTags.Tags.BallEcho))
+                {
+                    ball = transform.parent.GetComponent<Ball>();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
+        /// <summary>
+        /// Spawn echo effect
+        /// </summary>
         private void SpawnEchoEffect()
         {
-            if (GameSession.Instance.ActualGameState != Enumerators.GameStates.GAMEPLAY) return;
-
-            if (timeBetweenSpawns <= 0)
+            try
             {
-                GameObject echo = Instantiate(echoPrefab, transform.position, Quaternion.identity) as GameObject;
-                echo.transform.parent = GameSession.Instance.FindOrCreateObjectParent(NamesTags.Parents.Echos).transform;
-                if (tag == NamesTags.Tags.BallEcho && ball)
+                if (GameSession.Instance.ActualGameState != Enumerators.GameStates.GAMEPLAY) return;
+
+                if (timeBetweenSpawns <= 0)
                 {
-                    echo.transform.localScale = ball.transform.localScale;
-                    echo.transform.rotation = ball.transform.rotation;
-                    SpriteRenderer spriteRenderer = echo.GetComponent<SpriteRenderer>();
-                    spriteRenderer.color = ball.GetBallColor();
-                    spriteRenderer.sprite = ball.GetSprite();
-                }
+                    GameObject echo = Instantiate(echoPrefab, transform.position, Quaternion.identity) as GameObject;
+                    echo.transform.parent = GameSession.Instance.FindOrCreateObjectParent(NamesTags.Parents.Echos).transform;
+                    if (tag.Equals(NamesTags.Tags.BallEcho) && ball)
+                    {
+                        echo.transform.localScale = ball.transform.localScale;
+                        echo.transform.rotation = ball.transform.rotation;
+                        SpriteRenderer spriteRenderer = echo.GetComponent<SpriteRenderer>();
+                        spriteRenderer.color = ball.GetBallColor();
+                        spriteRenderer.sprite = ball.GetSprite();
+                    }
 
-                Destroy(echo, timeToSelfDestruct);
-                timeBetweenSpawns = startTimeBetweenSpanws;
+                    Destroy(echo, TimeToSelfDestruct);
+                    timeBetweenSpawns = startTimeBetweenSpanws;
+                }
+                else
+                {
+                    timeBetweenSpawns -= Time.deltaTime;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                timeBetweenSpawns -= Time.deltaTime;
+                throw ex;
             }
         }
     }
