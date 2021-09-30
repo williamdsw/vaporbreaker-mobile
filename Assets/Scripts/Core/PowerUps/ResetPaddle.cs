@@ -1,17 +1,26 @@
-
 using Controllers.Core;
-using UnityEngine;
+using System;
 
 namespace Core.PowerUps
 {
     public class ResetPaddle : PowerUp
     {
+        /// <summary>
+        /// Applies power up effect
+        /// </summary>
         protected override void Apply()
         {
-            if (paddle)
+            try
             {
-                paddle.ResetPaddle();
-                GameSession.Instance.AddToStore(Random.Range(100, 1000));
+                if (paddle != null)
+                {
+                    paddle.ResetPaddle();
+                    GameSession.Instance.AddToScore(UnityEngine.Random.Range(100, 1000));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

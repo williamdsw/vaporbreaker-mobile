@@ -187,7 +187,7 @@ namespace Controllers.Core
             }
         }
 
-        public void AddToStore(int value)
+        public void AddToScore(int value)
         {
             currentScore += value;
             UpdateUI();
@@ -266,28 +266,28 @@ namespace Controllers.Core
                             case Enumerators.Directions.Right:
                             {
                                 Vector3 right = new Vector3(block.transform.position.x + 1f, block.transform.position.y, 0f);
-                                MoveBlockAtPosition(block, right, (right.x <= BlockGrid.MaxXYCoordinates.x), ref numberOfOcorrences);
+                                MoveBlockAtPosition(block, right, (right.x <= BlockGrid.MaxCoordinatesInXY.x), ref numberOfOcorrences);
                                 break;
                             }
 
                             case Enumerators.Directions.Left:
                             {
                                 Vector3 left = new Vector3(block.transform.position.x - 1f, block.transform.position.y, 0f);
-                                MoveBlockAtPosition(block, left, (left.x >= BlockGrid.MinXYCoordinates.x), ref numberOfOcorrences);
+                                MoveBlockAtPosition(block, left, (left.x >= BlockGrid.MinCoordinatesInXY.x), ref numberOfOcorrences);
                                 break;
                             }
 
                             case Enumerators.Directions.Down:
                             {
                                 Vector3 down = new Vector3(block.transform.position.x, block.transform.position.y - 0.5f, 0f);
-                                MoveBlockAtPosition(block, down, (down.y >= BlockGrid.MinXYCoordinates.y), ref numberOfOcorrences);
+                                MoveBlockAtPosition(block, down, (down.y >= BlockGrid.MinCoordinatesInXY.y), ref numberOfOcorrences);
                                 break;
                             }
 
                             case Enumerators.Directions.Up:
                             {
                                 Vector3 up = new Vector3(block.transform.position.x, block.transform.position.y + 0.5f, 0f);
-                                MoveBlockAtPosition(block, up, (up.y <= BlockGrid.MaxXYCoordinates.y), ref numberOfOcorrences);
+                                MoveBlockAtPosition(block, up, (up.y <= BlockGrid.MaxCoordinatesInXY.y), ref numberOfOcorrences);
                                 break;
                             }
 
@@ -322,9 +322,9 @@ namespace Controllers.Core
             BlockGrid.Grid.Clear();
 
             Block[] blocks = FindObjectsOfType<Block>();
-            for (float y = BlockGrid.MinXYCoordinates.y; y <= BlockGrid.MaxXYCoordinates.y; y += 0.5f)
+            for (float y = BlockGrid.MinCoordinatesInXY.y; y <= BlockGrid.MaxCoordinatesInXY.y; y += 0.5f)
             {
-                for (float x = BlockGrid.MinXYCoordinates.x; x <= BlockGrid.MaxXYCoordinates.x; x++)
+                for (float x = BlockGrid.MinCoordinatesInXY.x; x <= BlockGrid.MaxCoordinatesInXY.x; x++)
                 {
                     Vector3 position = new Vector3(x, y, 0f);
 

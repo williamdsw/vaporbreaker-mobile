@@ -169,7 +169,7 @@ namespace Core
             TriggerExplosion();
             SpawnDebris();
             ShowScoreText(score);
-            GameSession.Instance.AddToStore(score);
+            GameSession.Instance.AddToScore(score);
 
             if (CanSpawnPowerUp)
             {

@@ -1,4 +1,5 @@
 using Controllers.Core;
+using System;
 using UnityEngine;
 
 namespace Core.PowerUps
@@ -8,15 +9,24 @@ namespace Core.PowerUps
         [Header("Required Configuration")]
         [SerializeField] private Core.Shooter shooterPrefab;
 
+        /// <summary>
+        /// Applies power up effect
+        /// </summary>
         protected override void Apply()
         {
-            // Finds and cancel case have one already
-            Core.Shooter shooter = FindObjectOfType<Core.Shooter>();
-            if (shooter) return;
+            try
+            {
+                Core.Shooter shooter = FindObjectOfType<Core.Shooter>();
+                if (shooter != null) return;
 
-            shooter = Instantiate(shooterPrefab, paddle.transform.position, Quaternion.identity) as Core.Shooter;
-            shooter.transform.parent = paddle.transform;
-            GameSession.Instance.AddToStore(Random.Range(100, 500));
+                shooter = Instantiate(shooterPrefab, paddle.transform.position, Quaternion.identity) as Core.Shooter;
+                shooter.transform.parent = paddle.transform;
+                GameSession.Instance.AddToScore(UnityEngine.Random.Range(100, 500));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

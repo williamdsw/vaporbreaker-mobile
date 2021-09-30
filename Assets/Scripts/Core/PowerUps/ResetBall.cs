@@ -1,28 +1,34 @@
 using Controllers.Core;
+using System;
 using UnityEngine;
 
 namespace Core.PowerUps
 {
     public class ResetBall : PowerUp
     {
+        /// <summary>
+        /// Applies power up effect
+        /// </summary>
         protected override void Apply()
         {
-            Ball[] balls = FindObjectsOfType<Ball>();
-            if (balls.Length != 0)
+            try
             {
-                foreach (Ball ball in balls)
+                Ball[] balls = FindObjectsOfType<Ball>();
+                if (balls.Length != 0)
                 {
-                    // Local Scale
-                    ball.transform.localScale = Vector3.one;
+                    foreach (Ball ball in balls)
+                    {
+                        ball.transform.localScale = Vector3.one;
+                        ball.MoveSpeed = ball.DefaultSpeed;
+                        ball.Velocity = (ball.Velocity.normalized * Time.fixedDeltaTime * ball.MoveSpeed);
+                    }
 
-                    // Movement
-                    Rigidbody2D ballRB = ball.GetComponent<Rigidbody2D>();
-                    float defaultSpeed = ball.DefaultSpeed;
-                    ball.MoveSpeed = defaultSpeed;
-                    ballRB.velocity = (ballRB.velocity.normalized * Time.deltaTime * defaultSpeed);
+                    GameSession.Instance.AddToScore(UnityEngine.Random.Range(100, 1000));
                 }
-
-                GameSession.Instance.AddToStore(Random.Range(100, 1000));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

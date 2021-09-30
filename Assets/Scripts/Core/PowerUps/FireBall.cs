@@ -1,14 +1,24 @@
 using Controllers.Core;
-using UnityEngine;
+using System;
 
 namespace Core.PowerUps
 {
     public class FireBall : PowerUp
     {
+        /// <summary>
+        /// Applies power up effect
+        /// </summary>
         protected override void Apply()
         {
-            GameSession.Instance.MakeFireBalls();
-            GameSession.Instance.AddToStore(Random.Range(-10000, 10000));
+            try
+            {
+                GameSession.Instance.MakeFireBalls();
+                GameSession.Instance.AddToScore(UnityEngine.Random.Range(-10000, 10000));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 using Controllers.Core;
+using System;
 using UnityEngine;
 using Utilities;
 
@@ -6,9 +7,12 @@ namespace Core.PowerUps
 {
     public class UnbreakablesToBreakables : PowerUp
     {
+        /// <summary>
+        /// Applies power up effect
+        /// </summary>
         protected override void Apply()
         {
-            if (GameObject.FindGameObjectsWithTag(NamesTags.Tags.Unbreakable).Length != 0)
+            try
             {
                 GameObject[] unbreakables = GameObject.FindGameObjectsWithTag(NamesTags.Tags.Unbreakable);
                 if (unbreakables.Length != 0)
@@ -25,8 +29,12 @@ namespace Core.PowerUps
                         }
                     }
 
-                    GameSession.Instance.AddToStore(Random.Range(100, 500));
+                    GameSession.Instance.AddToScore(UnityEngine.Random.Range(100, 500));
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }
