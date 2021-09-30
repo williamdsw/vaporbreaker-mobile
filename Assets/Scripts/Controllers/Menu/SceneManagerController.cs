@@ -6,7 +6,7 @@ namespace Controllers.Core
     public class SceneManagerController
     {
         public static string LoadingSceneName => "Loading";
-
+        public static string Level => "Level";
         public static string SelectLevelsSceneName => "SelectLevels";
 
         public static void CallScene(string sceneName) => SceneManager.LoadScene(sceneName);

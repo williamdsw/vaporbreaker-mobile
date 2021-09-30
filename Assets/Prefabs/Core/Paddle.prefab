@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5578734662007757178}
   - component: {fileID: 5578734662007757179}
   - component: {fileID: 5578734662007757181}
+  - component: {fileID: 8913075855647967232}
   - component: {fileID: 5578734662007757180}
   m_Layer: 8
   m_Name: Paddle
@@ -47,6 +48,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -58,6 +61,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -108,6 +112,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 0.33333334}
   m_EdgeRadius: 0
+--- !u!50 &8913075855647967232
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5578734662007757176}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 6
 --- !u!114 &5578734662007757180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,7 +146,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ball: {fileID: 0}
-  echoEffectSpawner: {fileID: 0}
   paddleSprites:
   - {fileID: 5275959952676599290, guid: 201dd5369616e9b4593f71aeb4b5dbc8, type: 3}
   - {fileID: 4144469285353641508, guid: 201dd5369616e9b4593f71aeb4b5dbc8, type: 3}

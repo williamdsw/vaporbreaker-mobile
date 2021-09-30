@@ -11,8 +11,10 @@ TagManager:
   - Ball
   - PowerUp
   - Ball_Echo
-  - Paddle_Echo
   - Line_Between_Ball_Pointer
+  - BallEcho
+  - LineBetweenBallPointer
+  - Paddle_Echo
   layers:
   - Default
   - TransparentFX
@@ -25,7 +27,7 @@ TagManager:
   - Paddle
   - Ball
   - Wall
-  - Death_Zone
+  - DeathZone
   - PowerUp
   - Projectile
   - Controllers

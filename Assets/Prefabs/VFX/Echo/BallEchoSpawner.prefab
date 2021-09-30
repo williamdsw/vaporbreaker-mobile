@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4201822348695025312}
   - component: {fileID: 4201822348695025313}
   m_Layer: 0
-  m_Name: Ball_Echo_Spawner
-  m_TagString: Ball_Echo
+  m_Name: BallEchoSpawner
+  m_TagString: BallEcho
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

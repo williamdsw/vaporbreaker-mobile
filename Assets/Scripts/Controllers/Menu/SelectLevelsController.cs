@@ -135,7 +135,7 @@ namespace Controllers.Menu
 
                 // GameObject
                 GameObject levelButton = Instantiate(levelButtonPrefab) as GameObject;
-                levelButton.name = level.Name;
+                //levelButton.name = level.Name;
                 levelButton.transform.SetParent(levelButtonsContainer.transform, false);
                 levelButton.transform.SetAsLastSibling();
 
@@ -175,7 +175,7 @@ namespace Controllers.Menu
             string bestScore = Formatter.FormatToCurrency(scoreboard.Score);
             string bestTimeScore = (scoreboard.TimeScore == 0 ? string.Empty : Formatter.GetEllapsedTimeInHours(scoreboard.TimeScore));
             LevelDetailsController.Instance.UpdateUI(levelName, bestScore, bestTimeScore, levelThumbnails[currentIndex], level.Id);
-            LevelDetailsController.Instance.LevelSceneName = level.Name;
+            LevelDetailsController.Instance.LevelSceneName = string.Empty;
 
             // Pass data
             GameStatusController.Instance.LevelId = level.Id;
@@ -256,7 +256,7 @@ namespace Controllers.Menu
                 Canvas.ForceUpdateCanvases();
 
                 // Finds next button and checks
-                GameObject button = GameObject.Find(levels[nextCurrentLevelIndex].Name);
+                GameObject button = GameObject.Find("");
                 if (!button) return;
 
                 // Calculates new anchored position

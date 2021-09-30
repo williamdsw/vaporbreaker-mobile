@@ -154,4 +154,4 @@ MonoBehaviour:
   - {fileID: 5065395553490544822, guid: 68a4ae4951b7a8545bc4133bbd8956e0, type: 3}
   particlesColor:
     serializedVersion: 2
-    rgba: 4294246400
+    rgba: 4294967295

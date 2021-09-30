@@ -44,8 +44,9 @@ namespace Core
         public bool CanSpawnPowerUp { private get; set; } = false;
         public int MaxHits { get; set; } = 0;
         public int StartMaxHits { get; set; } = 0;
+        public SpriteRenderer SpriteRenderer { get => spriteRenderer; set => spriteRenderer = value; }
 
-        private void Awake() => GetRequiredComponents();
+        public void Awake() => GetRequiredComponents();
 
         private void Start()
         {
@@ -85,7 +86,7 @@ namespace Core
         {
             try
             {
-                spriteRenderer = GetComponent<SpriteRenderer>();
+                SpriteRenderer = GetComponent<SpriteRenderer>();
                 BoxCollider2D = GetComponent<BoxCollider2D>();
             }
             catch (Exception ex)
@@ -98,7 +99,7 @@ namespace Core
         /// Define color for block and particles
         /// </summary>
         /// <param name="color"> Desired Color </param>
-        public void SetColor(Color32 color) => spriteRenderer.color = ParticlesColor = color;
+        public void SetColor(Color32 color) => SpriteRenderer.color = ParticlesColor = color;
 
         /// <summary>
         /// Count number of breakable blocks
@@ -137,7 +138,7 @@ namespace Core
             int spriteIndex = timesHit - 1;
             if (spriteIndex >= 0 && hitSprites[spriteIndex] != null)
             {
-                spriteRenderer.sprite = hitSprites[spriteIndex];
+                SpriteRenderer.sprite = hitSprites[spriteIndex];
             }
 
             AudioController.Instance.PlaySFX(AudioController.Instance.SlamSound, AudioController.Instance.MaxSFXVolume / 2f);

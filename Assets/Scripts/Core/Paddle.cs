@@ -7,7 +7,7 @@ namespace Core
 {
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(BoxCollider2D))]
-    //[RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(Rigidbody2D))]
     public class Paddle : MonoBehaviour
     {
         [Header("Configuration")]

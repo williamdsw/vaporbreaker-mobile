@@ -88,10 +88,5 @@ namespace MVC.Models
         /// Level has prefab spawner?
         /// </summary>
         public bool HasPrefabSpawner { get; set; } = false;
-
-        /// <summary>
-        /// Game Manager Controller can choose random blocks for power ups?
-        /// </summary>
-        public bool CanChooseRandomBlocks { get; set; } = false;
     }
 }

@@ -26,7 +26,7 @@ namespace Utilities
         public class Parents
         {
             public static string Blocks => "Blocks";
-            public static string BlockScoreText => "BlockScoreText";
+            public static string BlockScoreText => "BlockScoreTexts";
             public static string Debris => "Debris";
             public static string Echos => "Echos";
             public static string Explosions => "Explosions";

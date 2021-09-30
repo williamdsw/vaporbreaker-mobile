@@ -60,7 +60,7 @@ namespace Controllers.Menu
 
         private void BindClickEvents()
         {
-            playButton.onClick.AddListener(() => SelectLevelsController.Instance.StartCallNextScene(LevelSceneName));
+            playButton.onClick.AddListener(() => SelectLevelsController.Instance.StartCallNextScene(SceneManagerController.Level));
             backButton.onClick.AddListener(() =>
             {
                 levelDetailsPanel.SetActive(false);

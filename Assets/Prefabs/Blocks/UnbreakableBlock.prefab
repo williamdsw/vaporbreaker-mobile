@@ -157,7 +157,7 @@ MonoBehaviour:
   powerUpPrefabs: []
   particlesColor:
     serializedVersion: 2
-    rgba: 4286906368
+    rgba: 4294967295
 --- !u!1 &3840716938310394183
 GameObject:
   m_ObjectHideFlags: 0
