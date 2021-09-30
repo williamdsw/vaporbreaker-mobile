@@ -23,15 +23,15 @@ namespace Core.PowerUps
         {
             try
             {
-                if (GameSession.Instance.CanMoveBlocks)
+                if (GameSessionController.Instance.CanMoveBlocks)
                 {
-                    GameSession.Instance.CanMoveBlocks = false;
-                    GameSession.Instance.BlockDirection = Enumerators.Directions.None;
+                    GameSessionController.Instance.CanMoveBlocks = false;
+                    GameSessionController.Instance.BlockDirection = Enumerators.Directions.None;
                 }
 
-                GameSession.Instance.CanMoveBlocks = true;
-                GameSession.Instance.BlockDirection = direction;
-                GameSession.Instance.AddToScore(UnityEngine.Random.Range(0, 1000));
+                GameSessionController.Instance.CanMoveBlocks = true;
+                GameSessionController.Instance.BlockDirection = direction;
+                GameSessionController.Instance.AddToScore(UnityEngine.Random.Range(0, 1000));
             }
             catch (Exception ex)
             {

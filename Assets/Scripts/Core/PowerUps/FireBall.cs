@@ -12,8 +12,8 @@ namespace Core.PowerUps
         {
             try
             {
-                GameSession.Instance.MakeFireBalls();
-                GameSession.Instance.AddToScore(UnityEngine.Random.Range(-10000, 10000));
+                GameSessionController.Instance.MakeFireBalls();
+                GameSessionController.Instance.AddToScore(UnityEngine.Random.Range(-10000, 10000));
             }
             catch (Exception ex)
             {

@@ -80,13 +80,13 @@ namespace Controllers.Core
             // State
             pauseState = !pauseState;
             pauseMenu.SetActive(pauseState);
-            GameSession.Instance.ActualGameState = (pauseState ? Enumerators.GameStates.PAUSE : Enumerators.GameStates.GAMEPLAY);
+            GameSessionController.Instance.ActualGameState = (pauseState ? Enumerators.GameStates.PAUSE : Enumerators.GameStates.GAMEPLAY);
         }
 
         // Reset actual level
         private IEnumerator ResetLevelCoroutine()
         {
-            GameSession.Instance.ActualGameState = Enumerators.GameStates.TRANSITION;
+            GameSessionController.Instance.ActualGameState = Enumerators.GameStates.TRANSITION;
             FadeEffect.Instance.ResetAnimationFunctions();
             float fadeOutLength = FadeEffect.Instance.GetFadeOutLength();
             FadeEffect.Instance.FadeToLevel();
@@ -94,21 +94,21 @@ namespace Controllers.Core
             GameStatusController.Instance.IsLevelCompleted = false;
             GameStatusController.Instance.CameFromLevel = false;
             PersistentData.Instance.DestroyInstance();
-            GameSession.Instance.DestroyInstance();
+            GameSessionController.Instance.DestroyInstance();
             SceneManagerController.ReloadScene();
         }
 
         // Reset to Select Levels
         private IEnumerator ResetGameCoroutine(string sceneName)
         {
-            GameSession.Instance.ActualGameState = Enumerators.GameStates.TRANSITION;
+            GameSessionController.Instance.ActualGameState = Enumerators.GameStates.TRANSITION;
             FadeEffect.Instance.ResetAnimationFunctions();
             float fadeOutLength = FadeEffect.Instance.GetFadeOutLength();
             FadeEffect.Instance.FadeToLevel();
             yield return new WaitForSecondsRealtime(fadeOutLength);
             GameStatusController.Instance.IsLevelCompleted = false;
             GameStatusController.Instance.CameFromLevel = true;
-            GameSession.Instance.ResetGame(sceneName);
+            GameSessionController.Instance.GotoScene(sceneName);
         }
     }
 }

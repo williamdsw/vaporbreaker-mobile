@@ -20,7 +20,7 @@ namespace Core
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
+            if (GameSessionController.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
                 if (other.gameObject.CompareTag(NamesTags.Tags.Ball))
                 {
@@ -97,7 +97,7 @@ namespace Core
                 else
                 {
                     AudioController.Instance.PlaySFX(AudioController.Instance.BoomSound, AudioController.Instance.MaxSFXVolume / 2);
-                    GameSession.Instance.CurrentNumberOfBalls--;
+                    GameSessionController.Instance.CurrentNumberOfBalls--;
                 }
 
                 Destroy(otherBall);
@@ -113,7 +113,7 @@ namespace Core
         /// </summary>
         private IEnumerator WaitToReset()
         {
-            GameSession.Instance.ActualGameState = Enumerators.GameStates.TRANSITION;
+            GameSessionController.Instance.ActualGameState = Enumerators.GameStates.TRANSITION;
             AudioController.Instance.PlaySFX(AudioController.Instance.BoomSound, AudioController.Instance.MaxSFXVolume);
             yield return new WaitForSecondsRealtime(AudioController.Instance.GetClipLength(AudioController.Instance.BoomSound));
             FadeEffect.Instance.FadeToLevel();

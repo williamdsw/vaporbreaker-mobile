@@ -204,7 +204,7 @@ namespace Controllers.Core
             float fadeOutLength = FadeEffect.Instance.GetFadeOutLength();
             FadeEffect.Instance.FadeToLevel();
             yield return new WaitForSecondsRealtime(fadeOutLength);
-            GameSession.Instance.ResetGame(SceneManagerController.SelectLevelsSceneName);
+            GameSessionController.Instance.GotoScene(SceneManagerController.SelectLevelsSceneName);
         }
     }
 }

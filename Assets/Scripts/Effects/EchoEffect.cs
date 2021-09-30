@@ -58,12 +58,12 @@ namespace Effects
         {
             try
             {
-                if (GameSession.Instance.ActualGameState != Enumerators.GameStates.GAMEPLAY) return;
+                if (GameSessionController.Instance.ActualGameState != Enumerators.GameStates.GAMEPLAY) return;
 
                 if (timeBetweenSpawns <= 0)
                 {
                     GameObject echo = Instantiate(echoPrefab, transform.position, Quaternion.identity) as GameObject;
-                    echo.transform.parent = GameSession.Instance.FindOrCreateObjectParent(NamesTags.Parents.Echos).transform;
+                    echo.transform.parent = GameSessionController.Instance.FindOrCreateObjectParent(NamesTags.Parents.Echos).transform;
                     if (tag.Equals(NamesTags.Tags.BallEcho) && ball)
                     {
                         echo.transform.localScale = ball.transform.localScale;

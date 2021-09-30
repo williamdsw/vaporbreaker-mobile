@@ -31,5 +31,10 @@ namespace MVC.Models
         /// Is completed?
         /// </summary>
         public bool IsCompleted { get => IS_COMPLETED == 1; set => IS_COMPLETED = (value ? 1 : 0); }
+
+        /// <summary>
+        /// Level's Layout
+        /// </summary>
+        public string Layout { get => LAYOUT; set => LAYOUT = value; }
     }
 }

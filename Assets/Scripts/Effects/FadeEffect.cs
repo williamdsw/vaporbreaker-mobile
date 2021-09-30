@@ -177,7 +177,7 @@ namespace Effects
         public void CallResetLevel()
         {
             animator.Rebind();
-            GameSession.Instance.ResetLevel();
+            GameSessionController.Instance.ResetLevel();
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace Effects
         public void CallLevelMenu()
         {
             animator.Rebind();
-            GameSession.Instance.ResetGame(SceneManagerController.SelectLevelsSceneName);
+            GameSessionController.Instance.GotoScene(SceneManagerController.SelectLevelsSceneName);
         }
 
         /// <summary>
@@ -197,9 +197,9 @@ namespace Effects
         {
             switch (gameStateInt)
             {
-                case 0: GameSession.Instance.ActualGameState = Enumerators.GameStates.GAMEPLAY; break;
-                case 1: GameSession.Instance.ActualGameState = Enumerators.GameStates.PAUSE; break;
-                case 2: GameSession.Instance.ActualGameState = Enumerators.GameStates.TRANSITION; break;
+                case 0: GameSessionController.Instance.ActualGameState = Enumerators.GameStates.GAMEPLAY; break;
+                case 1: GameSessionController.Instance.ActualGameState = Enumerators.GameStates.PAUSE; break;
+                case 2: GameSessionController.Instance.ActualGameState = Enumerators.GameStates.TRANSITION; break;
                 default: break;
             }
         }

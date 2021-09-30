@@ -8,6 +8,9 @@ using Utilities;
 
 namespace Controllers.Menu
 {
+    /// <summary>
+    /// Controller for Logo Screen
+    /// </summary>
     public class LogoController : MonoBehaviour
     {
         [Header("Needed UI Elements")]
@@ -84,7 +87,7 @@ namespace Controllers.Menu
 
             yield return new WaitForSecondsRealtime(TIME_TO_WAIT);
             yield return new WaitUntil(() => LocalizationController.Instance != null);
-            LocalizationController.Instance.DefineLocalization();
+            LocalizationController.Instance.GetLocalization();
             yield return new WaitUntil(() => LocalizationController.Instance.DictionaryCount > 0);
             StartCoroutine(CallNextScene(SceneManagerController.SelectLevelsSceneName));
         }

@@ -42,7 +42,7 @@ namespace Core
 
         private void Update()
         {
-            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
+            if (GameSessionController.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
                 if (canRotateChance >= 50)
                 {
@@ -53,7 +53,7 @@ namespace Core
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
+            if (GameSessionController.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
                 paddle = other.collider.GetComponent<Paddle>();
                 if (paddle)

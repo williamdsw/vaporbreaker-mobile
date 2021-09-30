@@ -47,7 +47,7 @@ namespace Core.PowerUps
                     }
 
                     Vector2Int minMaxScore = new Vector2Int(makeBigger ? 0 : 1000, makeBigger ? 1000 : 5000);
-                    GameSession.Instance.AddToScore(UnityEngine.Random.Range(minMaxScore.x, minMaxScore.y));
+                    GameSessionController.Instance.AddToScore(UnityEngine.Random.Range(minMaxScore.x, minMaxScore.y));
                 }
             }
             catch (Exception ex)

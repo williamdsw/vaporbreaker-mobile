@@ -13,14 +13,14 @@ namespace Core.PowerUps
         {
             try
             {
-                if (GameSession.Instance.CurrentNumberOfBalls >= GameSession.Instance.MaxNumberOfBalls) return;
+                if (GameSessionController.Instance.CurrentNumberOfBalls >= GameSessionController.Instance.MaxNumberOfBalls) return;
 
                 Ball[] balls = FindObjectsOfType<Ball>();
                 if (balls.Length != 0)
                 {
                     foreach (Ball ball in balls)
                     {
-                        if (GameSession.Instance.CurrentNumberOfBalls >= GameSession.Instance.MaxNumberOfBalls) break;
+                        if (GameSessionController.Instance.CurrentNumberOfBalls >= GameSessionController.Instance.MaxNumberOfBalls) break;
 
                         Ball newBall = Instantiate(ball, ball.transform.position, Quaternion.identity) as Ball;
                         newBall.Velocity = (ball.Velocity.normalized * -1 * Time.fixedDeltaTime * ball.MoveSpeed);
@@ -31,10 +31,10 @@ namespace Core.PowerUps
                             newBall.ChangeSprite(newBall.IsOnFire);
                         }
 
-                        GameSession.Instance.CurrentNumberOfBalls++;
+                        GameSessionController.Instance.CurrentNumberOfBalls++;
                     }
 
-                    GameSession.Instance.AddToScore(UnityEngine.Random.Range(500, 2500));
+                    GameSessionController.Instance.AddToScore(UnityEngine.Random.Range(500, 2500));
                 }
             }
             catch (Exception ex)

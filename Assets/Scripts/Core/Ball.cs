@@ -65,9 +65,9 @@ namespace Core
 
         private void FixedUpdate()
         {
-            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
+            if (GameSessionController.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
-                if (!GameSession.Instance.HasStarted)
+                if (!GameSessionController.Instance.HasStarted)
                 {
                     LockBallToPaddle();
                     CalculateDistanceToMouse();
@@ -86,14 +86,14 @@ namespace Core
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
+            if (GameSessionController.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
-                if (GameSession.Instance.HasStarted)
+                if (GameSessionController.Instance.HasStarted)
                 {
                     if (other.gameObject.CompareTag(NamesTags.Tags.Paddle) ||
                         other.gameObject.CompareTag(NamesTags.Tags.Wall))
                     {
-                        GameSession.Instance.ResetCombo();
+                        GameSessionController.Instance.ResetCombo();
                     }
 
                     switch (other.gameObject.tag)
@@ -115,9 +115,9 @@ namespace Core
                                     }
                                 }
 
-                                if (GameSession.Instance.CanMoveBlocks)
+                                if (GameSessionController.Instance.CanMoveBlocks)
                                 {
-                                    GameSession.Instance.MoveBlocks(GameSession.Instance.BlockDirection);
+                                    GameSessionController.Instance.MoveBlocks(GameSessionController.Instance.BlockDirection);
                                 }
 
                                 break;
@@ -199,10 +199,10 @@ namespace Core
                 if (remainingPosition.y >= MIN_DISTANCE_TO_LAUNCH)
                 {
                     // Game Session parameters
-                    GameSession.Instance.HasStarted = true;
-                    GameSession.Instance.TimeToSpawnAnotherBall = 0f;
-                    GameSession.Instance.CanSpawnAnotherBall = true;
-                    GameSession.Instance.CurrentNumberOfBalls++;
+                    GameSessionController.Instance.HasStarted = true;
+                    GameSessionController.Instance.TimeToSpawnAnotherBall = 0f;
+                    GameSessionController.Instance.CanSpawnAnotherBall = true;
+                    GameSessionController.Instance.CurrentNumberOfBalls++;
 
                     // Other
                     rigidBody2D.velocity = (remainingPosition.normalized * MoveSpeed * Time.fixedDeltaTime);
@@ -271,7 +271,7 @@ namespace Core
             try
             {
                 GameObject particles = Instantiate(paddleParticlesPrefab, contactPoint, paddleParticlesPrefab.transform.rotation) as GameObject;
-                particles.transform.SetParent(GameSession.Instance.FindOrCreateObjectParent(NamesTags.Parents.Debris).transform);
+                particles.transform.SetParent(GameSessionController.Instance.FindOrCreateObjectParent(NamesTags.Parents.Debris).transform);
                 ParticleSystem debrisParticleSystem = paddleParticlesPrefab.GetComponent<ParticleSystem>();
                 float durationLength = (debrisParticleSystem.main.duration + debrisParticleSystem.main.startLifetime.constant);
                 Destroy(particles, durationLength);

@@ -21,7 +21,7 @@ namespace Core.PowerUps
 
                 shooter = Instantiate(shooterPrefab, paddle.transform.position, Quaternion.identity) as Core.Shooter;
                 shooter.transform.parent = paddle.transform;
-                GameSession.Instance.AddToScore(UnityEngine.Random.Range(100, 500));
+                GameSessionController.Instance.AddToScore(UnityEngine.Random.Range(100, 500));
             }
             catch (Exception ex)
             {

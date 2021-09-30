@@ -2,38 +2,36 @@
 
 namespace Controllers.Core
 {
+    /// <summary>
+    /// Controller for data about current level
+    /// </summary>
     public class GameStatusController : MonoBehaviour
     {
-        // Config
-        [SerializeField] private string nextSceneName;
-        [SerializeField] private int levelIndex = 0;
-        [SerializeField] private long levelId = 0;
-        [SerializeField] private long newScore = 0;
-        [SerializeField] private long newTimeScore = 0;
-        [SerializeField] private long oldScore = 0;
-        [SerializeField] private long oldTimeScore = 0;
-        [SerializeField] private bool cameFromLevel = false;
-        [SerializeField] private bool hasStartedSong = false;
-        [SerializeField] private bool isLevelCompleted = false;
+        // || Properties
 
-        public string NextSceneName { get => nextSceneName; set => nextSceneName = value; }
-        public int LevelIndex { get => levelIndex; set => levelIndex = value; }
-        public long LevelId { get => levelId; set => levelId = value; }
-        public long NewScore { get => newScore; set => newScore = value; }
-        public long NewTimeScore { get => newTimeScore; set => newTimeScore = value; }
-        public long OldScore { get => oldScore; set => oldScore = value; }
-        public long OldTimeScore { get => oldTimeScore; set => oldTimeScore = value; }
-        public bool CameFromLevel { get => cameFromLevel; set => cameFromLevel = value; }
-        public bool HasStartedSong { get => hasStartedSong; set => hasStartedSong = value; }
-        public bool IsLevelCompleted { get => isLevelCompleted; set => isLevelCompleted = value; }
         public static GameStatusController Instance { get; private set; }
+
+        public string NextSceneName { get; set; }
+        public int LevelIndex { get; set; }
+        public bool CameFromLevel { get; set; }
+        public bool HasStartedSong { get; set; }
+        public bool IsLevelCompleted { get; set; }
+        public long LevelId { get; set; }
+        public long NewScore { get; set; }
+        public long NewTimeScore { get; set; }
+        public long OldScore { get; set; }
+        public long OldTimeScore { get; set; }
+        public long OldCombo { get; set; }
+        public long NewCombo { get; set; }
 
         private void Awake() => SetupSingleton();
 
+        /// <summary>
+        /// Setup singleton instance
+        /// </summary>
         private void SetupSingleton()
         {
-            int numberOfInstances = FindObjectsOfType(GetType()).Length;
-            if (numberOfInstances > 1)
+            if (FindObjectsOfType(GetType()).Length > 1)
             {
                 Destroy(gameObject);
             }

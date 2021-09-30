@@ -9,9 +9,9 @@ namespace Core
     {
         public virtual void OnPointerUp(PointerEventData pointerEventData)
         {
-            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
+            if (GameSessionController.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
-                if (!GameSession.Instance.HasStarted)
+                if (!GameSessionController.Instance.HasStarted)
                 {
                     Ball ball = FindObjectOfType<Ball>();
                     if (ball)

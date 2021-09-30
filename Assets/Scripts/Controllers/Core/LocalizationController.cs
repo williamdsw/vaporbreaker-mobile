@@ -1,16 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using MVC.BL;
+﻿using MVC.BL;
 using MVC.Enums;
 using MVC.Models;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
-using Utilities;
 
 namespace Controllers.Core
 {
+    /// <summary>
+    /// Controller for Localization
+    /// </summary>
     public class LocalizationController : MonoBehaviour
     {
+        // || Cached
+
         private Dictionary<string, Dictionary<string, string>> dictionary;
 
         // || Properties
@@ -19,46 +23,84 @@ namespace Controllers.Core
 
         public int DictionaryCount => dictionary.Count;
 
-        private void Awake()
-        {
-            dictionary = new Dictionary<string, Dictionary<string, string>>();
-            SetupSingleton();
-        }
+        private void Awake() => SetupSingleton();
 
+        /// <summary>
+        /// Setup singleton instance
+        /// </summary>
         private void SetupSingleton()
         {
-            int numberOfInstances = FindObjectsOfType(GetType()).Length;
-            if (numberOfInstances > 1)
+            try
             {
-                DestroyImmediate(gameObject);
+                if (FindObjectsOfType(GetType()).Length > 1)
+                {
+                    Destroy(gameObject);
+                }
+                else
+                {
+                    Instance = this;
+                    DontDestroyOnLoad(gameObject);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
+                throw ex;
             }
         }
 
-        public void DefineLocalization()
+        /// <summary>
+        /// Get current or default localization
+        /// </summary>
+        public void GetLocalization()
         {
-            string language = PlayerPrefsController.Language;
-            string folderPath = string.Empty;
-            if (string.IsNullOrEmpty(language) || string.IsNullOrWhiteSpace(language))
+            try
             {
-                switch (Application.systemLanguage)
+                string language = PlayerPrefsController.Language;
+                string folderPath = string.Empty;
+                if (string.IsNullOrEmpty(language) || string.IsNullOrWhiteSpace(language))
                 {
-                    case SystemLanguage.English: default: language = SystemLanguage.English.ToString(); break;
-                    case SystemLanguage.Portuguese: language = SystemLanguage.Portuguese.ToString(); break;
+                    switch (Application.systemLanguage)
+                    {
+                        case SystemLanguage.English: default: language = SystemLanguage.English.ToString(); break;
+                        case SystemLanguage.Italian: language = SystemLanguage.Italian.ToString(); break;
+                        case SystemLanguage.Portuguese: language = SystemLanguage.Portuguese.ToString(); break;
+                        case SystemLanguage.Spanish: language = SystemLanguage.Spanish.ToString(); break;
+                    }
+
+                    PlayerPrefsController.Language = language;
                 }
 
-                PlayerPrefsController.Language = language;
+                LoadLocalization(language);
             }
-
-            LocalizationBL localizationBL = new LocalizationBL();
-            Localization localization = localizationBL.GetByLanguage(language);
-            dictionary = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(localization.Content);
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
+        /// <summary>
+        /// Load localization by language
+        /// </summary>
+        /// <param name="language"> Desired language </param>
+        public void LoadLocalization(string language)
+        {
+            try
+            {
+                LocalizationBL localizationBL = new LocalizationBL();
+                Localization localization = localizationBL.GetByLanguage(language);
+                dictionary = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(localization.Content);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Get translated word by field
+        /// </summary>
+        /// <param name="field"> Desired field </param>
+        /// <returns> Translated word </returns>
         public string GetWord(LocalizationFields field)
         {
             try

@@ -20,7 +20,7 @@ namespace Core.PowerUps
                     foreach (GameObject unbreakable in unbreakables)
                     {
                         unbreakable.tag = NamesTags.Tags.Breakable;
-                        GameSession.Instance.CountBlocks();
+                        GameSessionController.Instance.CountBlocks();
                         unbreakable.GetComponent<Animator>().enabled = false;
 
                         foreach (Transform child in unbreakable.transform)
@@ -29,7 +29,7 @@ namespace Core.PowerUps
                         }
                     }
 
-                    GameSession.Instance.AddToScore(UnityEngine.Random.Range(100, 500));
+                    GameSessionController.Instance.AddToScore(UnityEngine.Random.Range(100, 500));
                 }
             }
             catch (Exception ex)

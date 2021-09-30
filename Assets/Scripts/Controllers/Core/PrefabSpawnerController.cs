@@ -3,8 +3,11 @@ using System;
 using UnityEngine;
 using Utilities;
 
-namespace Effects
+namespace Core
 {
+    /// <summary>
+    /// Controller for Prefab Spawner
+    /// </summary>
     public class PrefabSpawnerController : MonoBehaviour
     {
         // || Inspector References
@@ -36,9 +39,9 @@ namespace Effects
             {
                 if (prefabs.Length == 0) return;
 
-                if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
+                if (GameSessionController.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
                 {
-                    if (GameSession.Instance.HasStarted)
+                    if (GameSessionController.Instance.HasStarted)
                     {
                         timeToSpawn -= Time.deltaTime;
                         if (timeToSpawn <= 0)

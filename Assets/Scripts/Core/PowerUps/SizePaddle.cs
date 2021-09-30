@@ -26,7 +26,7 @@ namespace Core.PowerUps
                 {
                     paddle.DefinePaddleSize(toExpand);
                     Vector2Int minMaxScore = new Vector2Int(toExpand ? 100 : 10000, toExpand ? 500 : 30000);
-                    GameSession.Instance.AddToScore(UnityEngine.Random.Range(minMaxScore.x, minMaxScore.y));
+                    GameSessionController.Instance.AddToScore(UnityEngine.Random.Range(minMaxScore.x, minMaxScore.y));
                 }
             }
             catch (Exception ex)

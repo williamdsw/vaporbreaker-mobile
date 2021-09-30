@@ -20,7 +20,7 @@ namespace Core.PowerUps
                         block.MaxHits = block.StartMaxHits = 1;
                     }
 
-                    GameSession.Instance.AddToScore(UnityEngine.Random.Range(0, 1000));
+                    GameSessionController.Instance.AddToScore(UnityEngine.Random.Range(0, 1000));
                 }
             }
             catch (Exception ex)

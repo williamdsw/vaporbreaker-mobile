@@ -40,7 +40,7 @@ namespace Core
 
         private void FixedUpdate()
         {
-            if (GameSession.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
+            if (GameSessionController.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
                 Move();
                 LockPositionToScreen();

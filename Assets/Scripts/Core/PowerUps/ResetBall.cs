@@ -23,7 +23,7 @@ namespace Core.PowerUps
                         ball.Velocity = (ball.Velocity.normalized * Time.fixedDeltaTime * ball.MoveSpeed);
                     }
 
-                    GameSession.Instance.AddToScore(UnityEngine.Random.Range(100, 1000));
+                    GameSessionController.Instance.AddToScore(UnityEngine.Random.Range(100, 1000));
                 }
             }
             catch (Exception ex)
