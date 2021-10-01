@@ -13,6 +13,7 @@ namespace MVC.Models
         private long LEVEL_ID;
         private long SCORE;
         private long TIME_SCORE;
+        private long BEST_COMBO;
         private long MOMENT;
 
         /// <summary>
@@ -34,6 +35,11 @@ namespace MVC.Models
         /// Total Time Score
         /// </summary>
         public long TimeScore { get => TIME_SCORE; set => TIME_SCORE = value; }
+
+        /// <summary>
+        /// Best Combo
+        /// </summary>
+        public long BestCombo { get => BEST_COMBO; set => BEST_COMBO = value; }
 
         /// <summary>
         /// Played Moment

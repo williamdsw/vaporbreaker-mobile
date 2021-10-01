@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Controllers.Core
 {
+    /// <summary>
+    /// Controller for Audio
+    /// </summary>
     public class AudioController : MonoBehaviour
     {
         // Config

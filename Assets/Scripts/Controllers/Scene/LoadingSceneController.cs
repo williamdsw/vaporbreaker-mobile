@@ -6,15 +6,17 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Utilities;
 
-namespace Controllers.Menu
+namespace Controllers.Scene
 {
-    public class LoadingController : MonoBehaviour
+    /// <summary>
+    /// Controller for Loading Scene
+    /// </summary>
+    public class LoadingSceneController : MonoBehaviour
     {
         // || Inspector References
 
-        [Header("UI Elements")]
+        [Header("Required Elements")]
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private GameObject loadingPanel;
         [SerializeField] private GameObject[] instructionPanels;

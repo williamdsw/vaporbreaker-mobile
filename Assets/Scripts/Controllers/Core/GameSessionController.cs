@@ -1,4 +1,4 @@
-﻿using Controllers.Menu;
+﻿using Controllers.Panel;
 using Core;
 using MVC.BL;
 using MVC.Models;

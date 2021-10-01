@@ -1,4 +1,5 @@
 ﻿using Controllers.Core;
+using Controllers.Panel;
 using System;
 using UnityEngine;
 using Utilities;

@@ -677,7 +677,7 @@ GameObject:
   - component: {fileID: 927331118}
   - component: {fileID: 927331119}
   m_Layer: 14
-  m_Name: LogoController
+  m_Name: LogoSceneController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

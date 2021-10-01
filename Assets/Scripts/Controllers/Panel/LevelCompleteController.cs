@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utilities;
 
-namespace Controllers.Menu
+namespace Controllers.Panel
 {
     public class LevelCompleteController : MonoBehaviour
     {

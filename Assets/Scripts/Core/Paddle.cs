@@ -11,9 +11,7 @@ namespace Core
     public class Paddle : MonoBehaviour
     {
         [Header("Configuration")]
-        [SerializeField] private Ball ball;
         [SerializeField] private Sprite[] paddleSprites;
-        [SerializeField] private JoystickMovement joystickMovement;
 
         // || State
 
@@ -57,15 +55,6 @@ namespace Core
                 boxCollider2D = GetComponent<BoxCollider2D>();
                 rigidBody2D = GetComponent<Rigidbody2D>();
                 SpriteRenderer = GetComponent<SpriteRenderer>();
-
-                Debug.Log(joystickMovement);
-
-                if (!joystickMovement)
-                {
-                    joystickMovement = FindObjectOfType<JoystickMovement>();
-                }
-
-                Debug.Log(joystickMovement);
             }
             catch (Exception ex)
             {

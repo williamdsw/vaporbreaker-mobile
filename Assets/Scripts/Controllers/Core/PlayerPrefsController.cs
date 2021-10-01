@@ -2,6 +2,9 @@
 
 namespace Controllers.Core
 {
+    /// <summary>
+    /// Controller for PlayerPrefs
+    /// </summary>
     public class PlayerPrefsController
     {
         private class Keys

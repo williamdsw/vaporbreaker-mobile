@@ -1,9 +1,8 @@
-﻿using Controllers.Core;
-using System;
+﻿using System;
 using UnityEngine;
 using Utilities;
 
-namespace Core
+namespace Controllers.Core
 {
     /// <summary>
     /// Controller for Prefab Spawner

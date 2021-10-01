@@ -23,7 +23,7 @@ namespace MVC.DAO
         {
             try
             {
-                string query = string.Format(Configuration.Queries.Scoreboard.Insert, model.LevelId, model.Score, model.TimeScore, model.Moment);
+                string query = string.Format(Configuration.Queries.Scoreboard.Insert, model.LevelId, model.Score, model.TimeScore, model.BestCombo, model.Moment);
                 return ExecuteNonQuery(query) == 1;
             }
             catch (Exception ex)

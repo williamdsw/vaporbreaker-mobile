@@ -6,14 +6,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utilities;
 
-namespace Controllers.Menu
+namespace Controllers.Scene
 {
     /// <summary>
-    /// Controller for Logo Screen
+    /// Controller for Logo Scene
     /// </summary>
-    public class LogoController : MonoBehaviour
+    public class LogoSceneController : MonoBehaviour
     {
-        [Header("Needed UI Elements")]
+        // || Inspector References
+
+        [Header("Required Elements")]
         [SerializeField] private Image backgroundImage;
         [SerializeField] private Image iconImage;
         [SerializeField] private Image logoImage;
