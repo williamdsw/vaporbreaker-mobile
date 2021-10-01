@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Controllers.Menu;
+using Core;
 using MVC.BL;
 using MVC.Models;
 using Newtonsoft.Json;
@@ -22,6 +23,7 @@ namespace Controllers.Core
         [SerializeField] private GameObject ballPrefab;
         [SerializeField] private Block[] blockPrefabs;
         [SerializeField] private PrefabSpawnerController powerUpSpawnerPrefab;
+        [SerializeField] private JoystickMovement joystickMovement;
 
         [Header("Required UI Texts")]
         [SerializeField] private TextMeshProUGUI ellapsedTimeText;
@@ -31,7 +33,7 @@ namespace Controllers.Core
 
         // || State
 
-        private Enumerators.GameStates actualGameState = Enumerators.GameStates.GAMEPLAY;
+        [SerializeField] private Enumerators.GameStates actualGameState = Enumerators.GameStates.GAMEPLAY;
         private Vector2Int minMaxNumberOfRandomBlocks = Vector2Int.zero;
         private bool areBallOnFire = false;
         private float ellapsedTime = 0f;
@@ -65,39 +67,40 @@ namespace Controllers.Core
                 switch (ActualGameState)
                 {
                     case Enumerators.GameStates.LEVEL_COMPLETE:
-                    {
-                        PauseController.Instance.CanPause = false;
-                        canvasGroup.interactable = true;
-                        break;
-                    }
+                        {
+                            PauseController.Instance.CanPause = false;
+                            canvasGroup.interactable = true;
+                            break;
+                        }
 
                     case Enumerators.GameStates.GAMEPLAY:
-                    {
-                        Time.timeScale = 1f;
-                        PauseController.Instance.CanPause = true;
-                        canvasGroup.interactable = true;
-                        break;
-                    }
+                        {
+                            Time.timeScale = 1f;
+                            PauseController.Instance.CanPause = true;
+                            canvasGroup.interactable = true;
+                            break;
+                        }
 
                     case Enumerators.GameStates.PAUSE:
-                    {
-                        Time.timeScale = 0f;
-                        PauseController.Instance.CanPause = true;
-                        canvasGroup.interactable = true;
-                        break;
-                    }
+                        {
+                            Time.timeScale = 0f;
+                            PauseController.Instance.CanPause = true;
+                            canvasGroup.interactable = true;
+                            break;
+                        }
 
                     case Enumerators.GameStates.TRANSITION:
-                    {
-                        PauseController.Instance.CanPause = false;
-                        canvasGroup.interactable = false;
-                        break;
-                    }
+                        {
+                            PauseController.Instance.CanPause = false;
+                            canvasGroup.interactable = false;
+                            break;
+                        }
                 }
             }
         }
 
         public Enumerators.Directions BlockDirection { get; set; } = Enumerators.Directions.None;
+        public JoystickMovement JoystickMovement => joystickMovement;
         public float StartTimeToSpawnAnotherBall => 10f;
         public float TimeToSpawnAnotherBall { get; set; } = -1f;
         public int CurrentNumberOfBalls { get; set; } = 1;
@@ -376,32 +379,32 @@ namespace Controllers.Core
                             switch (direction)
                             {
                                 case Enumerators.Directions.Right:
-                                {
-                                    Vector3 right = new Vector3(block.transform.position.x + 1f, block.transform.position.y, 0f);
-                                    MoveBlockAtPosition(block, right, (right.x <= BlockGrid.MaxCoordinatesInXY.x), ref numberOfOcorrences);
-                                    break;
-                                }
+                                    {
+                                        Vector3 right = new Vector3(block.transform.position.x + 1f, block.transform.position.y, 0f);
+                                        MoveBlockAtPosition(block, right, (right.x <= BlockGrid.MaxCoordinatesInXY.x), ref numberOfOcorrences);
+                                        break;
+                                    }
 
                                 case Enumerators.Directions.Left:
-                                {
-                                    Vector3 left = new Vector3(block.transform.position.x - 1f, block.transform.position.y, 0f);
-                                    MoveBlockAtPosition(block, left, (left.x >= BlockGrid.MinCoordinatesInXY.x), ref numberOfOcorrences);
-                                    break;
-                                }
+                                    {
+                                        Vector3 left = new Vector3(block.transform.position.x - 1f, block.transform.position.y, 0f);
+                                        MoveBlockAtPosition(block, left, (left.x >= BlockGrid.MinCoordinatesInXY.x), ref numberOfOcorrences);
+                                        break;
+                                    }
 
                                 case Enumerators.Directions.Down:
-                                {
-                                    Vector3 down = new Vector3(block.transform.position.x, block.transform.position.y - 0.5f, 0f);
-                                    MoveBlockAtPosition(block, down, down.y >= BlockGrid.MinCoordinatesInXY.y, ref numberOfOcorrences);
-                                    break;
-                                }
+                                    {
+                                        Vector3 down = new Vector3(block.transform.position.x, block.transform.position.y - 0.5f, 0f);
+                                        MoveBlockAtPosition(block, down, down.y >= BlockGrid.MinCoordinatesInXY.y, ref numberOfOcorrences);
+                                        break;
+                                    }
 
                                 case Enumerators.Directions.Up:
-                                {
-                                    Vector3 up = new Vector3(block.transform.position.x, block.transform.position.y + 0.5f, 0f);
-                                    MoveBlockAtPosition(block, up, up.y <= BlockGrid.MaxCoordinatesInXY.y, ref numberOfOcorrences);
-                                    break;
-                                }
+                                    {
+                                        Vector3 up = new Vector3(block.transform.position.x, block.transform.position.y + 0.5f, 0f);
+                                        MoveBlockAtPosition(block, up, up.y <= BlockGrid.MaxCoordinatesInXY.y, ref numberOfOcorrences);
+                                        break;
+                                    }
 
                                 default: break;
                             }

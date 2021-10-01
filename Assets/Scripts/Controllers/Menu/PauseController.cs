@@ -1,23 +1,26 @@
-﻿using Core;
+﻿using Controllers.Core;
+using Core;
 using Effects;
 using MVC.Enums;
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Utilities;
 
-namespace Controllers.Core
+namespace Controllers.Menu
 {
     public class PauseController : MonoBehaviour
     {
         // || Inspector References
 
         [Header("Pause UI Objects")]
-        [SerializeField] private GameObject pauseMenu;
+        [SerializeField] private GameObject panel;
         [SerializeField] private Button pauseButtonMenu;
-        [SerializeField] private Button[] allPauseMenuButtons;
+        [SerializeField] private Button resumeButton;
+        [SerializeField] private Button restartButton;
+        [SerializeField] private Button levelsButton;
 
         [Header("Labels to Translate")]
         [SerializeField] private TextMeshProUGUI headerLabel;
@@ -25,90 +28,121 @@ namespace Controllers.Core
         // || State
 
         private bool pauseState = false;
-        private List<TextMeshProUGUI> allPauseMenuButtonsTexts;
+
+        // || Cached
+
+        private TextMeshProUGUI resumeButtonLabel;
+        private TextMeshProUGUI restartButtonLabel;
+        private TextMeshProUGUI levelsButtonLabel;
 
         // || Properties
 
-        public bool CanPause { private get; set; } = true;
-
         public static PauseController Instance { get; private set; }
+        public bool CanPause { private get; set; } = true;
 
         private void Awake()
         {
             Instance = this;
-            pauseMenu.SetActive(false);
-            allPauseMenuButtonsTexts = new List<TextMeshProUGUI>();
-            foreach (Button item in allPauseMenuButtons)
+            panel.SetActive(false);
+
+            GetRequiredComponents();
+            Translate();
+            BindEventListeners();
+        }
+
+        /// <summary>
+        /// Get required components
+        /// </summary>
+        private void GetRequiredComponents()
+        {
+            try
             {
-                allPauseMenuButtonsTexts.Add(item.GetComponentInChildren<TextMeshProUGUI>());
+                resumeButtonLabel = resumeButton.GetComponentInChildren<TextMeshProUGUI>();
+                restartButtonLabel = restartButton.GetComponentInChildren<TextMeshProUGUI>();
+                levelsButtonLabel = levelsButton.GetComponentInChildren<TextMeshProUGUI>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
-        private void Start()
+        /// <summary>
+        /// Translates the UI
+        /// </summary>
+        public void Translate()
         {
-            TranslateLabels();
-            BindButtonClickEvents();
-        }
-
-        private void TranslateLabels()
-        {
-            headerLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.pause_paused);
-            string[] words = 
+            try
             {
-                LocalizationController.Instance.GetWord(LocalizationFields.pause_resume),
-                LocalizationController.Instance.GetWord(LocalizationFields.pause_restart),
-                LocalizationController.Instance.GetWord(LocalizationFields.pause_levels),
-            };
-
-            for (int index = 0; index < words.Length; index++)
+                headerLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.pause_paused);
+                resumeButtonLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.pause_resume);
+                restartButtonLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.pause_restart);
+                levelsButtonLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.pause_levels);
+            }
+            catch (Exception ex)
             {
-                allPauseMenuButtonsTexts[index].text = words[index];
+                throw ex;
             }
         }
 
-        private void BindButtonClickEvents()
+        /// <summary>
+        /// Bind event listeners to elements
+        /// </summary>
+        private void BindEventListeners()
         {
-            // 0 = Resume, 1 = Restart, 2 = Levels
-            pauseButtonMenu.onClick.AddListener(() => PauseGame());
-            allPauseMenuButtons[0].onClick.AddListener(() => PauseGame());
-            allPauseMenuButtons[1].onClick.AddListener(() => StartCoroutine(ResetLevelCoroutine()));
-            allPauseMenuButtons[2].onClick.AddListener(() => StartCoroutine(ResetGameCoroutine(SceneManagerController.SelectLevelsSceneName)));
+            try
+            {
+                pauseButtonMenu.onClick.AddListener(() => PauseOrResumeGame());
+                resumeButton.onClick.AddListener(() => PauseOrResumeGame());
+                restartButton.onClick.AddListener(() => StartCoroutine(ResetLevelCoroutine()));
+                levelsButton.onClick.AddListener(() => StartCoroutine(GotoNextScene(SceneManagerController.SelectLevelsSceneName)));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public void PauseGame()
+        /// <summary>
+        /// Pause or resume current game
+        /// </summary>
+        public void PauseOrResumeGame()
         {
-            // State
             pauseState = !pauseState;
-            pauseMenu.SetActive(pauseState);
+            panel.SetActive(pauseState);
             GameSessionController.Instance.ActualGameState = (pauseState ? Enumerators.GameStates.PAUSE : Enumerators.GameStates.GAMEPLAY);
         }
 
-        // Reset actual level
+        /// <summary>
+        /// Reset current level
+        /// </summary>
         private IEnumerator ResetLevelCoroutine()
         {
-            GameSessionController.Instance.ActualGameState = Enumerators.GameStates.TRANSITION;
-            FadeEffect.Instance.ResetAnimationFunctions();
-            float fadeOutLength = FadeEffect.Instance.GetFadeOutLength();
-            FadeEffect.Instance.FadeToLevel();
-            yield return new WaitForSecondsRealtime(fadeOutLength);
-            GameStatusController.Instance.IsLevelCompleted = false;
-            GameStatusController.Instance.CameFromLevel = false;
+            yield return FadeIn();
             PersistentData.Instance.DestroyInstance();
             GameSessionController.Instance.DestroyInstance();
             SceneManagerController.ReloadScene();
         }
 
         // Reset to Select Levels
-        private IEnumerator ResetGameCoroutine(string sceneName)
+        private IEnumerator GotoNextScene(string sceneName)
+        {
+            yield return FadeIn();
+            GameSessionController.Instance.GotoScene(sceneName);
+        }
+
+
+        /// <summary>
+        /// Apply fade in
+        /// </summary>
+        private IEnumerator FadeIn()
         {
             GameSessionController.Instance.ActualGameState = Enumerators.GameStates.TRANSITION;
-            FadeEffect.Instance.ResetAnimationFunctions();
-            float fadeOutLength = FadeEffect.Instance.GetFadeOutLength();
-            FadeEffect.Instance.FadeToLevel();
-            yield return new WaitForSecondsRealtime(fadeOutLength);
             GameStatusController.Instance.IsLevelCompleted = false;
-            GameStatusController.Instance.CameFromLevel = true;
-            GameSessionController.Instance.GotoScene(sceneName);
+            GameStatusController.Instance.CameFromLevel = false;
+            FadeEffect.Instance.ResetAnimationFunctions();
+            FadeEffect.Instance.FadeToLevel();
+            yield return new WaitForSecondsRealtime(FadeEffect.Instance.GetFadeOutLength());
         }
     }
 }

@@ -135,7 +135,8 @@ MonoBehaviour:
   - {fileID: 129114370444052011, guid: 0bfc88e441cd48a47b94d90eadff833c, type: 3}
   particlesPrefab: {fileID: 704464901149122646, guid: 5da83126db8ad0c4f8087a93cb08e756,
     type: 3}
-  blockScoreTextPrefab: {fileID: 0}
+  blockScoreTextPrefab: {fileID: 2517203266182758734, guid: 35e7dae6807e28344b0ac0362f9d9dc5,
+    type: 3}
   powerUpPrefabs:
   - {fileID: -7754417100698402476, guid: 62af0701fb27dce44b3c8084d7a86df3, type: 3}
   - {fileID: 8128731949446312808, guid: 3db3976a787e80c4297760a74ca04787, type: 3}

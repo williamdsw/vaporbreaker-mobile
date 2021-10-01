@@ -34,8 +34,7 @@ namespace Effects
 
         private void Start()
         {
-            if (SceneManagerController.GetActiveSceneIndex() >= SCENE_TO_APPLY_EVENTS)
-            //if (SceneManagerController.GetActiveSceneIndex() == SCENE_TO_APPLY_EVENTS)
+            if (SceneManagerController.GetActiveSceneIndex() == SCENE_TO_APPLY_EVENTS)
             {
                 CreateFadeInEvents();
                 CreateFadeOutEvents();

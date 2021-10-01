@@ -186,12 +186,12 @@ GameObject:
   - component: {fileID: 148169564}
   - component: {fileID: 148169565}
   m_Layer: 14
-  m_Name: TimeScoreLabel
+  m_Name: TimeScore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &148169564
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -262,12 +262,12 @@ GameObject:
   - component: {fileID: 149054034}
   - component: {fileID: 149054035}
   m_Layer: 14
-  m_Name: TotalLabel
+  m_Name: Total
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &149054034
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -336,7 +336,7 @@ Transform:
   m_Children:
   - {fileID: 538313519}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &164252656
 RectTransform:
@@ -369,7 +369,7 @@ GameObject:
   - component: {fileID: 164252658}
   - component: {fileID: 164252659}
   m_Layer: 14
-  m_Name: BestComboText
+  m_Name: BestComboLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -715,12 +715,12 @@ GameObject:
   - component: {fileID: 321866684}
   - component: {fileID: 321866685}
   m_Layer: 14
-  m_Name: BestComboLabel
+  m_Name: BestCombo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &321866684
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1117,7 +1117,7 @@ GameObject:
   - component: {fileID: 540964226}
   - component: {fileID: 540964227}
   m_Layer: 14
-  m_Name: TotalText
+  m_Name: TotalLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1536,7 +1536,7 @@ Transform:
   - {fileID: 589457192}
   - {fileID: 1024307424}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &915003888
 RectTransform:
@@ -1575,7 +1575,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &915003890
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1744,12 +1744,12 @@ GameObject:
   - component: {fileID: 934603691}
   - component: {fileID: 934603688}
   m_Layer: 14
-  m_Name: NumberOfBallsLabel
+  m_Name: NumberOfBalls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1024307423
 GameObject:
   m_ObjectHideFlags: 0
@@ -1935,12 +1935,12 @@ GameObject:
   - component: {fileID: 1128243153}
   - component: {fileID: 1128243158}
   m_Layer: 14
-  m_Name: ScoreLabel
+  m_Name: Score
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1128243158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2120,7 +2120,7 @@ GameObject:
   - component: {fileID: 1221717360}
   - component: {fileID: 1221717361}
   m_Layer: 14
-  m_Name: NumberOfBallsText
+  m_Name: NumberOfBallsLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2421,7 +2421,7 @@ Transform:
   - {fileID: 1816091228}
   - {fileID: 7094084367428519175}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1380496479
 GameObject:
@@ -2582,7 +2582,7 @@ GameObject:
   - component: {fileID: 1384626424}
   - component: {fileID: 1384626425}
   m_Layer: 14
-  m_Name: TimeScoreText
+  m_Name: TimeScoreLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2849,8 +2849,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 3078553942259129686}
-  m_RootOrder: 3
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1499225422
 Transform:
@@ -3231,7 +3231,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1599331226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3781,10 +3781,12 @@ MonoBehaviour:
   - {fileID: 3840716938095202383, guid: 35e37767df8e13144a7c14a1931e85f8, type: 3}
   powerUpSpawnerPrefab: {fileID: 2813070210544745102, guid: 0e25f1a7883f8a74f9759fb1f1a2ad89,
     type: 3}
+  joystickMovement: {fileID: 1657523447}
   ellapsedTimeText: {fileID: 629025227}
   currentScoreText: {fileID: 1308512455}
   comboMultiplierText: {fileID: 269561174}
   ballCountdownText: {fileID: 1888215455}
+  actualGameState: 1
 --- !u!114 &1784210066 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4879661715759950785, guid: 9bb5b1573375c1c469d5fe396c6ff784,
@@ -3815,12 +3817,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eea144119be5ae747aea25bc625c3255, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenu: {fileID: 1644250243}
+  panel: {fileID: 1644250243}
   pauseButtonMenu: {fileID: 419337758}
-  allPauseMenuButtons:
-  - {fileID: 1535208471}
-  - {fileID: 1645018078}
-  - {fileID: 1445998760}
+  resumeButton: {fileID: 1535208471}
+  restartButton: {fileID: 1645018078}
+  levelsButton: {fileID: 1445998760}
   headerLabel: {fileID: 1037069927}
 --- !u!4 &1821838222
 Transform:
@@ -4020,7 +4021,7 @@ GameObject:
   - component: {fileID: 1956918860}
   - component: {fileID: 1956918861}
   m_Layer: 14
-  m_Name: ScoreText
+  m_Name: ScoreLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4973,9 +4974,8 @@ Transform:
   - {fileID: 1821838222}
   - {fileID: 1499225422}
   - {fileID: 1559492172}
-  - {fileID: 1490149067}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &3235082081464728286
 RectTransform:
@@ -5763,16 +5763,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cf9241cadda1a849b69230022f7b83f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelCompletedPanel: {fileID: 563995666}
+  panel: {fileID: 563995666}
   continueButton: {fileID: 1599331226}
   headerLabel: {fileID: 1636078573}
-  scoreText: {fileID: 1956918861}
-  timeScoreText: {fileID: 1384626425}
-  bestComboText: {fileID: 164252659}
-  numberOfBallsText: {fileID: 1221717361}
-  totalText: {fileID: 540964227}
+  scoreLabel: {fileID: 1956918861}
+  timeScoreLabel: {fileID: 1384626425}
+  bestComboLabel: {fileID: 164252659}
+  numberOfBallsLabel: {fileID: 1221717361}
+  totalLabel: {fileID: 540964227}
   newScoreLabel: {fileID: 915003891}
-  defaultSecondsValue: 1
 --- !u!222 &7892162411584674357
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -1,46 +1,46 @@
-﻿using Core;
+﻿using Controllers.Core;
+using Core;
 using Effects;
 using MVC.Enums;
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utilities;
 
-namespace Controllers.Core
+namespace Controllers.Menu
 {
     public class LevelCompleteController : MonoBehaviour
     {
         [Header("Required Elements References")]
-        [SerializeField] private GameObject levelCompletedPanel;
+        [SerializeField] private GameObject panel;
         [SerializeField] private Button continueButton;
 
         [Header("Labels to Translate")]
         [SerializeField] private TextMeshProUGUI headerLabel;
-        [SerializeField] private TextMeshProUGUI scoreText;
-        [SerializeField] private TextMeshProUGUI timeScoreText;
-        [SerializeField] private TextMeshProUGUI bestComboText;
-        [SerializeField] private TextMeshProUGUI numberOfBallsText;
-        [SerializeField] private TextMeshProUGUI totalText;
+        [SerializeField] private TextMeshProUGUI scoreLabel;
+        [SerializeField] private TextMeshProUGUI timeScoreLabel;
+        [SerializeField] private TextMeshProUGUI bestComboLabel;
+        [SerializeField] private TextMeshProUGUI numberOfBallsLabel;
+        [SerializeField] private TextMeshProUGUI totalLabel;
         [SerializeField] private TextMeshProUGUI newScoreLabel;
 
-        // Config
-        [SerializeField] private float defaultSecondsValue = 1f;
+        // || Config
 
-        // Data / State
-        private int currentScore = 0;
-        private int timeScore = 0;
+        private const float DELAY_TIME = 1f;
+
+        // || State
+
+        private long currentScore = 0;
+        private long timeScore = 0;
         private int bestCombo = 0;
         private int numberOfBalls = 0;
-        private int totalScore = 0;
-        private float countdownTimer = 3f;
+        private long totalScore = 0;
 
         // || Cached
 
-        private Ball[] balls;
-        private List<string> cachedTexts = new List<string>();
         private TextMeshProUGUI continueButtonText;
-        private GameObject[] parents;
 
         // || Properties
 
@@ -49,113 +49,117 @@ namespace Controllers.Core
         private void Awake()
         {
             Instance = this;
+            panel.SetActive(false);
+            GetRequiredComponents();
+            BindEventListeners();
+            TranslateLabels();
             continueButtonText = continueButton.GetComponentInChildren<TextMeshProUGUI>();
         }
 
-        private void Start()
+        /// <summary>
+        /// Get required components
+        /// </summary>
+        private void GetRequiredComponents()
         {
-            levelCompletedPanel.SetActive(false);
-            TranslateLabels();
-            DefaultUIValues();
-            BindClickEvents();
+            try
+            {
+                continueButtonText = continueButton.GetComponentInChildren<TextMeshProUGUI>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
+        /// <summary>
+        /// Translates the UI
+        /// </summary>
         private void TranslateLabels()
         {
-            headerLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_levelcompleted);
-            scoreText.text = LocalizationController.Instance.GetWord(LocalizationFields.general_score);
-            timeScoreText.text = LocalizationController.Instance.GetWord(LocalizationFields.general_timescore);
-            bestComboText.text = LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_bestcombo);
-            numberOfBallsText.text = LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_currentballs);
-            totalText.text = LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_total);
-            newScoreLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_newscore);
-            continueButtonText.text = LocalizationController.Instance.GetWord(LocalizationFields.general_continue);
-        }
-
-        private void DefaultUIValues()
-        {
-            parents = new GameObject[]
+            try
             {
-                scoreText.gameObject.transform.parent.gameObject,
-                timeScoreText.gameObject.transform.parent.gameObject,
-                bestComboText.gameObject.transform.parent.gameObject,
-                numberOfBallsText.gameObject.transform.parent.gameObject,
-                totalText.gameObject.transform.parent.gameObject,
-            };
-
-            foreach (GameObject parent in parents)
-            {
-                parent.SetActive(false);
+                headerLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_levelcompleted);
+                scoreLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.general_score);
+                timeScoreLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.general_timescore);
+                bestComboLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_bestcombo);
+                numberOfBallsLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_currentballs);
+                totalLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_total);
+                newScoreLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_newscore);
+                continueButtonText.text = LocalizationController.Instance.GetWord(LocalizationFields.general_continue);
             }
-
-            newScoreLabel.enabled = false;
-            continueButton.gameObject.SetActive(false);
-        }
-
-        public void BindClickEvents()
-        {
-            continueButton.onClick.AddListener(() =>
+            catch (Exception ex)
             {
-                continueButton.interactable = false;
-                StartCoroutine(FadeCoroutine());
-            });
+                throw ex;
+            }
         }
 
-        public void CallLevelComplete(float timeScore, int bestCombo, int currentScore)
+        /// <summary>
+        /// Bind event listeners to elements
+        /// </summary>
+        private void BindEventListeners()
         {
-            balls = FindObjectsOfType<Ball>();
+            try
+            {
+                continueButton.onClick.AddListener(() =>
+                {
+                    continueButton.interactable = false;
+                    StartCoroutine(FadeCoroutine());
+                });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
-            // Passing values
+        /// <summary>
+        /// Pass values
+        /// </summary>
+        /// <param name="timeScore"> Score for Time </param>
+        /// <param name="bestCombo"> Best Combo </param>
+        /// <param name="currentScore"> Current Score </param>
+        public void CallLevelComplete(float timeScore, int bestCombo, long currentScore)
+        {
             this.timeScore = Mathf.FloorToInt(timeScore);
             this.bestCombo = bestCombo;
             this.currentScore = currentScore;
-            this.numberOfBalls = balls.Length;
+            this.numberOfBalls = FindObjectsOfType<Ball>().Length;
 
             StartCoroutine(LevelComplete());
         }
 
+        /// <summary>
+        /// Calculates total score
+        /// </summary>
         private void CalculateTotalScore()
         {
-            // Calculates total time
-            int totalTimeScore = 0;
+            long totalTimeScore = 1000000;
+            long minutes = (timeScore - ((timeScore / 3600) * 3600)) / 60;
+            totalTimeScore = (minutes != 0 ? totalTimeScore / minutes : totalTimeScore);
 
-            if (timeScore > 120) { totalTimeScore = 0; }
-            else if (timeScore > 110 && timeScore <= 120) { totalTimeScore = 20000; }
-            else if (timeScore > 100 && timeScore <= 110) { totalTimeScore = 40000; }
-            else if (timeScore > 90 && timeScore <= 100) { totalTimeScore = 50000; }
-            else if (timeScore > 80 && timeScore <= 90) { totalTimeScore = 60000; }
-            else if (timeScore > 70 && timeScore <= 80) { totalTimeScore = 80000; }
-            else if (timeScore > 60 && timeScore <= 70) { totalTimeScore = 100000; }
-            else if (timeScore > 50 && timeScore <= 60) { totalTimeScore = 120000; }
-            else if (timeScore > 40 && timeScore <= 50) { totalTimeScore = 130000; }
-            else if (timeScore > 40 && timeScore <= 50) { totalTimeScore = 140000; }
-            else if (timeScore > 30 && timeScore <= 40) { totalTimeScore = 150000; }
-            else if (timeScore > 20 && timeScore <= 30) { totalTimeScore = 160000; }
-            else if (timeScore > 10 && timeScore <= 20) { totalTimeScore = 180000; }
-            else if (timeScore > 0 && timeScore <= 10) { totalTimeScore = 200000; }
-
-            // Calculates
             totalScore = (currentScore + totalTimeScore);
-            totalScore += (numberOfBalls >= 1 ? numberOfBalls * 50000 : 0);
-            totalScore += (bestCombo > 1 ? bestCombo * 50000 : 0);
+            totalScore += (numberOfBalls >= 1 ? numberOfBalls * 10000 : 0);
+            totalScore += (bestCombo > 1 ? bestCombo * 10000 : 0);
 
             // Update UI
-            scoreText.text = string.Concat(scoreText.text, " : ", currentScore);
-            timeScoreText.text = string.Concat(timeScoreText.text, " : ", totalTimeScore);
-            bestComboText.text = string.Concat(bestComboText.text, " : ", bestCombo);
-            numberOfBallsText.text = string.Concat(numberOfBallsText.text, " : ", numberOfBalls);
-            totalText.text = string.Concat(totalText.text, " : ", totalScore);
+            scoreLabel.text = string.Format("{0} : {1}", scoreLabel.text, Formatter.FormatToCurrency(currentScore));
+            timeScoreLabel.text = string.Format("{0} : {1}", timeScoreLabel.text, (totalTimeScore > 0 ? Formatter.FormatToCurrency((long)totalTimeScore) : "0"));
+            bestComboLabel.text = string.Format("{0} : {1}", bestComboLabel.text, bestCombo.ToString());
+            numberOfBallsLabel.text = string.Format("{0} : {1}", numberOfBallsLabel.text, numberOfBalls.ToString());
+            totalLabel.text = string.Format("{0} : {1}", totalLabel.text, Formatter.FormatToCurrency(totalScore));
         }
 
+        /// <summary>
+        /// Show information
+        /// </summary>
         private IEnumerator LevelComplete()
         {
-            foreach (Ball ball in balls)
+            foreach (Ball ball in FindObjectsOfType<Ball>())
             {
                 Destroy(ball.gameObject);
             }
 
-            PowerUp[] powerUps = FindObjectsOfType<PowerUp>();
-            foreach (PowerUp powerUp in powerUps)
+            foreach (PowerUp powerUp in FindObjectsOfType<PowerUp>())
             {
                 Destroy(powerUp.gameObject);
             }
@@ -164,46 +168,59 @@ namespace Controllers.Core
             AudioController.Instance.StopMusic();
             CalculateTotalScore();
 
-            // Pass values
+            // Values to be saved
             GameStatusController.Instance.NewScore = totalScore;
             GameStatusController.Instance.NewTimeScore = timeScore;
+            GameStatusController.Instance.NewCombo = bestCombo;
             GameStatusController.Instance.IsLevelCompleted = true;
 
             // Plays success sound
-            yield return new WaitForSecondsRealtime(defaultSecondsValue);
+            yield return new WaitForSecondsRealtime(DELAY_TIME);
             AudioController.Instance.PlaySFX(AudioController.Instance.SuccessEffect, AudioController.Instance.MaxSFXVolume);
 
             // Show panel
-            yield return new WaitForSecondsRealtime(defaultSecondsValue);
-            levelCompletedPanel.SetActive(true);
+            yield return new WaitForSecondsRealtime(DELAY_TIME);
+            panel.SetActive(true);
 
             // Shows each text
-            yield return new WaitForSecondsRealtime(defaultSecondsValue);
-            foreach (GameObject parent in parents)
-            {
-                AudioController.Instance.PlaySFX(AudioController.Instance.HittingFace, AudioController.Instance.MaxSFXVolume);
-                parent.SetActive(true);
-                yield return new WaitForSecondsRealtime(defaultSecondsValue / 2f);
-            }
+            yield return new WaitForSecondsRealtime(DELAY_TIME);
+            yield return ShowElement(scoreLabel.gameObject.transform.parent.gameObject);
+            yield return ShowElement(timeScoreLabel.gameObject.transform.parent.gameObject);
+            yield return ShowElement(bestComboLabel.gameObject.transform.parent.gameObject);
+            yield return ShowElement(numberOfBallsLabel.gameObject.transform.parent.gameObject);
+            yield return ShowElement(totalLabel.gameObject.transform.parent.gameObject);
 
-            // Case have a new score
+            // New score
             if (totalScore > GameStatusController.Instance.OldScore)
             {
                 AudioController.Instance.PlaySFX(AudioController.Instance.NewScoreEffect, AudioController.Instance.MaxSFXVolume);
-                newScoreLabel.enabled = true;
-                newScoreLabel.GetComponent<FlashTextEffect>().enabled = true;
-                yield return new WaitForSecondsRealtime(defaultSecondsValue * 2);
+                newScoreLabel.gameObject.SetActive(true);
+                yield return new WaitForSecondsRealtime(DELAY_TIME * 2);
             }
 
             continueButton.gameObject.SetActive(true);
+            continueButton.Select();
         }
 
+        /// <summary>
+        /// Show desired element
+        /// </summary>
+        /// <param name="element"> Element to be shown </param>
+        private IEnumerator ShowElement(GameObject element)
+        {
+            AudioController.Instance.PlaySFX(AudioController.Instance.HittingFace, AudioController.Instance.MaxSFXVolume);
+            element.SetActive(true);
+            yield return new WaitForSecondsRealtime(DELAY_TIME / 2f);
+        }
+
+        /// <summary>
+        /// Fade to Select Levels
+        /// </summary>
         private IEnumerator FadeCoroutine()
         {
             FadeEffect.Instance.ResetAnimationFunctions();
-            float fadeOutLength = FadeEffect.Instance.GetFadeOutLength();
             FadeEffect.Instance.FadeToLevel();
-            yield return new WaitForSecondsRealtime(fadeOutLength);
+            yield return new WaitForSecondsRealtime(FadeEffect.Instance.GetFadeOutLength());
             GameSessionController.Instance.GotoScene(SceneManagerController.SelectLevelsSceneName);
         }
     }

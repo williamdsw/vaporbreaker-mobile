@@ -18,11 +18,6 @@ namespace Utilities
             public static string UndoFireBalls => "UndoFireBalls";
         }
 
-        public class Names
-        {
-            public static string TouchPad => "Touchpad";
-        }
-
         public class Parents
         {
             public static string Blocks => "Blocks";
@@ -37,9 +32,9 @@ namespace Utilities
         public class Tags
         {
             public static string Ball => "Ball";
-            public static string BallEcho => "Ball_Echo";
+            public static string BallEcho => "BallEcho";
             public static string Breakable => "Breakable";
-            public static string LineBetweenBallPointer => "Line_Between_Ball_Pointer";
+            public static string LineBetweenBallPointer => "LineBetweenBallPointer";
             public static string Paddle => "Paddle";
             public static string PowerUp => "PowerUp";
             public static string Wall => "Wall";

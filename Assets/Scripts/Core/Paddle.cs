@@ -58,11 +58,14 @@ namespace Core
                 rigidBody2D = GetComponent<Rigidbody2D>();
                 SpriteRenderer = GetComponent<SpriteRenderer>();
 
+                Debug.Log(joystickMovement);
+
                 if (!joystickMovement)
                 {
-                    GameObject touchpad = GameObject.Find(NamesTags.Names.TouchPad);
-                    joystickMovement = touchpad.GetComponent<JoystickMovement>();
+                    joystickMovement = FindObjectOfType<JoystickMovement>();
                 }
+
+                Debug.Log(joystickMovement);
             }
             catch (Exception ex)
             {
@@ -98,7 +101,7 @@ namespace Core
         private void Move()
         {
             // TODO!
-            currentDirection = new Vector3(joystickMovement.InputDirection.x, 0, 0);
+            currentDirection = new Vector3(GameSessionController.Instance.JoystickMovement.InputDirection.x, 0, 0);
             transform.position = new Vector3(currentDirection.x, this.transform.position.y, this.transform.position.z);
         }
 
