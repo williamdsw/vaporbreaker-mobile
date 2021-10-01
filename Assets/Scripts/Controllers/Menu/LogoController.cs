@@ -28,14 +28,17 @@ namespace Controllers.Menu
 
         private bool isDatabaseOk = false;
 
-        private void Awake() => StartCoroutine(ExtractDatabase());
+        private void Awake() => UnityUtilities.DisableAnalytics();
 
-        private void Start()
+        private IEnumerator Start()
         {
-            UnityUtilities.DisableAnalytics();
-            StartCoroutine(PlayAndShowLogo());
+            yield return ExtractDatabase();
+            yield return PlayAndShowLogo();
         }
 
+        /// <summary>
+        /// Extract database file
+        /// </summary>
         private IEnumerator ExtractDatabase()
         {
             if (!FileManager.Exists(Configuration.Properties.DatabasePath))
@@ -56,12 +59,14 @@ namespace Controllers.Menu
 
         private IEnumerator CopyDatabase()
         {
-            yield return StartCoroutine(API.API.Get(Configuration.Properties.MobileDatabasePath, (bytes) => FileManager.WriteAllBytes(Configuration.Properties.DatabasePath, bytes)));
+            yield return API.API.Get(Configuration.Properties.MobileDatabasePath, (bytes) => FileManager.WriteAllBytes(Configuration.Properties.DatabasePath, bytes));
         }
 
+        /// <summary>
+        /// Extract database file
+        /// </summary>
         private IEnumerator PlayAndShowLogo()
         {
-            // Plays Logo Sound
             yield return new WaitUntil(() => isDatabaseOk);
             yield return new WaitForSecondsRealtime(TIME_TO_CALL_ANIMATION);
 
@@ -75,6 +80,7 @@ namespace Controllers.Menu
             }
 
             AudioController.Instance.PlayME(AudioController.Instance.RetrogemnVoice, 1f, false);
+
             alpha = iconImage.color.a;
             for (float i = alpha; i < 1f; i += ALPHA_INCREMENT)
             {
@@ -89,15 +95,18 @@ namespace Controllers.Menu
             yield return new WaitUntil(() => LocalizationController.Instance != null);
             LocalizationController.Instance.GetLocalization();
             yield return new WaitUntil(() => LocalizationController.Instance.DictionaryCount > 0);
-            StartCoroutine(CallNextScene(SceneManagerController.SelectLevelsSceneName));
+
+            yield return CallNextScene();
         }
 
-        private IEnumerator CallNextScene(string nextSceneName)
+        /// <summary>
+        /// Goto loading and title
+        /// </summary>
+        private IEnumerator CallNextScene()
         {
-            float fadeOutLength = FadeEffect.Instance.GetFadeOutLength();
             FadeEffect.Instance.FadeToLevel();
-            yield return new WaitForSecondsRealtime(fadeOutLength);
-            GameStatusController.Instance.NextSceneName = nextSceneName;
+            yield return new WaitForSecondsRealtime(FadeEffect.Instance.GetFadeOutLength());
+            GameStatusController.Instance.NextSceneName = SceneManagerController.SelectLevelsSceneName;
             GameStatusController.Instance.CameFromLevel = false;
             GameStatusController.Instance.IsLevelCompleted = false;
             SceneManagerController.CallScene(SceneManagerController.LoadingSceneName);
