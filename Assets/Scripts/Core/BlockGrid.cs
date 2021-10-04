@@ -14,7 +14,6 @@ namespace Core
 
         // || Properties
 
-        public static Dictionary<Vector3, Block> Grid { get; } = new Dictionary<Vector3, Block>();
         public static Vector2 MinCoordinatesInXY => new Vector2(-4f, -7.5f);
         public static Vector2 MaxCoordinatesInXY => new Vector2(4f, 7.5f);
 
@@ -33,13 +32,6 @@ namespace Core
                 }
             }
         }
-
-        /// <summary>
-        /// Put block at position
-        /// </summary>
-        /// <param name="position"> Desired position </param>
-        /// <param name="block"> Desired block </param>
-        public static void PutBlock(Vector3 position, Block block) => grid.Add(position, block);
 
         /// <summary>
         /// Check if position exists

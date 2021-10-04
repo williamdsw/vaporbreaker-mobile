@@ -86,8 +86,7 @@ namespace Controllers.Core
         {
             try
             {
-                LocalizationBL localizationBL = new LocalizationBL();
-                Localization localization = localizationBL.GetByLanguage(language);
+                Localization localization = new LocalizationBL().GetByLanguage(language);
                 dictionary = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(localization.Content);
             }
             catch (Exception ex)

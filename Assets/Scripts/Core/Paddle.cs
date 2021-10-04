@@ -5,11 +5,16 @@ using Utilities;
 
 namespace Core
 {
+    /// <summary>
+    /// Paddle, the player
+    /// </summary>
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(BoxCollider2D))]
     [RequireComponent(typeof(Rigidbody2D))]
     public class Paddle : MonoBehaviour
     {
+        // || Inspector References
+
         [Header("Configuration")]
         [SerializeField] private Sprite[] paddleSprites;
 
@@ -18,7 +23,7 @@ namespace Core
         private int currentPaddleIndex = 1;
         private Vector2 minMaxCoordinatesInX = Vector2.zero;
         private Vector3 currentDirection;
-        private float moveSpeed = 15f;
+        private float moveSpeed = 40f;
 
         // || Cached
 
@@ -41,7 +46,6 @@ namespace Core
             if (GameSessionController.Instance.ActualGameState == Enumerators.GameStates.GAMEPLAY)
             {
                 Move();
-                LockPositionToScreen();
             }
         }
 
@@ -72,7 +76,6 @@ namespace Core
             rigidBody2D.MovePosition((Vector2)startPosition);
         }
 
-
         /// <summary>
         /// Define bounds for Paddle
         /// </summary>
@@ -89,17 +92,9 @@ namespace Core
         /// </summary>
         private void Move()
         {
-            // TODO!
-            currentDirection = new Vector3(GameSessionController.Instance.JoystickMovement.InputDirection.x, 0, 0);
-            transform.position = new Vector3(currentDirection.x, this.transform.position.y, this.transform.position.z);
-        }
-
-        private void LockPositionToScreen()
-        {
-            // TODO!
-            float xPosition = transform.position.x;
-            xPosition = Mathf.Clamp(xPosition, minMaxCoordinatesInX.x, minMaxCoordinatesInX.y);
-            transform.position = new Vector3(xPosition, transform.position.y, transform.position.z);
+            float x = GameSessionController.Instance.JoystickMovement.InputDirection.x * moveSpeed * Time.fixedDeltaTime;
+            x = Mathf.Clamp(x, minMaxCoordinatesInX.x, minMaxCoordinatesInX.y);
+            rigidBody2D.MovePosition(new Vector2(x, 0));
         }
 
         /// <summary>

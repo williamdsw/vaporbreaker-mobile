@@ -1,16 +1,14 @@
 ﻿
 namespace Utilities
 {
+    /// <summary>
+    /// Names | Tags
+    /// </summary>
     public class NamesTags
     {
         public class AnimatorTriggers
         {
             public static string FadeOut => "FadeOut";
-        }
-
-        public class Blocks
-        {
-            public static string PowerUpBlock => "PowerUpBlock";
         }
 
         public class Functions

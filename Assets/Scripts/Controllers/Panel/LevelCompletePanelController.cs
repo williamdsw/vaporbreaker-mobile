@@ -11,7 +11,10 @@ using Utilities;
 
 namespace Controllers.Panel
 {
-    public class LevelCompleteController : MonoBehaviour
+    /// <summary>
+    /// Controller for Level Complete Panel
+    /// </summary>
+    public class LevelCompletePanelController : MonoBehaviour
     {
         [Header("Required Elements References")]
         [SerializeField] private GameObject panel;
@@ -44,16 +47,16 @@ namespace Controllers.Panel
 
         // || Properties
 
-        public static LevelCompleteController Instance { get; private set; }
+        public static LevelCompletePanelController Instance { get; private set; }
 
         private void Awake()
         {
             Instance = this;
             panel.SetActive(false);
+
             GetRequiredComponents();
             BindEventListeners();
             TranslateLabels();
-            continueButtonText = continueButton.GetComponentInChildren<TextMeshProUGUI>();
         }
 
         /// <summary>
@@ -221,7 +224,7 @@ namespace Controllers.Panel
             FadeEffect.Instance.ResetAnimationFunctions();
             FadeEffect.Instance.FadeToLevel();
             yield return new WaitForSecondsRealtime(FadeEffect.Instance.GetFadeOutLength());
-            GameSessionController.Instance.GotoScene(SceneManagerController.SelectLevelsSceneName);
+            GameSessionController.Instance.GotoScene(SceneManagerController.SceneNames.SelectLevels);
         }
     }
 }

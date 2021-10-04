@@ -11,7 +11,7 @@ using Utilities;
 
 namespace Controllers.Panel
 {
-    public class PauseController : MonoBehaviour
+    public class PausePanelController : MonoBehaviour
     {
         // || Inspector References
 
@@ -37,7 +37,7 @@ namespace Controllers.Panel
 
         // || Properties
 
-        public static PauseController Instance { get; private set; }
+        public static PausePanelController Instance { get; private set; }
         public bool CanPause { private get; set; } = true;
 
         private void Awake()
@@ -95,7 +95,7 @@ namespace Controllers.Panel
                 pauseButtonMenu.onClick.AddListener(() => PauseOrResumeGame());
                 resumeButton.onClick.AddListener(() => PauseOrResumeGame());
                 restartButton.onClick.AddListener(() => StartCoroutine(ResetLevelCoroutine()));
-                levelsButton.onClick.AddListener(() => StartCoroutine(GotoNextScene(SceneManagerController.SelectLevelsSceneName)));
+                levelsButton.onClick.AddListener(() => StartCoroutine(GotoNextScene(SceneManagerController.SceneNames.SelectLevels)));
             }
             catch (Exception ex)
             {

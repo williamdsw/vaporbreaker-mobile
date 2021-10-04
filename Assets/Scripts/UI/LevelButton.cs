@@ -1,12 +1,14 @@
-using System;
 using MVC.Models;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Utilities;
 
 namespace UI
 {
+    /// <summary>
+    /// Level Button Prefab
+    /// </summary>
     [RequireComponent(typeof(Button))]
     [RequireComponent(typeof(LayoutElement))]
     public class LevelButton : MonoBehaviour

@@ -71,7 +71,7 @@ namespace Controllers.Scene
 
         private void Start()
         {
-            if (GameStatusController.Instance.NextSceneName.Equals(SceneManagerController.LevelSceneName))
+            if (GameStatusController.Instance.NextSceneName.Equals(SceneManagerController.SceneNames.Level))
             {
                 Translate();
                 BindEventListeners();

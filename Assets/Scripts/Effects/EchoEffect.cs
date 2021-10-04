@@ -6,6 +6,9 @@ using Utilities;
 
 namespace Effects
 {
+    /// <summary>
+    /// Echo Effect for the Ball
+    /// </summary>
     public class EchoEffect : MonoBehaviour
     {
         // || Inspector References

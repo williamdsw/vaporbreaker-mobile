@@ -2,10 +2,12 @@
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using UnityEngine;
 
 namespace Utilities
 {
+    /// <summary>
+    /// Manager for Progress
+    /// </summary>
     public class ProgressManager
     {
         /// <summary>

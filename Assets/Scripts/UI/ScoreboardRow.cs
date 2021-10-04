@@ -6,6 +6,9 @@ using Utilities;
 
 namespace UI
 {
+    /// <summary>
+    /// Prefab for Scoreboard Row
+    /// </summary>
     [RequireComponent(typeof(Image))]
     [RequireComponent(typeof(HorizontalLayoutGroup))]
     public class ScoreboardRow : MonoBehaviour
@@ -41,6 +44,14 @@ namespace UI
             }
         }
 
+        /// <summary>
+        /// Set properties for this element
+        /// </summary>
+        /// <param name="order"> Current Order </param>
+        /// <param name="score"> Best Score </param>
+        /// <param name="timeScore"> Best Time Score </param>
+        /// <param name="bestCombo"> Best Combo </param>
+        /// <param name="isOdd">Is a odd row ? </param>
         public void Set(int order, long score, long timeScore, long bestCombo, bool isOdd)
         {
             try

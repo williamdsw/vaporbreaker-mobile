@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 namespace Effects
 {
+    /// <summary>
+    /// Animation effect with sprite array
+    /// </summary>
     public class AnimationEffect : MonoBehaviour
     {
         // || Inspector References

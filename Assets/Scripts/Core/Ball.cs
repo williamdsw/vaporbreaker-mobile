@@ -6,6 +6,9 @@ using Utilities;
 
 namespace Core
 {
+    /// <summary>
+    /// Ball entity
+    /// </summary>
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(Rigidbody2D))]
     public class Ball : MonoBehaviour
@@ -37,7 +40,8 @@ namespace Core
 
         // || Properties
 
-
+        public Color32 CurrentColor => spriteRenderer.color;
+        public Sprite Sprite => spriteRenderer.sprite;
         public bool IsOnFire { get; set; } = false;
         public float DefaultSpeed { get; set; }
         public float MoveSpeed { get; set; } = 300f;
@@ -47,8 +51,6 @@ namespace Core
         public Vector2 MinMaxLocalScale => new Vector2(0.5f, 8f);
         public Vector2 MinMaxRotationDegree => new Vector2(10f, 90f);
         public Vector2 Velocity { get => rigidBody2D.velocity; set => rigidBody2D.velocity = value; }
-        public Color32 CurrentColor => spriteRenderer.color;
-        public Sprite Sprite => spriteRenderer.sprite;
 
         private void Awake() => GetRequiredComponents();
 
@@ -98,37 +100,32 @@ namespace Core
 
                     switch (other.gameObject.tag)
                     {
-                        // Colision with paddle
                         case "Paddle":
-                            {
-                                if (other.GetContact(0).normal != Vector2.down)
-                                {
-                                    ClampVelocity();
-                                    AudioController.Instance.PlaySFX(AudioController.Instance.BlipSound, AudioController.Instance.MaxSFXVolume);
-                                }
-
-                                if (other.GetContact(0).normal == Vector2.up)
-                                {
-                                    if (MoveSpeed > DefaultSpeed)
-                                    {
-                                        SpawnPaddleDebris(other.GetContact(0).point);
-                                    }
-                                }
-
-                                if (GameSessionController.Instance.CanMoveBlocks)
-                                {
-                                    GameSessionController.Instance.MoveBlocks(GameSessionController.Instance.BlockDirection);
-                                }
-
-                                break;
-                            }
-
-                        case "Wall":
+                            if (other.GetContact(0).normal != Vector2.down)
                             {
                                 ClampVelocity();
                                 AudioController.Instance.PlaySFX(AudioController.Instance.BlipSound, AudioController.Instance.MaxSFXVolume);
-                                break;
                             }
+
+                            if (other.GetContact(0).normal == Vector2.up)
+                            {
+                                if (MoveSpeed > DefaultSpeed)
+                                {
+                                    SpawnPaddleDebris(other.GetContact(0).point);
+                                }
+                            }
+
+                            if (GameSessionController.Instance.CanMoveBlocks)
+                            {
+                                GameSessionController.Instance.MoveBlocks(GameSessionController.Instance.BlockDirection);
+                            }
+
+                            break;
+
+                        case "Wall":
+                            ClampVelocity();
+                            AudioController.Instance.PlaySFX(AudioController.Instance.BlipSound, AudioController.Instance.MaxSFXVolume);
+                            break;
 
                         case "Breakable": case "Unbreakable": ClampVelocity(); break;
                         default: break;

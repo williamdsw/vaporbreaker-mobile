@@ -7,6 +7,9 @@ using Utilities;
 
 namespace Core
 {
+    /// <summary>
+    /// Death zone for ball and power ups
+    /// </summary>
     [RequireComponent(typeof(EdgeCollider2D))]
     public class DeathZone : MonoBehaviour
     {

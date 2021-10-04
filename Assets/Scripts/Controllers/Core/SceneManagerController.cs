@@ -8,12 +8,15 @@ namespace Controllers.Core
     /// </summary>
     public class SceneManagerController
     {
-        // || Properties
+        public class SceneNames
+        {
+            // || Properties
 
-        public static string LevelSceneName => "Level";
-        public static string LoadingSceneName => "Loading";
-        public static string SelectLevelsSceneName => "SelectLevels";
-        public static string SountrackSceneName => "Soundtrack";
+            public static string Level => "Level";
+            public static string Loading => "Loading";
+            public static string SelectLevels => "SelectLevels";
+            public static string Soundtrack => "Soundtrack";
+        }
 
         /// <summary>
         /// Calls a scene by name

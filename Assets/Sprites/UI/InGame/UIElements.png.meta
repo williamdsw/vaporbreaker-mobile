@@ -4,43 +4,46 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: -7663377620997365329
-    second: UI_Elements_0
+    second: AnalogOutside
   - first:
       213: -2251538127485611388
-    second: UI_Elements_1
+    second: AnalogInside
   - first:
       213: -7182453096281324025
-    second: UI_Elements_2
+    second: ShooterButton
   - first:
       213: -1099639297399914058
-    second: UI_Elements_3
+    second: BButton
   - first:
       213: -2929646516663234307
-    second: UI_Elements_4
+    second: BlackPanel
   - first:
       213: 3111307083283611356
-    second: UI_Elements_5
+    second: SoundOn
   - first:
       213: -7474635856940394777
-    second: UI_Elements_6
+    second: SoundOff
   - first:
       213: -7688733447887603931
-    second: UI_Elements_7
+    second: Menu
   - first:
       213: 996403824330879391
-    second: UI_Elements_8
+    second: Back
   - first:
       213: 3872370640917899509
-    second: UI_Elements_9
+    second: Disk
   - first:
       213: -2757062313598379230
-    second: UI_Elements_10
+    second: Close
   - first:
       213: -2757062313598379230
-    second: UI_Elements_11
+    second: Ok
   - first:
       213: 7776510085270253624
-    second: UI_Elements_12
+    second: ThreeDots
+  - first:
+      213: 8316150575541490755
+    second: Flag
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -178,7 +181,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: UI_Elements_0
+      name: AnalogOutside
       rect:
         serializedVersion: 2
         x: 8
@@ -199,7 +202,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_Elements_1
+      name: AnalogInside
       rect:
         serializedVersion: 2
         x: 184
@@ -220,7 +223,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_Elements_2
+      name: ShooterButton
       rect:
         serializedVersion: 2
         x: 296
@@ -241,7 +244,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_Elements_3
+      name: BButton
       rect:
         serializedVersion: 2
         x: 392
@@ -262,7 +265,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_Elements_4
+      name: BlackPanel
       rect:
         serializedVersion: 2
         x: 56
@@ -283,7 +286,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_Elements_5
+      name: SoundOn
       rect:
         serializedVersion: 2
         x: 112
@@ -304,7 +307,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_Elements_6
+      name: SoundOff
       rect:
         serializedVersion: 2
         x: 152
@@ -325,7 +328,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_Elements_7
+      name: Menu
       rect:
         serializedVersion: 2
         x: 192
@@ -346,7 +349,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_Elements_8
+      name: Back
       rect:
         serializedVersion: 2
         x: 232
@@ -367,7 +370,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_Elements_9
+      name: Disk
       rect:
         serializedVersion: 2
         x: 272
@@ -388,7 +391,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_Elements_10
+      name: Close
       rect:
         serializedVersion: 2
         x: 312
@@ -409,7 +412,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_Elements_11
+      name: Ok
       rect:
         serializedVersion: 2
         x: 352
@@ -430,7 +433,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_Elements_12
+      name: ThreeDots
       rect:
         serializedVersion: 2
         x: 392
@@ -438,7 +441,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -446,6 +449,27 @@ TextureImporter:
       bones: []
       spriteID: e3dc537056a5e5d43bdb5365d04d3dcc
       internalID: 7776510085270253624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Flag
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3449fc933e6e86370800000000000000
+      internalID: 8316150575541490755
       vertices: []
       indices: 
       edges: []

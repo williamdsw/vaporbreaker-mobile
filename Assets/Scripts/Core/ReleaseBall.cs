@@ -5,6 +5,9 @@ using Utilities;
 
 namespace Core
 {
+    /// <summary>
+    /// Release ball | shooter button
+    /// </summary>
     public class ReleaseBall : MonoBehaviour, IPointerUpHandler
     {
         public virtual void OnPointerUp(PointerEventData pointerEventData)

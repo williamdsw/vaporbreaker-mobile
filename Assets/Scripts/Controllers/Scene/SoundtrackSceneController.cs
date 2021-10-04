@@ -1,9 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Controllers.Core;
 using Effects;
 using MVC.Models;
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -226,7 +225,7 @@ namespace Controllers.Scene
         /// <summary>
         /// Updates battery level
         /// </summary>
-        private void UpdateBatteryLevel() => batteryLevelLabel.text = string.Format("{0}%", (Mathf.FloorToInt(SystemInfo.batteryLevel * 10)));
+        private void UpdateBatteryLevel() => batteryLevelLabel.text = string.Format("{0}%", (Mathf.FloorToInt(SystemInfo.batteryLevel * 100)));
 
         /// <summary>
         /// Stop all and calls main menu scene
@@ -244,10 +243,10 @@ namespace Controllers.Scene
 
             FadeEffect.Instance.FadeToLevel();
             yield return new WaitForSecondsRealtime(FadeEffect.Instance.GetFadeOutLength());
-            GameStatusController.Instance.NextSceneName = SceneManagerController.SelectLevelsSceneName;
+            GameStatusController.Instance.NextSceneName = SceneManagerController.SceneNames.SelectLevels;
             GameStatusController.Instance.CameFromLevel = false;
             GameStatusController.Instance.IsLevelCompleted = false;
-            SceneManagerController.CallScene(SceneManagerController.LoadingSceneName);
+            SceneManagerController.CallScene(SceneManagerController.SceneNames.Loading);
         }
     }
 }

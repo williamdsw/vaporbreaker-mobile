@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using MVC.BL;
+﻿using MVC.BL;
 using MVC.Models;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Controllers.Core
@@ -11,7 +11,8 @@ namespace Controllers.Core
     /// </summary>
     public class AudioController : MonoBehaviour
     {
-        // Config
+        // || Config
+
         [Header("Audio Sources")]
         [SerializeField] private AudioSource audioSourceBGM;
         [SerializeField] private AudioSource audioSourceME;
@@ -124,7 +125,7 @@ namespace Controllers.Core
         /// <param name="volume"> Volume amount </param>
         public void PlaySFX(AudioClip clip, float volume)
         {
-            if (AudioSourceSFX.mute || AudioSourceSFX.isPlaying) return;
+            if (AudioSourceSFX.mute) return;
             float temporaryVolume = (volume > MaxSFXVolume ? MaxSFXVolume : volume);
             AudioSourceSFX.volume = temporaryVolume;
             AudioSourceSFX.PlayOneShot(clip);
@@ -138,7 +139,7 @@ namespace Controllers.Core
         /// <param name="toLoop"> Is to loop ? </param>
         public void PlayME(AudioClip clip, float volume, bool toLoop)
         {
-            if (AudioSourceME.mute || AudioSourceME.isPlaying) return;
+            if (AudioSourceME.mute) return;
             float temporaryVolume = (volume > MaxMEVolume ? MaxMEVolume : volume);
             AudioSourceME.volume = temporaryVolume;
             AudioSourceME.clip = clip;

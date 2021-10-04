@@ -7,6 +7,9 @@ using Utilities;
 
 namespace Core
 {
+    /// <summary>
+    /// Shooter used by the Player
+    /// </summary>
     public class Shooter : MonoBehaviour
     {
         // || Inspector References
@@ -24,12 +27,13 @@ namespace Core
         // || Cached
 
         private Paddle paddle;
-        private List<GameObject> projectilesPool = new List<GameObject>();
+        private List<GameObject> projectilesPool;
 
         private void Awake()
         {
             projectilesPool = new List<GameObject>();
             paddle = FindObjectOfType<Paddle>();
+
             CreateProjectilesPool();
             SetCannonsPosition();
             StartCoroutine(SelfDestruct());

@@ -1,11 +1,13 @@
 ﻿using Controllers.Core;
-using Controllers.Panel;
 using System;
 using UnityEngine;
 using Utilities;
 
 namespace Effects
 {
+    /// <summary>
+    /// Fade In | Fade Out Effect
+    /// </summary>
     [RequireComponent(typeof(Animator))]
     public class FadeEffect : MonoBehaviour
     {
@@ -17,6 +19,7 @@ namespace Effects
         }
 
         // || Config
+
         private readonly int SCENE_TO_APPLY_EVENTS = 4;
 
         // || Cached
@@ -186,7 +189,7 @@ namespace Effects
         public void CallLevelMenu()
         {
             animator.Rebind();
-            GameSessionController.Instance.GotoScene(SceneManagerController.SelectLevelsSceneName);
+            GameSessionController.Instance.GotoScene(SceneManagerController.SceneNames.SelectLevels);
         }
 
         /// <summary>

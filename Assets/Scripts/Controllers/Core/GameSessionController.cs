@@ -67,34 +67,26 @@ namespace Controllers.Core
                 switch (ActualGameState)
                 {
                     case Enumerators.GameStates.LEVEL_COMPLETE:
-                        {
-                            PauseController.Instance.CanPause = false;
-                            canvasGroup.interactable = true;
-                            break;
-                        }
+                        PausePanelController.Instance.CanPause = false;
+                        canvasGroup.interactable = true;
+                        break;
 
                     case Enumerators.GameStates.GAMEPLAY:
-                        {
-                            Time.timeScale = 1f;
-                            PauseController.Instance.CanPause = true;
-                            canvasGroup.interactable = true;
-                            break;
-                        }
+                        Time.timeScale = 1f;
+                        PausePanelController.Instance.CanPause = true;
+                        canvasGroup.interactable = true;
+                        break;
 
                     case Enumerators.GameStates.PAUSE:
-                        {
-                            Time.timeScale = 0f;
-                            PauseController.Instance.CanPause = true;
-                            canvasGroup.interactable = true;
-                            break;
-                        }
+                        Time.timeScale = 0f;
+                        PausePanelController.Instance.CanPause = true;
+                        canvasGroup.interactable = true;
+                        break;
 
                     case Enumerators.GameStates.TRANSITION:
-                        {
-                            PauseController.Instance.CanPause = false;
-                            canvasGroup.interactable = false;
-                            break;
-                        }
+                        PausePanelController.Instance.CanPause = false;
+                        canvasGroup.interactable = false;
+                        break;
                 }
             }
         }
@@ -295,7 +287,7 @@ namespace Controllers.Core
         public void CallLevelComplete()
         {
             ActualGameState = Enumerators.GameStates.LEVEL_COMPLETE;
-            LevelCompleteController.Instance.CallLevelComplete(ellapsedTime, bestCombo, currentScore);
+            LevelCompletePanelController.Instance.CallLevelComplete(ellapsedTime, bestCombo, currentScore);
         }
 
         /// <summary>
@@ -379,32 +371,24 @@ namespace Controllers.Core
                             switch (direction)
                             {
                                 case Enumerators.Directions.Right:
-                                    {
-                                        Vector3 right = new Vector3(block.transform.position.x + 1f, block.transform.position.y, 0f);
-                                        MoveBlockAtPosition(block, right, (right.x <= BlockGrid.MaxCoordinatesInXY.x), ref numberOfOcorrences);
-                                        break;
-                                    }
+                                    Vector3 right = new Vector3(block.transform.position.x + 1f, block.transform.position.y, 0f);
+                                    MoveBlockAtPosition(block, right, (right.x <= BlockGrid.MaxCoordinatesInXY.x), ref numberOfOcorrences);
+                                    break;
 
                                 case Enumerators.Directions.Left:
-                                    {
-                                        Vector3 left = new Vector3(block.transform.position.x - 1f, block.transform.position.y, 0f);
-                                        MoveBlockAtPosition(block, left, (left.x >= BlockGrid.MinCoordinatesInXY.x), ref numberOfOcorrences);
-                                        break;
-                                    }
+                                    Vector3 left = new Vector3(block.transform.position.x - 1f, block.transform.position.y, 0f);
+                                    MoveBlockAtPosition(block, left, (left.x >= BlockGrid.MinCoordinatesInXY.x), ref numberOfOcorrences);
+                                    break;
 
                                 case Enumerators.Directions.Down:
-                                    {
-                                        Vector3 down = new Vector3(block.transform.position.x, block.transform.position.y - 0.5f, 0f);
-                                        MoveBlockAtPosition(block, down, down.y >= BlockGrid.MinCoordinatesInXY.y, ref numberOfOcorrences);
-                                        break;
-                                    }
+                                    Vector3 down = new Vector3(block.transform.position.x, block.transform.position.y - 0.5f, 0f);
+                                    MoveBlockAtPosition(block, down, down.y >= BlockGrid.MinCoordinatesInXY.y, ref numberOfOcorrences);
+                                    break;
 
                                 case Enumerators.Directions.Up:
-                                    {
-                                        Vector3 up = new Vector3(block.transform.position.x, block.transform.position.y + 0.5f, 0f);
-                                        MoveBlockAtPosition(block, up, up.y <= BlockGrid.MaxCoordinatesInXY.y, ref numberOfOcorrences);
-                                        break;
-                                    }
+                                    Vector3 up = new Vector3(block.transform.position.x, block.transform.position.y + 0.5f, 0f);
+                                    MoveBlockAtPosition(block, up, up.y <= BlockGrid.MaxCoordinatesInXY.y, ref numberOfOcorrences);
+                                    break;
 
                                 default: break;
                             }
@@ -682,7 +666,7 @@ namespace Controllers.Core
             GameStatusController.Instance.NextSceneName = sceneName;
             GameStatusController.Instance.HasStartedSong = false;
             GameStatusController.Instance.CameFromLevel = true;
-            SceneManagerController.CallScene(SceneManagerController.LoadingSceneName);
+            SceneManagerController.CallScene(SceneManagerController.SceneNames.Loading);
             DestroyInstance();
         }
 

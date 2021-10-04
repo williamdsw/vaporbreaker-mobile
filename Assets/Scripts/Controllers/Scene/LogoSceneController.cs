@@ -109,10 +109,10 @@ namespace Controllers.Scene
         {
             FadeEffect.Instance.FadeToLevel();
             yield return new WaitForSecondsRealtime(FadeEffect.Instance.GetFadeOutLength());
-            GameStatusController.Instance.NextSceneName = SceneManagerController.SelectLevelsSceneName;
+            GameStatusController.Instance.NextSceneName = SceneManagerController.SceneNames.SelectLevels;
             GameStatusController.Instance.CameFromLevel = false;
             GameStatusController.Instance.IsLevelCompleted = false;
-            SceneManagerController.CallScene(SceneManagerController.LoadingSceneName);
+            SceneManagerController.CallScene(SceneManagerController.SceneNames.Loading);
         }
     }
 }

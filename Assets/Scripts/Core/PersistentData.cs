@@ -3,9 +3,13 @@ using UnityEngine;
 
 namespace Core
 {
+    /// <summary>
+    /// Data to be persisted when scene reloads
+    /// </summary>
     public class PersistentData : MonoBehaviour
     {
         // || State 
+
         private int startingSceneIndex;
 
         // || Properties

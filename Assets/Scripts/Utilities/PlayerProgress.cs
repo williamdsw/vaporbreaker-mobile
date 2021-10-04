@@ -2,6 +2,9 @@
 
 namespace Utilities
 {
+    /// <summary>
+    /// Progress data for Player
+    /// </summary>
     [Serializable]
     public class PlayerProgress
     {

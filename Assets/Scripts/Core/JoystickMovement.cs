@@ -6,10 +6,17 @@ using Utilities;
 
 namespace Core
 {
+    /// <summary>
+    /// Player movement
+    /// </summary>
     [RequireComponent(typeof(Image))]
     public class JoystickMovement : MonoBehaviour, IDragHandler, IPointerDownHandler
     {
+        // || Cached
+
         private Image backgroundImage;
+
+        // || Properties
 
         public Vector3 InputDirection { get; private set; }
 

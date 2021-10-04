@@ -1,9 +1,6 @@
 using Controllers.Core;
-using MVC.BL;
 using MVC.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -105,6 +102,10 @@ namespace Controllers.Panel
             }
         }
 
+        /// <summary>
+        /// Set desired language
+        /// </summary>
+        /// <param name="language"> Desired system language </param>
         private void SetLanguage(string language)
         {
             try

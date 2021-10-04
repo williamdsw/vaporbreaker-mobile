@@ -4,6 +4,9 @@ using Utilities;
 
 namespace Core
 {
+    /// <summary>
+    /// Projectile spawned by Player's shooter
+    /// </summary>
     [RequireComponent(typeof(Rigidbody2D))]
     public class Projectile : MonoBehaviour
     {

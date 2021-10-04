@@ -2,7 +2,6 @@ using MVC.Global;
 using MVC.Models;
 using MVC.Utils;
 using System;
-using System.Collections.Generic;
 
 namespace MVC.DAO
 {

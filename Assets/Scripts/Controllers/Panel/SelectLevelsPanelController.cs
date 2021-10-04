@@ -114,7 +114,7 @@ namespace Controllers.Panel
                     ConfigurationPanelController.Instance.TogglePanel(true);
                 });
 
-                soundtrackButton.onClick.AddListener(() => StartCallNextScene(SceneManagerController.SountrackSceneName));
+                soundtrackButton.onClick.AddListener(() => StartCallNextScene(SceneManagerController.SceneNames.Soundtrack));
                 quitApplicationButton.onClick.AddListener(() => SceneManagerController.QuitGame());
             }
             catch (Exception ex)
@@ -344,7 +344,7 @@ namespace Controllers.Panel
 
             GameStatusController.Instance.NextSceneName = sceneName;
             GameStatusController.Instance.CameFromLevel = false;
-            SceneManagerController.CallScene(SceneManagerController.LoadingSceneName);
+            SceneManagerController.CallScene(SceneManagerController.SceneNames.Loading);
         }
 
         /// <summary>

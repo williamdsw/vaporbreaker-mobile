@@ -2456,8 +2456,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 5960698972679700583, guid: db7f1e9a0f1ab7848a9d38246c73d165,
-    type: 3}
+  m_Sprite: {fileID: 610972232090119498, guid: db7f1e9a0f1ab7848a9d38246c73d165, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -2953,7 +2952,7 @@ GameObject:
   - component: {fileID: 1499225422}
   - component: {fileID: 7834559946647486537}
   m_Layer: 14
-  m_Name: LevelCompleteController
+  m_Name: LevelCompletePanelController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3924,7 +3923,7 @@ GameObject:
   - component: {fileID: 1821838222}
   - component: {fileID: 1821838217}
   m_Layer: 14
-  m_Name: PauseController
+  m_Name: PausePanelController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

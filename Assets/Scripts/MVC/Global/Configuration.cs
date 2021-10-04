@@ -96,7 +96,7 @@ namespace MVC.Global
             /// <summary>
             /// Local Streaming Assets folder path
             /// </summary>
-            public static string DatabaseStreamingAssetsPath => string.Format("{0}/StreamingAssets/{1}", Application.dataPath, DatabaseName);
+            public static string DatabaseStreamingAssetsPath => string.Format("{0}/{1}", Application.streamingAssetsPath, DatabaseName);
 
 #if UNITY_ANDROID
 

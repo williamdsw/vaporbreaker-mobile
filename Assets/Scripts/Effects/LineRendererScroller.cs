@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Effects
 {
+    /// <summary>
+    /// Scroller for Line Renderer
+    /// </summary>
     [RequireComponent(typeof(LineRenderer))]
     public class LineRendererScroller : MonoBehaviour
     {
@@ -24,7 +27,9 @@ namespace Effects
             offset = new Vector2(movementSpeeds.x, movementSpeeds.y);
         }
 
-        private void FixedUpdate() => material.mainTextureOffset += (offset * Time.fixedDeltaTime);
+        private void FixedUpdate() => Scroll();
+
+
 
         /// <summary>
         /// Get required components
@@ -40,5 +45,10 @@ namespace Effects
                 throw ex;
             }
         }
+
+        /// <summary>
+        /// Scroll texture
+        /// </summary>
+        private void Scroll() => material.mainTextureOffset += (offset * Time.fixedDeltaTime);
     }
 }

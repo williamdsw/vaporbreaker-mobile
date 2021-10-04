@@ -2,6 +2,9 @@
 
 namespace Utilities
 {
+    /// <summary>
+    /// Utilities for Unity
+    /// </summary>
     public class UnityUtilities
     {
         /// <summary>

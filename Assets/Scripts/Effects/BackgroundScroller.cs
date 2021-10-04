@@ -1,22 +1,24 @@
 ﻿using System;
-using Controllers.Core;
 using UnityEngine;
-using Utilities;
 
 namespace Effects
 {
+    /// <summary>
+    /// Background Scroller Effect
+    /// </summary>
+    [RequireComponent(typeof(MeshRenderer))]
     public class BackgroundScroller : MonoBehaviour
     {
         // || Inspector References
 
         [Header("Required Configuration")]
-        [SerializeField] private bool randomMaterial;
-        [SerializeField] private bool randomMovementSpeeds;
-        [SerializeField] private float xMovementSpeed = 0.1f;
-        [SerializeField] private float yMovementSpeed = 0.1f;
-        [SerializeField] private Material[] listOfMaterials;
+        [SerializeField] private bool chooseRandomMaterial;
+        [SerializeField] private Material[] materials;
+        [SerializeField] private bool chooseRandomMovementSpeed;
+        [SerializeField] private float movementSpeedInX = 0.1f;
+        [SerializeField] private float movementSpeedInY = 0.1f;
 
-        // || CONFIG
+        // || Config
 
         private const float TEXTURE_OFFSET_VALUE = 0.2f;
 
@@ -29,30 +31,10 @@ namespace Effects
         private void Awake()
         {
             GetRequiredComponents();
+            Config();
         }
 
-        private void Start()
-        {
-            // Chooses random material
-            if (randomMaterial)
-            {
-                if (listOfMaterials.Length == 0) return;
-                int index = UnityEngine.Random.Range(0, listOfMaterials.Length);
-                myRenderer.material = listOfMaterials[index];
-            }
-
-            // Chooses movement speed
-            if (randomMovementSpeeds)
-            {
-                xMovementSpeed = UnityEngine.Random.Range(-TEXTURE_OFFSET_VALUE, TEXTURE_OFFSET_VALUE);
-                yMovementSpeed = UnityEngine.Random.Range(-TEXTURE_OFFSET_VALUE, TEXTURE_OFFSET_VALUE);
-            }
-
-            material = myRenderer.material;
-            offset = new Vector2(xMovementSpeed, yMovementSpeed);
-        }
-
-        private void FixedUpdate() => material.mainTextureOffset += (offset * Time.fixedDeltaTime);
+        private void FixedUpdate() => Scroll();
 
         /// <summary>
         /// Get required components
@@ -68,5 +50,38 @@ namespace Effects
                 throw ex;
             }
         }
+
+        /// <summary>
+        /// Config settings
+        /// </summary>
+        private void Config()
+        {
+            try
+            {
+                if (chooseRandomMaterial && materials != null && materials.Length != 0)
+                {
+                    int index = UnityEngine.Random.Range(0, materials.Length);
+                    myRenderer.material = materials[index];
+                }
+
+                if (chooseRandomMovementSpeed)
+                {
+                    movementSpeedInX = UnityEngine.Random.Range(-TEXTURE_OFFSET_VALUE, TEXTURE_OFFSET_VALUE);
+                    movementSpeedInY = UnityEngine.Random.Range(-TEXTURE_OFFSET_VALUE, TEXTURE_OFFSET_VALUE);
+                }
+
+                material = myRenderer.material;
+                offset = new Vector2(movementSpeedInX, movementSpeedInY);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Scroll texture
+        /// </summary>
+        private void Scroll() => material.mainTextureOffset += (offset * Time.fixedDeltaTime);
     }
 }

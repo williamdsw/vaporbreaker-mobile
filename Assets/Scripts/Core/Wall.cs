@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Core
 {
+    /// <summary>
+    /// Walls
+    /// </summary>
     [RequireComponent(typeof(EdgeCollider2D))]
     public class Wall : MonoBehaviour
     {

@@ -8,6 +8,9 @@ using Utilities;
 
 namespace Core
 {
+    /// <summary>
+    /// Block entity
+    /// </summary>
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(BoxCollider2D))]
     public class Block : MonoBehaviour
@@ -33,18 +36,14 @@ namespace Core
         private bool lastCollision = false;
         public Dictionary<string, int> listPowerUpIndexes = new Dictionary<string, int>();
 
-        // || Cached
-
-        private SpriteRenderer spriteRenderer;
-
         // || Properties
 
         public BoxCollider2D BoxCollider2D { get; private set; }
+        public SpriteRenderer SpriteRenderer { get; private set; }
         public Color32 ParticlesColor { get; set; }
         public bool CanSpawnPowerUp { private get; set; } = false;
         public int MaxHits { get; set; } = 0;
         public int StartMaxHits { get; set; } = 0;
-        public SpriteRenderer SpriteRenderer { get => spriteRenderer; set => spriteRenderer = value; }
 
         public void Awake() => GetRequiredComponents();
 
@@ -209,8 +208,7 @@ namespace Core
                     GameObject explosion = Instantiate(explosionPrefabs[randomIndex], transform.position, Quaternion.identity) as GameObject;
                     explosion.transform.SetParent(GameSessionController.Instance.FindOrCreateObjectParent(NamesTags.Parents.Explosions).transform);
                     Animator animator = explosion.GetComponent<Animator>();
-                    float animationLength = animator.GetCurrentAnimatorStateInfo(0).length;
-                    Destroy(explosion, animationLength);
+                    Destroy(explosion, animator.GetCurrentAnimatorStateInfo(0).length);
                 }
             }
             catch (Exception ex)
@@ -232,8 +230,7 @@ namespace Core
                 GameObject scoreText = Instantiate(blockScoreTextPrefab, transform.position, Quaternion.identity) as GameObject;
                 scoreText.transform.SetParent(GameSessionController.Instance.FindOrCreateObjectParent(NamesTags.Parents.BlockScoreText).transform);
                 Animator animator = scoreText.GetComponent<Animator>();
-                float durationLength = animator.GetCurrentAnimatorStateInfo(0).length;
-                Destroy(scoreText, durationLength);
+                Destroy(scoreText, animator.GetCurrentAnimatorStateInfo(0).length);
             }
             catch (Exception ex)
             {

@@ -2,6 +2,9 @@
 
 namespace Utilities
 {
+    /// <summary>
+    /// Formatter util
+    /// </summary>
     public class Formatter
     {
         /// <summary>
@@ -48,13 +51,5 @@ namespace Utilities
         /// <param name="value"> Value to be formatted </param>
         /// <returns> Formatted value </returns>
         public static string FormatToCurrency(long value) => value.ToString("#,###,###,###");
-
-        /// <summary>
-        /// Format date timer to desired format
-        /// </summary>
-        /// <param name="timer"> Date timer </param>
-        /// <param name="format"> Desired Format Mask </param>
-        /// <returns>Formatted date timer </returns>
-        public static string FormatDateTimer(long timer, string format) => DateTimeOffset.FromUnixTimeSeconds(timer).ToLocalTime().ToString(format);
     }
 }

@@ -5,6 +5,9 @@ using TMPro;
 
 namespace Effects
 {
+    /// <summary>
+    /// Flash Effect for TextMeshPro or TextMeshProUGUI
+    /// </summary>
     public class FlashTextEffect : MonoBehaviour
     {
         // || Inspector References
@@ -20,7 +23,7 @@ namespace Effects
 
         // || Properties
 
-        public float TimeToFlick { get => timeToFlick; set => timeToFlick = value; }
+        public float TimeToFlick => timeToFlick;
 
         private void Awake() => GetRequiredComponents();
 
