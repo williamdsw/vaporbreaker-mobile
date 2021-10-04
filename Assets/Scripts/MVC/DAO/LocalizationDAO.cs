@@ -34,25 +34,5 @@ namespace MVC.DAO
                 CloseConnection();
             }
         }
-
-        /// <summary>
-        /// Get all languages
-        /// </summary>
-        /// <returns> List of Localization instances </returns>
-        public List<Localization> ListAll()
-        {
-            try
-            {
-                return Factory<Localization>.CreateMany(ExecuteQuery(Configuration.Queries.Localization.ListAll));
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                CloseConnection();
-            }
-        }
     }
 }

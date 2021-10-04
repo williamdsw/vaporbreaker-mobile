@@ -1411,7 +1411,7 @@ MonoBehaviour:
   explosionSound: {fileID: 8300000, guid: 7830e3fa90501b643ac46b18e3b714f7, type: 3}
   hittingFace: {fileID: 8300000, guid: 77a3676463d223b4cac46f92885c4cc2, type: 3}
   hittingWall: {fileID: 8300000, guid: f445472940e6e6748925c0e6103c7c10, type: 3}
-  laserPewSound: {fileID: 8300000, guid: b4a2c315bd840e74b954a2aac6782b47, type: 3}
+  laserPewSound: {fileID: 8300000, guid: cac9081af2b62c1418b4fdfe98300c71, type: 3}
   powerUpSound: {fileID: 8300000, guid: 57a187728e3317e40a2ba5dbaf8c3bf4, type: 3}
   showUpSound: {fileID: 8300000, guid: 43bd213338b688c4cbde682e1d00054d, type: 3}
   slamSound: {fileID: 8300000, guid: 00c6ee0324377bb4eb1e50731dc93ad7, type: 3}

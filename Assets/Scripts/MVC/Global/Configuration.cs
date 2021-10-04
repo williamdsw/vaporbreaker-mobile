@@ -46,12 +46,7 @@ namespace MVC.Global
                 /// <summary>
                 /// Get a localization by language
                 /// </summary>
-                public static string GetByLanguage => string.Concat(ListAll, " WHERE language = '{0}'; ");
-
-                /// <summary>
-                /// Get all languages
-                /// </summary>
-                public static string ListAll => " SELECT * FROM localization ";
+                public static string GetByLanguage => " SELECT * FROM localization WHERE language = '{0}'; ";
             }
 
             public class Scoreboard

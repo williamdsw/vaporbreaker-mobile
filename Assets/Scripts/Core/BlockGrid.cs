@@ -15,8 +15,8 @@ namespace Core
         // || Properties
 
         public static Dictionary<Vector3, Block> Grid { get; } = new Dictionary<Vector3, Block>();
-        public static Vector2 MinCoordinatesInXY => new Vector2(-4f, 0f);
-        public static Vector2 MaxCoordinatesInXY => new Vector2(4f, 6f);
+        public static Vector2 MinCoordinatesInXY => new Vector2(-4f, -7.5f);
+        public static Vector2 MaxCoordinatesInXY => new Vector2(4f, 7.5f);
 
         /// <summary>
         /// Initialize Grid with positions

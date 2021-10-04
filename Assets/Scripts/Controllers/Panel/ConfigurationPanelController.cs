@@ -37,9 +37,10 @@ namespace Controllers.Panel
         private TextMeshProUGUI bgmVolumeButtonLabel;
         private TextMeshProUGUI meVolumeButtonLabel;
         private TextMeshProUGUI sfxVolumeButtonLabel;
-        private TextMeshProUGUI aboutButtonText;
-        private TextMeshProUGUI resetProgressButtonText;
-        private TextMeshProUGUI backButtonText;
+        private TextMeshProUGUI languageButtonLabel;
+        private TextMeshProUGUI aboutButtonLabel;
+        private TextMeshProUGUI resetProgressButtonLabel;
+        private TextMeshProUGUI backButtonLabel;
 
         // || State
 
@@ -73,10 +74,10 @@ namespace Controllers.Panel
                 bgmVolumeButtonLabel = bgmVolumeButton.GetComponentInChildren<TextMeshProUGUI>();
                 meVolumeButtonLabel = meVolumeButton.GetComponentInChildren<TextMeshProUGUI>();
                 sfxVolumeButtonLabel = sfxVolumeButton.GetComponentInChildren<TextMeshProUGUI>();
-                //languageButtonText = languageButton.GetComponentInChildren<TextMeshProUGUI>(); !TODO
-                aboutButtonText = aboutButton.GetComponentInChildren<TextMeshProUGUI>();
-                resetProgressButtonText = resetProgressButton.GetComponentInChildren<TextMeshProUGUI>();
-                backButtonText = backButton.GetComponentInChildren<TextMeshProUGUI>();
+                languageButtonLabel = languageButton.GetComponentInChildren<TextMeshProUGUI>();
+                aboutButtonLabel = aboutButton.GetComponentInChildren<TextMeshProUGUI>();
+                resetProgressButtonLabel = resetProgressButton.GetComponentInChildren<TextMeshProUGUI>();
+                backButtonLabel = backButton.GetComponentInChildren<TextMeshProUGUI>();
             }
             catch (Exception ex)
             {
@@ -95,10 +96,10 @@ namespace Controllers.Panel
                 bgmVolumeButtonLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.configurations_backgroundmusic);
                 meVolumeButtonLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.configurations_musiceffects);
                 sfxVolumeButtonLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.configurations_soundeffects);
-                //languageButton.text = LocalizationController.Instance.GetWord(LocalizationFields.general_about); !TODO
-                aboutButtonText.text = LocalizationController.Instance.GetWord(LocalizationFields.general_about);
-                resetProgressButtonText.text = LocalizationController.Instance.GetWord(LocalizationFields.configurations_resetprogress);
-                backButtonText.text = LocalizationController.Instance.GetWord(LocalizationFields.general_back);
+                languageButtonLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.configurations_language);
+                aboutButtonLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.general_about);
+                resetProgressButtonLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.configurations_resetprogress);
+                backButtonLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.general_back);
             }
             catch (Exception ex)
             {
@@ -131,11 +132,11 @@ namespace Controllers.Panel
                     ToggleAudio(isSfxMuted, AudioController.Instance.AudioSourceSFX, sfxVolumeButtonImage);
                 });
 
-                /*languageButton.onClick.AddListener(() => !TODO
+                languageButton.onClick.AddListener(() =>
                 {
                     TogglePanel(false);
-                    aboutPanel.SetActive(true);
-                });*/
+                    LanguagePanelController.Instance.TogglePanel(true);
+                });
 
                 aboutButton.onClick.AddListener(() =>
                 {

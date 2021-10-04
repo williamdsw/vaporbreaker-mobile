@@ -4,12 +4,10 @@ using MVC.Enums;
 using MVC.Models;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
-using Utilities;
 
 namespace Controllers.Panel
 {
@@ -77,7 +75,7 @@ namespace Controllers.Panel
                 titleLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.general_scoreboard);
                 scoreColumnLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.general_score);
                 timeScoreColumnLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.general_time);
-                comboColumnLabel.text = "Combo"; // !TODO
+                comboColumnLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.general_combo);
                 backButtonText.text = LocalizationController.Instance.GetWord(LocalizationFields.general_back);
             }
             catch (Exception ex)
