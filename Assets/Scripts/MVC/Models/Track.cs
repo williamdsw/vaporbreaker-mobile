@@ -9,7 +9,6 @@ namespace MVC.Models
         private long ID;
         private string TITLE;
         private string ARTIST;
-        private string COVER;
         private string FILENAME;
 
         /// <summary>

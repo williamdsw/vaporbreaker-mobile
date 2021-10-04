@@ -25,6 +25,7 @@ namespace Controllers.Panel
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private GameObject panel;
         [SerializeField] private Button configurationsButton;
+        [SerializeField] private Button soundtrackButton;
         [SerializeField] private Button quitApplicationButton;
         [SerializeField] private Sprite[] levelThumbnails;
 
@@ -113,6 +114,7 @@ namespace Controllers.Panel
                     ConfigurationPanelController.Instance.TogglePanel(true);
                 });
 
+                soundtrackButton.onClick.AddListener(() => StartCallNextScene(SceneManagerController.SountrackSceneName));
                 quitApplicationButton.onClick.AddListener(() => SceneManagerController.QuitGame());
             }
             catch (Exception ex)
@@ -327,12 +329,12 @@ namespace Controllers.Panel
         /// <summary>
         /// Call next scene
         /// </summary>
-        public void StartCallNextScene() => StartCoroutine(CallNextScene());
+        public void StartCallNextScene(string sceneName) => StartCoroutine(CallNextScene(sceneName));
 
         /// <summary>
         /// Call next scene
         /// </summary>
-        private IEnumerator CallNextScene()
+        private IEnumerator CallNextScene(string sceneName)
         {
             ActualGameState = Enumerators.GameStates.TRANSITION;
             canvasGroup.interactable = false;
@@ -340,7 +342,7 @@ namespace Controllers.Panel
             FadeEffect.Instance.FadeToLevel();
             yield return new WaitForSecondsRealtime(FadeEffect.Instance.GetFadeOutLength());
 
-            GameStatusController.Instance.NextSceneName = SceneManagerController.LevelSceneName;
+            GameStatusController.Instance.NextSceneName = sceneName;
             GameStatusController.Instance.CameFromLevel = false;
             SceneManagerController.CallScene(SceneManagerController.LoadingSceneName);
         }

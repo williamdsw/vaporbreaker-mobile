@@ -31,6 +31,18 @@ namespace Utilities
         }
 
         /// <summary>
+        /// Get formatted ellapsed time in minutes. Ex: "10:32"
+        /// </summary>
+        /// <param name="timer"> Timer count </param>
+        /// <returns> Formatted ellapsed time </returns>
+        public static string GetEllapsedTimeInMinutes(int timer)
+        {
+            int hours, minutes, seconds;
+            GetTime(timer, out hours, out minutes, out seconds);
+            return string.Format("{0}:{1}", minutes.ToString("00"), seconds.ToString("00"));
+        }
+
+        /// <summary>
         /// Get formatted value in currency. Ex: "1.324.894.9830"
         /// </summary>
         /// <param name="value"> Value to be formatted </param>

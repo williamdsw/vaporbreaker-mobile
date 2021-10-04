@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/SelectLevels.unity
     guid: 9c0d76db247a4124a9b63ae56787e706
   - enabled: 1
+    path: Assets/Scenes/Soundtrack.unity
+    guid: 88720b99c00701548b102a00fdd39665
+  - enabled: 1
     path: Assets/Scenes/Level.unity
     guid: 6cd057d51b433de478f523e767cb37d6
   m_configObjects: {}

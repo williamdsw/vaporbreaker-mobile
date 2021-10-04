@@ -17,7 +17,7 @@ namespace Effects
         }
 
         // || Config
-        private readonly int SCENE_TO_APPLY_EVENTS = 3;
+        private readonly int SCENE_TO_APPLY_EVENTS = 4;
 
         // || Cached
 

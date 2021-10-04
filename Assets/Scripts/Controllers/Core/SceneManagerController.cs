@@ -13,6 +13,7 @@ namespace Controllers.Core
         public static string LevelSceneName => "Level";
         public static string LoadingSceneName => "Loading";
         public static string SelectLevelsSceneName => "SelectLevels";
+        public static string SountrackSceneName => "Soundtrack";
 
         /// <summary>
         /// Calls a scene by name

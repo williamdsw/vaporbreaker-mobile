@@ -110,7 +110,7 @@ namespace Core
         private void DealCollisionWithPaddle()
         {
             Destroy(gameObject);
-            AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.PowerUpSound, AudioController.Instance.MaxSFXVolume);
+            AudioController.Instance.PlaySFX(AudioController.Instance.PowerUpSound, AudioController.Instance.MaxSFXVolume);
             Apply();
         }
 

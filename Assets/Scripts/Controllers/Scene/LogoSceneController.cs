@@ -82,6 +82,7 @@ namespace Controllers.Scene
             }
 
             AudioController.Instance.PlayME(AudioController.Instance.RetrogemnVoice, 1f, false);
+            AudioController.Instance.GetTracks();
 
             alpha = iconImage.color.a;
             for (float i = alpha; i < 1f; i += ALPHA_INCREMENT)

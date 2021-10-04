@@ -92,7 +92,7 @@ namespace Controllers.Panel
         {
             try
             {
-                playButton.onClick.AddListener(() => SelectLevelsPanelController.Instance.StartCallNextScene());
+                playButton.onClick.AddListener(() => SelectLevelsPanelController.Instance.StartCallNextScene(SceneManagerController.LevelSceneName));
                 backButton.onClick.AddListener(() =>
                 {
                     TogglePanel(false);

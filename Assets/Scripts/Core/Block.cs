@@ -204,7 +204,7 @@ namespace Core
             {
                 if (explosionPrefabs.Length >= 1)
                 {
-                    AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.ExplosionSound, AudioController.Instance.MaxSFXVolume / 2);
+                    AudioController.Instance.PlaySFX(AudioController.Instance.ExplosionSound, AudioController.Instance.MaxSFXVolume / 2);
                     int randomIndex = UnityEngine.Random.Range(0, explosionPrefabs.Length);
                     GameObject explosion = Instantiate(explosionPrefabs[randomIndex], transform.position, Quaternion.identity) as GameObject;
                     explosion.transform.SetParent(GameSessionController.Instance.FindOrCreateObjectParent(NamesTags.Parents.Explosions).transform);
@@ -278,7 +278,7 @@ namespace Core
                 int randomIndex = UnityEngine.Random.Range(0, powerUpPrefabs.Length);
                 GameObject powerUp = Instantiate(powerUpPrefabs[randomIndex].gameObject, transform.position, Quaternion.identity) as GameObject;
                 powerUp.transform.SetParent(GameSessionController.Instance.FindOrCreateObjectParent(NamesTags.Parents.PowerUps).transform);
-                AudioController.Instance.PlaySoundAtPoint(AudioController.Instance.ShowUpSound, AudioController.Instance.MaxSFXVolume);
+                AudioController.Instance.PlaySFX(AudioController.Instance.ShowUpSound, AudioController.Instance.MaxSFXVolume);
             }
             catch (Exception ex)
             {
