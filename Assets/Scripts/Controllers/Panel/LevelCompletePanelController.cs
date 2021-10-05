@@ -20,6 +20,13 @@ namespace Controllers.Panel
         [SerializeField] private GameObject panel;
         [SerializeField] private Button continueButton;
 
+        [Header("Values Labels")]
+        [SerializeField] private TextMeshProUGUI scoreValueLabel;
+        [SerializeField] private TextMeshProUGUI timeScoreValueLabel;
+        [SerializeField] private TextMeshProUGUI bestComboValueLabel;
+        [SerializeField] private TextMeshProUGUI numberOfBallsValueLabel;
+        [SerializeField] private TextMeshProUGUI totalValueLabel;
+
         [Header("Labels to Translate")]
         [SerializeField] private TextMeshProUGUI headerLabel;
         [SerializeField] private TextMeshProUGUI scoreLabel;
@@ -145,11 +152,11 @@ namespace Controllers.Panel
             totalScore += (bestCombo > 1 ? bestCombo * 10000 : 0);
 
             // Update UI
-            scoreLabel.text = string.Format("{0} : {1}", scoreLabel.text, Formatter.FormatToCurrency(currentScore));
-            timeScoreLabel.text = string.Format("{0} : {1}", timeScoreLabel.text, (totalTimeScore > 0 ? Formatter.FormatToCurrency((long)totalTimeScore) : "0"));
-            bestComboLabel.text = string.Format("{0} : {1}", bestComboLabel.text, bestCombo.ToString());
-            numberOfBallsLabel.text = string.Format("{0} : {1}", numberOfBallsLabel.text, numberOfBalls.ToString());
-            totalLabel.text = string.Format("{0} : {1}", totalLabel.text, Formatter.FormatToCurrency(totalScore));
+            scoreValueLabel.text = Formatter.FormatToCurrency(currentScore);
+            timeScoreValueLabel.text = (totalTimeScore > 0 ? Formatter.FormatToCurrency((long)totalTimeScore) : "0");
+            bestComboValueLabel.SetText(bestCombo.ToString());
+            numberOfBallsValueLabel.SetText(numberOfBalls.ToString());
+            totalValueLabel.text = Formatter.FormatToCurrency(totalScore);
         }
 
         /// <summary>
@@ -187,11 +194,11 @@ namespace Controllers.Panel
 
             // Shows each text
             yield return new WaitForSecondsRealtime(DELAY_TIME);
-            yield return ShowElement(scoreLabel.gameObject.transform.parent.gameObject);
-            yield return ShowElement(timeScoreLabel.gameObject.transform.parent.gameObject);
-            yield return ShowElement(bestComboLabel.gameObject.transform.parent.gameObject);
-            yield return ShowElement(numberOfBallsLabel.gameObject.transform.parent.gameObject);
-            yield return ShowElement(totalLabel.gameObject.transform.parent.gameObject);
+            yield return ShowElement(scoreValueLabel.gameObject.transform.parent.gameObject);
+            yield return ShowElement(timeScoreValueLabel.gameObject.transform.parent.gameObject);
+            yield return ShowElement(bestComboValueLabel.gameObject.transform.parent.gameObject);
+            yield return ShowElement(numberOfBallsValueLabel.gameObject.transform.parent.gameObject);
+            yield return ShowElement(totalValueLabel.gameObject.transform.parent.gameObject);
 
             // New score
             if (totalScore > GameStatusController.Instance.OldScore)

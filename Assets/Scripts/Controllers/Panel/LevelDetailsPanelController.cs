@@ -22,6 +22,10 @@ namespace Controllers.Panel
 
         [Header("Level Details Elements")]
         [SerializeField] private Image levelThumbnail;
+        [SerializeField] private TextMeshProUGUI bestScoreValueLabel;
+        [SerializeField] private TextMeshProUGUI bestTimeScoreValueLabel;
+        [SerializeField] private TextMeshProUGUI bestComboValueLabel;
+
 
         [Header("Labels to Translate")]
         [SerializeField] private TextMeshProUGUI levelNameLabel;
@@ -72,6 +76,9 @@ namespace Controllers.Panel
             try
             {
                 playButtonLabel.text = LocalizationController.Instance.GetWord(LocalizationFields.leveldetails_play);
+                bestScoreLabel.SetText(LocalizationController.Instance.GetWord(LocalizationFields.leveldetails_bestscore));
+                bestTimeScoreLabel.SetText(LocalizationController.Instance.GetWord(LocalizationFields.leveldetails_besttime));
+                bestComboLabel.SetText(LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_bestcombo));
             }
             catch (Exception ex)
             {
@@ -120,9 +127,9 @@ namespace Controllers.Panel
             {
                 this.levelId = levelId;
                 levelNameLabel.text = string.Format("{0} {1}", LocalizationController.Instance.GetWord(LocalizationFields.leveldetails_level), levelIndex.ToString("000"));
-                bestScoreLabel.text = string.Format("{0} : {1}", LocalizationController.Instance.GetWord(LocalizationFields.leveldetails_bestscore), bestScore);
-                bestTimeScoreLabel.text = string.Format("{0} : {1}", LocalizationController.Instance.GetWord(LocalizationFields.leveldetails_besttime), bestTimeScore);
-                bestComboLabel.text = string.Format("{0} : {1}", LocalizationController.Instance.GetWord(LocalizationFields.levelcomplete_bestcombo), bestCombo);
+                bestScoreValueLabel.SetText(bestScore);
+                bestTimeScoreValueLabel.SetText(bestTimeScore);
+                bestComboValueLabel.SetText(bestCombo);
                 levelThumbnail.sprite = levelThumbnailSprite;
                 scoreboardButton.gameObject.SetActive(!string.IsNullOrEmpty(bestScore) && !string.IsNullOrEmpty(bestTimeScore) && !string.IsNullOrEmpty(bestCombo));
             }
