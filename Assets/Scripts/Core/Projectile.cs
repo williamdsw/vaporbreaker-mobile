@@ -13,7 +13,6 @@ namespace Core
         // || Config
 
         private readonly float forceInY = 750f;
-        private readonly float timeToSelfDestruct = 2f;
 
         // || Cached
 

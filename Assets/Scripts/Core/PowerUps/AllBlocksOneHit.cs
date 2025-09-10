@@ -1,5 +1,6 @@
 using Controllers.Core;
 using System;
+using UnityEngine;
 
 namespace Core.PowerUps
 {
@@ -12,7 +13,7 @@ namespace Core.PowerUps
         {
             try
             {
-                Block[] blocks = FindObjectsOfType<Block>();
+                Block[] blocks = FindObjectsByType<Block>(FindObjectsSortMode.InstanceID);
                 if (blocks.Length != 0)
                 {
                     foreach (Block block in blocks)

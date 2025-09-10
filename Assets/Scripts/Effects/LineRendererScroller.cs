@@ -29,8 +29,6 @@ namespace Effects
 
         private void FixedUpdate() => Scroll();
 
-
-
         /// <summary>
         /// Get required components
         /// </summary>

@@ -13,7 +13,7 @@ namespace Core.PowerUps
         {
             try
             {
-                Ball[] balls = FindObjectsOfType<Ball>();
+                Ball[] balls = FindObjectsByType<Ball>(FindObjectsSortMode.InstanceID);
                 if (balls.Length != 0)
                 {
                     foreach (Ball ball in balls)

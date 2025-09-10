@@ -22,7 +22,6 @@ namespace Core
 
         private int currentPaddleIndex = 1;
         private Vector2 minMaxCoordinatesInX = Vector2.zero;
-        private Vector3 currentDirection;
         private float moveSpeed = 40f;
 
         // || Cached
@@ -139,7 +138,7 @@ namespace Core
                 boxCollider2D = gameObject.AddComponent<BoxCollider2D>();
                 DefineBounds();
 
-                Shooter shooter = FindObjectOfType<Shooter>();
+                Shooter shooter = FindAnyObjectByType<Shooter>();
                 if (shooter != null)
                 {
                     shooter.SetCannonsPosition();

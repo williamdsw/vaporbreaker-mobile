@@ -41,7 +41,7 @@ namespace Core
             AddRandomForce();
         }
 
-        private void Start() => paddle = FindObjectOfType<Paddle>();
+        private void Start() => paddle = FindAnyObjectByType<Paddle>();
 
         private void Update()
         {

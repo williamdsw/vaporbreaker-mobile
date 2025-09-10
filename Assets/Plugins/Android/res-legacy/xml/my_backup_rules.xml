@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Explicitly including files to backup because of crash with restored Unity "il2cpp" folder.
+         Using "exclude" in any way does not prevent "il2cpp" from being restored (equals app crash).
+         Combining "include" "." and "exclude" "il2cpp" does not prevent the restore of "il2cpp".
+         Using only "include" does prevent a restore of "il2cpp". -->
+    <include domain="sharedpref" path="."/>
+</full-backup-content>

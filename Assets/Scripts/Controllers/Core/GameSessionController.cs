@@ -110,8 +110,8 @@ namespace Controllers.Core
 
         private void Start()
         {
-            balls = FindObjectsOfType<Ball>();
-            canvasGroup = FindObjectOfType<CanvasGroup>();
+            balls = FindObjectsByType<Ball>(FindObjectsSortMode.InstanceID);
+            canvasGroup = FindAnyObjectByType<CanvasGroup>();
 
             Level level = new LevelBL().GetById(GameStatusController.Instance.LevelId);
             Layout layout = JsonConvert.DeserializeObject<Layout>(level.Layout);
@@ -153,7 +153,7 @@ namespace Controllers.Core
         {
             try
             {
-                if (FindObjectsOfType(GetType()).Length > 1)
+                if (FindObjectsByType(GetType(), FindObjectsSortMode.InstanceID).Length > 1)
                 {
                     gameObject.SetActive(false);
                     DestroyInstance();
@@ -364,7 +364,7 @@ namespace Controllers.Core
                     if (CanMoveBlocks)
                     {
                         int numberOfOcorrences = 0;
-                        foreach (Block block in FindObjectsOfType<Block>())
+                        foreach (Block block in FindObjectsByType<Block>(FindObjectsSortMode.InstanceID))
                         {
                             if (block.CompareTag(NamesTags.Tags.Unbreakable)) return;
 
@@ -435,7 +435,7 @@ namespace Controllers.Core
             {
                 BlockGrid.InitGrid();
 
-                foreach (Block block in FindObjectsOfType<Block>())
+                foreach (Block block in FindObjectsByType<Block>(FindObjectsSortMode.InstanceID))
                 {
                     if (BlockGrid.CheckPosition(block.transform.position) && BlockGrid.GetBlock(block.transform.position) == null)
                     {
@@ -474,7 +474,7 @@ namespace Controllers.Core
                             block.BoxCollider2D.isTrigger = true;
                         }
 
-                        foreach (Ball ball in FindObjectsOfType<Ball>())
+                        foreach (Ball ball in FindObjectsByType<Ball>(FindObjectsSortMode.InstanceID))
                         {
                             ball.IsOnFire = true;
                             ball.ChangeSprite(true);
@@ -508,7 +508,7 @@ namespace Controllers.Core
                     block.BoxCollider2D.isTrigger = false;
                 }
 
-                foreach (Ball ball in FindObjectsOfType<Ball>())
+                foreach (Ball ball in FindObjectsByType<Ball>(FindObjectsSortMode.InstanceID))
                 {
                     ball.IsOnFire = false;
                     ball.ChangeSprite(false);
@@ -573,7 +573,7 @@ namespace Controllers.Core
 
                 if (TimeToSpawnAnotherBall >= StartTimeToSpawnAnotherBall)
                 {
-                    Ball[] balls = FindObjectsOfType<Ball>();
+                    Ball[] balls = FindObjectsByType<Ball>(FindObjectsSortMode.InstanceID);
                     if (balls.Length != 0)
                     {
                         foreach (Ball ball in balls)
@@ -605,22 +605,22 @@ namespace Controllers.Core
         {
             try
             {
-                foreach (Ball ball in FindObjectsOfType<Ball>())
+                foreach (Ball ball in FindObjectsByType<Ball>(FindObjectsSortMode.InstanceID))
                 {
                     Destroy(ball.gameObject);
                 }
 
-                foreach (Shooter shooter in FindObjectsOfType<Shooter>())
+                foreach (Shooter shooter in FindObjectsByType<Shooter>(FindObjectsSortMode.InstanceID))
                 {
                     Destroy(shooter.gameObject);
                 }
 
-                foreach (PowerUp powerUp in FindObjectsOfType<PowerUp>())
+                foreach (PowerUp powerUp in FindObjectsByType<PowerUp>(FindObjectsSortMode.InstanceID))
                 {
                     Destroy(powerUp.gameObject);
                 }
 
-                Destroy(FindObjectOfType<Paddle>().gameObject);
+                Destroy(FindAnyObjectByType<Paddle>().gameObject);
             }
             catch (Exception ex)
             {

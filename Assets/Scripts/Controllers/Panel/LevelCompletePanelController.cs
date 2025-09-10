@@ -133,7 +133,7 @@ namespace Controllers.Panel
             this.timeScore = Mathf.FloorToInt(timeScore);
             this.bestCombo = bestCombo;
             this.currentScore = currentScore;
-            this.numberOfBalls = FindObjectsOfType<Ball>().Length;
+            this.numberOfBalls = FindObjectsByType<Ball>(FindObjectsSortMode.InstanceID).Length;
 
             StartCoroutine(LevelComplete());
         }
@@ -164,12 +164,12 @@ namespace Controllers.Panel
         /// </summary>
         private IEnumerator LevelComplete()
         {
-            foreach (Ball ball in FindObjectsOfType<Ball>())
+            foreach (Ball ball in FindObjectsByType<Ball>(FindObjectsSortMode.InstanceID))
             {
                 Destroy(ball.gameObject);
             }
 
-            foreach (PowerUp powerUp in FindObjectsOfType<PowerUp>())
+            foreach (PowerUp powerUp in FindObjectsByType<PowerUp>(FindObjectsSortMode.InstanceID))
             {
                 Destroy(powerUp.gameObject);
             }

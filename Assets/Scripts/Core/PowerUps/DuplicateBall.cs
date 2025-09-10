@@ -15,7 +15,7 @@ namespace Core.PowerUps
             {
                 if (GameSessionController.Instance.CurrentNumberOfBalls >= GameSessionController.Instance.MaxNumberOfBalls) return;
 
-                Ball[] balls = FindObjectsOfType<Ball>();
+                Ball[] balls = FindObjectsByType<Ball>(FindObjectsSortMode.InstanceID);
                 if (balls.Length != 0)
                 {
                     foreach (Ball ball in balls)

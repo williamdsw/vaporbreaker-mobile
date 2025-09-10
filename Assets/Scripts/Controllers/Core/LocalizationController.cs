@@ -32,7 +32,7 @@ namespace Controllers.Core
         {
             try
             {
-                if (FindObjectsOfType(GetType()).Length > 1)
+                if (FindObjectsByType(GetType(), FindObjectsSortMode.InstanceID).Length > 1)
                 {
                     Destroy(gameObject);
                 }

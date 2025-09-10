@@ -16,7 +16,7 @@ namespace Core
             {
                 if (!GameSessionController.Instance.HasStarted)
                 {
-                    Ball ball = FindObjectOfType<Ball>();
+                    Ball ball = FindAnyObjectByType<Ball>();
                     if (ball)
                     {
                         ball.LaunchBall();
@@ -24,7 +24,7 @@ namespace Core
                 }
                 else
                 {
-                    Shooter shooter = FindObjectOfType<Shooter>();
+                    Shooter shooter = FindAnyObjectByType<Shooter>();
                     if (shooter)
                     {
                         shooter.Shoot();

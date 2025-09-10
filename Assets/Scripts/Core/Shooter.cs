@@ -32,7 +32,7 @@ namespace Core
         private void Awake()
         {
             projectilesPool = new List<GameObject>();
-            paddle = FindObjectOfType<Paddle>();
+            paddle = FindAnyObjectByType<Paddle>();
 
             CreateProjectilesPool();
             SetCannonsPosition();

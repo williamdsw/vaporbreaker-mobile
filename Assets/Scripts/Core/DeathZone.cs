@@ -93,7 +93,7 @@ namespace Core
         {
             try
             {
-                if (FindObjectsOfType<Ball>().Length == 1)
+                if (FindObjectsByType<Ball>(FindObjectsSortMode.InstanceID).Length == 1)
                 {
                     StartCoroutine(WaitToReset());
                 }

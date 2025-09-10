@@ -123,6 +123,11 @@ namespace MVC.Global
             /// Save progress path
             /// </summary>
             public static string ProgressPath => Path.Combine(Application.persistentDataPath, "SaveProgress.dat");
+
+            /// <summary>
+            /// Project Settings path
+            /// </summary>
+            public static string ProjectSettings => "ProjectSettings/ProjectSettings.asset";
         }
     }
 }
